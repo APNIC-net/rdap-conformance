@@ -186,7 +186,7 @@ public class Result
         if (len >= 1) { 
             s += nodeToString(node.get(len - 1));
         }
-        s += "," + getDocument() + "," + getReference() + ",";
+        s += "," + getDocument() + "," + getReference();
         return s;
     }
 }
