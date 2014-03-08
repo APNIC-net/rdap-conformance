@@ -16,6 +16,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
+import net.apnic.rdap.conformance.responsetest.AccessControl;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.HttpRequest;
@@ -82,6 +83,9 @@ public class Utils
             request.releaseConnection();
             return null;
         }
+
+        ResponseTest ac = new AccessControl();
+        ac.run(context, proto, response);
 
         Map root = null;
         try {
