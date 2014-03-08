@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 import org.joda.time.*;
 import org.joda.time.format.*;
 
+import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
@@ -50,7 +51,7 @@ public class Event implements ContentTest
         }
 
         boolean evtres = true;
-        String event_action = (String) data.get("eventAction");
+        String event_action = Utils.castToString(data.get("eventAction"));
         Result ear = new Result(proto);
         ear.setCode("content");
         ear.addNode("eventAction");
@@ -83,7 +84,7 @@ public class Event implements ContentTest
         DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
 
         boolean evdres = true;
-        String event_date = (String) data.get("eventDate");
+        String event_date = Utils.castToString(data.get("eventDate"));
         Result edr = new Result(proto);
         edr.setCode("content");
         edr.addNode("eventDate");
@@ -114,9 +115,27 @@ public class Event implements ContentTest
             }
         }
 
+        boolean eacres = true;
+        Object eac = data.get("eventActor");
+        if (eac != null) {
+            Result eacr = new Result(proto);
+            eacr.setCode("content");
+            eacr.addNode("eventActor");
+            if (Utils.castToString(eac) != null) {
+                eacr.setInfo("is string");
+                eacr.setStatus(Status.Success);
+                results.add(eacr);
+            } else {
+                eacr.setInfo("is not string");
+                eacr.setStatus(Status.Failure);
+                results.add(eacr);
+                eacres = false;
+            }
+        }
+
         ContentTest lst = new Links();
         boolean lstres = lst.run(context, proto, arg_data);
 
-        return (evtres && evdres && lstres);
+        return (evtres && evdres && eacres && lstres);
     }
 }

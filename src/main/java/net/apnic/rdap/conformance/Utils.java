@@ -31,7 +31,7 @@ import org.apache.http.client.config.RequestConfig;
 public class Utils
 {
     static public HttpRequestBase httpGetRequest(Context context,
-                                             String path)
+                                                 String path)
     {
         HttpGet request = new HttpGet(path);
         request.setHeader("Accept", "application/rdap+json");
@@ -115,5 +115,17 @@ public class Utils
 
         request.releaseConnection();
         return root;
+    }
+
+    public static String castToString(Object b)
+    {
+        if (b == null) {
+            return null;
+        }
+        String sb = null;
+        try {
+            sb = (String) b;
+        } catch (ClassCastException ce) {}
+        return sb;
     }
 }
