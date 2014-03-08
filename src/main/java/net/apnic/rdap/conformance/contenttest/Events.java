@@ -41,7 +41,7 @@ public class Events implements ContentTest
 
         Object value = data.get("events");
         if (value == null) {
-            nr1.setStatus(Status.Warning);
+            nr1.setStatus(Status.Notification);
             nr1.setInfo("not present");
             results.add(nr1);
             return false;

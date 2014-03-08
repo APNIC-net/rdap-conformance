@@ -14,17 +14,24 @@ import net.apnic.rdap.conformance.contenttest.Status;
 import net.apnic.rdap.conformance.contenttest.Port43;
 import net.apnic.rdap.conformance.contenttest.PublicIds;
 
-public class StandardResponse implements net.apnic.rdap.conformance.ContentTest
+public class StandardObject implements net.apnic.rdap.conformance.ContentTest
 {
-    public StandardResponse() {}
+    public StandardObject() {}
 
     public boolean run(Context context, Result proto,
                        Object root)
     {
         List<ContentTest> tests = new ArrayList(Arrays.asList(
-            new RdapConformance(),
-            new Notices(),
-            new StandardObject()
+            new Links(),
+            new Events(),
+            new Status(),
+            /* This appears to be permitted at any level of the response,
+             * since the document refers to 'the containing object
+             * instance'. */
+            new Port43(),
+            new PublicIds(),
+            new Entities(),
+            new Notices("remarks")
         ));
 
         boolean ret = true;
