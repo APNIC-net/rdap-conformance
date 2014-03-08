@@ -10,6 +10,7 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ContentTest;
 
 import net.apnic.rdap.conformance.contenttest.Link;
+import net.apnic.rdap.conformance.contenttest.Array;
 
 public class Links implements ContentTest
 {
@@ -18,7 +19,7 @@ public class Links implements ContentTest
     public boolean run(Context context, Result proto, 
                        Object arg_data)
     {
-        List<Result> results = context.getResults();
+        ContentTest array_test = new Array(new Link(), "links");
 
         Result nr = new Result(proto);
         nr.setCode("content");
@@ -26,58 +27,6 @@ public class Links implements ContentTest
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.2");
 
-        Map<String, Object> data;
-        try {
-            data = (Map<String, Object>) arg_data;
-        } catch (ClassCastException e) {
-            nr.setInfo("structure is invalid");
-            nr.setStatus(Status.Failure);
-            results.add(nr);
-            return false;
-        }
-
-        Result nr1 = new Result(nr);
-        nr1.setInfo("present");
-
-        Object value = data.get("links");
-        if (value == null) {
-            nr1.setStatus(Status.Notification);
-            nr1.setInfo("not present");
-            results.add(nr1);
-            return false;
-        } else {
-            nr1.setStatus(Status.Success);
-            results.add(nr1);
-        }
-
-        Result nr2 = new Result(nr);
-        nr2.setInfo("is an array");
-
-        List<Object> links;
-        try { 
-            links = (List<Object>) value;
-        } catch (ClassCastException e) {
-            nr2.setStatus(Status.Failure);
-            nr2.setInfo("is not an array");
-            results.add(nr2);
-            return false;
-        }
-
-        nr2.setStatus(Status.Success);
-        results.add(nr2);
-
-        ContentTest link = new Link();
-        boolean success = true;
-        int i = 0;
-        for (Object link_object : links) {
-            Result proto2 = new Result(nr);
-            proto2.addNode(Integer.toString(i++));
-            boolean link_success = link.run(context, proto2, link_object);
-            if (!link_success) {
-                success = false;
-            }
-        }
-
-        return success;
+        return array_test.run(context, nr, arg_data);
     }
 }
