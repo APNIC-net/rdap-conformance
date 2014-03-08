@@ -13,7 +13,8 @@ import net.apnic.rdap.conformance.responsetest.ContentType;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.RdapConformance;
 import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
-import net.apnic.rdap.conformance.contenttest.ArrayAttribute;
+import net.apnic.rdap.conformance.contenttest.Array;
+import net.apnic.rdap.conformance.contenttest.StringTest;
 import net.apnic.rdap.conformance.contenttest.Notices;
 
 public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
@@ -39,8 +40,10 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
         boolean ectres = ect.run(context, p, root);
         ContentTest sat = new ScalarAttribute("title");
         boolean satres = sat.run(context, p, root);
-        ContentTest aat = new ArrayAttribute("description");
-        boolean aatres = aat.run(context, p, root);
+        ContentTest aat = new Array(new StringTest(), "description");
+        Result pd = new Result(p);
+        pd.addNode("description");
+        boolean aatres = aat.run(context, pd, root);
         ContentTest nt = new Notices();
         boolean ntres = nt.run(context, p, root);
 

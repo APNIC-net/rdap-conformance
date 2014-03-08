@@ -9,7 +9,6 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
-import net.apnic.rdap.conformance.contenttest.ArrayAttribute;
 import net.apnic.rdap.conformance.contenttest.Links;
 
 public class PublicId implements ContentTest

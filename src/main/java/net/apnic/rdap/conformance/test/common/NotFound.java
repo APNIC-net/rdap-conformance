@@ -29,7 +29,6 @@ import net.apnic.rdap.conformance.responsetest.ContentType;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.RdapConformance;
 import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
-import net.apnic.rdap.conformance.contenttest.ArrayAttribute;
 import net.apnic.rdap.conformance.contenttest.Notices;
 import net.apnic.rdap.conformance.contenttest.ErrorResponse;
 import net.apnic.rdap.conformance.Utils;
