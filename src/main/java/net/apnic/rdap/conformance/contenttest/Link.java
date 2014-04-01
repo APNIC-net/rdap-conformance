@@ -1,5 +1,6 @@
 package net.apnic.rdap.conformance.contenttest;
 
+import java.lang.IllegalArgumentException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.IllformedLocaleException;
 import com.google.common.collect.Sets;
+import com.google.common.net.MediaType;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.HttpRequest;
@@ -341,6 +343,34 @@ public class Link implements ContentTest
                     mtr.setInfo("not registered");
                 }
                 results.add(mtr);
+            }
+        }
+
+        if (data.get("type") != null) {
+            Result tr = new Result(nr);
+            tr.addNode("type");
+            tr.setStatus(Status.Success);
+            tr.setInfo("present");
+            String type = null;
+            try {
+                type = (String) data.get("type");
+            } catch (ClassCastException e) {
+                tr.setStatus(Status.Failure);
+                tr.setInfo("structure is invalid");
+            }
+            results.add(tr);
+            if (type != null) {
+                Result tvr = new Result(nr);
+                tvr.addNode("type");
+                tvr.setStatus(Status.Success);
+                tvr.setInfo("valid");
+                try {
+                    MediaType.parse(type);
+                } catch (IllegalArgumentException e) {
+                    tvr.setInfo(e.toString());
+                    tvr.setStatus(Status.Failure);
+                }
+                results.add(tvr);
             }
         }
 
