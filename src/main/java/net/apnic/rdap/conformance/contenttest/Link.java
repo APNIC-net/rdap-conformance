@@ -102,6 +102,21 @@ public class Link implements ContentTest
                         "working-copy",
                         "working-copy-of");
 
+    /* The first nine are defined by HTML 4.01, and the last two by
+     * CSS 2. */
+    private static final Set<String> media_types =
+        Sets.newHashSet("aural",
+                        "braille",
+                        "handheld",
+                        "print",
+                        "projection",
+                        "screen",
+                        "tty",
+                        "tv",
+                        "all",
+                        "embossed",
+                        "speech");
+
     public Link() {}
 
     private boolean urlIsFetchable(Context context,
@@ -298,6 +313,35 @@ public class Link implements ContentTest
                 tr.setInfo("structure is invalid");
             }
             results.add(tr);
+        }
+
+        if (data.get("media") != null) {
+            Result tr = new Result(nr);
+            tr.addNode("media");
+            tr.setStatus(Status.Success);
+            tr.setInfo("present");
+            String media = null;
+            try {
+                media = (String) data.get("media");
+            } catch (ClassCastException e) {
+                tr.setStatus(Status.Failure);
+                tr.setInfo("structure is invalid");
+            }
+            results.add(tr);
+            if (media != null) {
+                Result mtr = new Result(nr);
+                mtr.addNode("media");
+                mtr.setStatus(Status.Success);
+                mtr.setInfo("registered");
+                if (!media_types.contains(media)) {
+                    /* It's not impossible that the media type is one
+                     * that has been registered in the meantime, which
+                     * is why this is only a warning. */
+                    mtr.setStatus(Status.Warning);
+                    mtr.setInfo("not registered");
+                }
+                results.add(mtr);
+            }
         }
 
         return success;
