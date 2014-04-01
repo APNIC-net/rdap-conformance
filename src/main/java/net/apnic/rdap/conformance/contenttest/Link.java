@@ -1,10 +1,12 @@
 package net.apnic.rdap.conformance.contenttest;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.IllformedLocaleException;
 import com.google.common.collect.Sets;
 
 import org.apache.http.client.HttpClient;
@@ -230,6 +232,55 @@ public class Link implements ContentTest
                 success = false;
             }
             results.add(valid);
+        }
+
+        if (data.get("hreflang") != null) {
+            boolean is_list = false;
+            Result hlr = new Result(nr);
+            hlr.addNode("hreflang");
+            hlr.setStatus(Status.Success);
+            hlr.setInfo("present");
+            List<String> hreflangs = new ArrayList<String>();
+            try {
+                String hreflang = (String) data.get("hreflang");
+                hreflangs.add(hreflang);
+            } catch (ClassCastException e) {}
+            if (hreflangs.size() == 0) {
+                try {
+                    hreflangs = (List<String>) data.get("hreflang");
+                    is_list = true;
+                } catch (ClassCastException e) {
+                    hlr.setStatus(Status.Failure);
+                    hlr.setInfo("structure is invalid");
+                }
+            }
+            results.add(hlr);
+            if (hreflangs.size() != 0) {
+                int i = 0;
+                for (String hreflang : hreflangs) {
+                    Result hler = new Result(nr);
+                    hler.addNode("hreflang");
+                    if (is_list) {
+                        hler.addNode(Integer.toString(i));
+                    }
+                    hler.setStatus(Status.Success);
+                    hler.setInfo("valid");
+                    if (hreflang.length() == 0) {
+                        hler.setStatus(Status.Failure);
+                        hler.setInfo("empty");
+                    } else {
+                        try {
+                            Locale.Builder hlt = 
+                                new Locale.Builder()
+                                          .setLanguageTag(hreflang);
+                        } catch (IllformedLocaleException e) {
+                            hler.setStatus(Status.Failure);
+                            hler.setInfo(e.toString());
+                        }
+                    }
+                    results.add(hler);
+                }
+            }
         }
             
         return success;
