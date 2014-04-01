@@ -135,8 +135,8 @@ public class Link implements ContentTest
             request.releaseConnection();
         }
         /* Previously, this treated >= 400 as a problem. Of course, if
-            an error response is being tested, that won't work. Ideally
-            this would check against the 'current' status code. */
+           an error response is being tested, that won't work. Ideally
+           this would check against the 'current' status code. */
         if (success) {
             vnr.setStatus(Status.Success);
             vnr.setInfo("got response for URL (" + code + ")");
@@ -282,7 +282,24 @@ public class Link implements ContentTest
                 }
             }
         }
-            
+        
+        if (data.get("title") != null) {
+            Result tr = new Result(nr);
+            tr.addNode("title");
+            tr.setStatus(Status.Success);
+            tr.setInfo("valid");
+            try {
+                String title = (String) data.get("title");
+            } catch (ClassCastException e) {
+                tr.setStatus(Status.Failure);
+                /* The example currently present in 5.2 has an array
+                 * of titles. However, RFC 5988 only allows for one
+                 * title to be present: see 5.4. */
+                tr.setInfo("structure is invalid");
+            }
+            results.add(tr);
+        }
+
         return success;
     }
 }
