@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.List;
+import java.util.Set;
+import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
@@ -17,6 +19,19 @@ public class Entity implements ContentTest
 {
     String handle = null;
 
+    private static final Set<String> roles =
+        Sets.newHashSet("registrant",
+                        "technical",
+                        "administrative",
+                        "abuse",
+                        "billing",
+                        "registrar",
+                        "reseller",
+                        "sponsor",
+                        "proxy",
+                        "notifications",
+                        "noc");
+
     public Entity() {}
 
     public Entity(String arg_handle) 
@@ -29,7 +44,6 @@ public class Entity implements ContentTest
     {
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.addNode("entity");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("6.1");
 
@@ -44,16 +58,18 @@ public class Entity implements ContentTest
         }
 
         String response_handle = Utils.castToString(root.get("handle"));
-        Result r = new Result(proto);
+        Result r = new Result(nr);
         r.setStatus(Status.Success);
-        r.setInfo("handle element found");
+        r.addNode("handle");
+        r.setInfo("present");
         if (response_handle == null) {
             r.setStatus(Status.Warning);
-            r.setInfo("handle element not found");
+            r.setInfo("not present");
         } 
         context.addResult(r);
         if ((response_handle != null) && (handle != null)) {
-            Result r2 = new Result(proto);
+            Result r2 = new Result(nr);
+            r.addNode("handle");
             r2.setStatus(Status.Success);
             r2.setInfo("response handle element matches requested handle");
             if (!response_handle.equals(handle)) {
@@ -62,6 +78,48 @@ public class Entity implements ContentTest
                            "match requested handle");
             }
             context.addResult(r2);
+        }
+
+        Result hr = new Result(nr);
+        hr.setStatus(Status.Success);
+        hr.addNode("roles");
+        hr.setInfo("present");
+        Object response_roles = root.get("roles");
+        if (response_roles == null) {
+            hr.setStatus(Status.Notification);
+            hr.setInfo("not present");
+        }
+        context.addResult(hr);
+        if (response_roles != null) {
+            Result ilr = new Result(nr);
+            ilr.setStatus(Status.Success);
+            ilr.addNode("roles");
+            ilr.setInfo("is an array");
+            List<String> response_roles_list = null;
+            try {
+                response_roles_list = (List<String>) response_roles;
+            } catch (ClassCastException e) {
+                ilr.setStatus(Status.Failure);
+                ilr.setInfo("is not an array");
+            }
+            context.addResult(ilr);
+            if (response_roles_list != null) {
+                int i = 0;
+                for (String role : response_roles_list) {
+                    Result rr = new Result(nr);
+                    rr.addNode("roles");
+                    rr.addNode(Integer.toString(i));
+                    rr.setInfo("registered");
+                    rr.setStatus(Status.Success);
+                    rr.setReference("10.2.3");
+                    if (!roles.contains(role)) {
+                        rr.setInfo("not registered");
+                        rr.setStatus(Status.Failure);
+                    }
+                    context.addResult(rr);
+                    i++;
+                }
+            }
         }
 
         ContentTest srt = new StandardObject();
