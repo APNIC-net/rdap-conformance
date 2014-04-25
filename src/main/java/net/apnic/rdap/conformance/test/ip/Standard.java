@@ -2,6 +2,8 @@ package net.apnic.rdap.conformance.test.ip;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -65,6 +67,73 @@ public class Standard implements net.apnic.rdap.conformance.Test
         return address;
     }
 
+    private long bytesToLong(byte[] bytes)
+    {
+        long value = 0;
+        for (int i = 0; i < bytes.length; i++) {
+            value = (value << 8) + (bytes[i] & 0xff);
+        }
+        return value;
+    }
+
+    private BigInteger bytesToBigInteger(byte[] bytes)
+    {
+        BigInteger value = BigInteger.valueOf(0);
+        for (int i = 0; i < bytes.length; i++) {
+            value.shiftLeft(8);
+            value.add(BigInteger.valueOf(bytes[i] & 0xff));
+        }
+        return value;
+    }
+
+    private boolean confirmLessThanOrEqualTo(Context context, Result proto,
+                                             String start_address,
+                                             String end_address,
+                                             int version)
+    {
+        InetAddress start_obj = null;
+        try {
+            start_obj = InetAddress.getByName(start_address);
+        } catch (UnknownHostException uhe) {
+            return false;
+        }
+
+        InetAddress end_obj = null;
+        try {
+            end_obj = InetAddress.getByName(end_address);
+        } catch (UnknownHostException uhe) {
+            return false;
+        }
+
+        byte[] start_bytes = start_obj.getAddress();
+        byte[] end_bytes   = end_obj.getAddress();
+
+        boolean ret = true;
+        if (version == 4) {
+            long start = bytesToLong(start_bytes);
+            long end   = bytesToLong(end_bytes);
+            ret = (start <= end);
+        } else if (version == 6) {
+            BigInteger start = bytesToBigInteger(start_bytes);
+            BigInteger end   = bytesToBigInteger(end_bytes);
+            ret = (start.compareTo(end) <= 0);
+        }
+
+        Result res = new Result(proto);
+        res.addNode("startAddress");
+        if (ret) {
+            res.setStatus(Result.Status.Success);
+            res.setInfo("start address is less than or " +
+                        "equal to end address");
+        } else {
+            res.setStatus(Result.Status.Failure);
+            res.setInfo("start address is greater than end address");
+        }
+        context.addResult(res);
+
+        return ret;
+    }
+
     public boolean run(Context context)
     {
         boolean ret = true;
@@ -110,6 +179,17 @@ public class Standard implements net.apnic.rdap.conformance.Test
                 );
                 types_match.setStatus(Result.Status.Failure);
                 context.addResult(types_match);
+                ret = false;
+            }
+        }
+
+        if (version != 0) {
+            boolean cltret =
+                confirmLessThanOrEqualTo(
+                    context, proto, start_address,
+                    end_address, version
+                );
+            if (!cltret) {
                 ret = false;
             }
         }
