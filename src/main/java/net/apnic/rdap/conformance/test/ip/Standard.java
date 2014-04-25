@@ -18,6 +18,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.Status;
 import net.apnic.rdap.conformance.contenttest.Array;
+import net.apnic.rdap.conformance.contenttest.Country;
 import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
@@ -159,7 +160,7 @@ public class Standard implements net.apnic.rdap.conformance.Test
                 new ScalarAttribute("name"),
                 new ScalarAttribute("handle"),
                 new ScalarAttribute("type"),
-                new ScalarAttribute("country"),
+                new Country(),
                 new ScalarAttribute("parentHandle"),
                 new Array(new Status(), "status"),
                 new StandardResponse()
