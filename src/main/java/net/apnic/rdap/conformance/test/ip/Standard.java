@@ -68,6 +68,7 @@ public class Standard implements net.apnic.rdap.conformance.Test
         Result proto = new Result(Status.Notification, path,
                                   "ip.standard",
                                   "", "", "", "");
+        proto.setCode("content");
         Result r = new Result(proto);
         r.setCode("response");
         Map root = Utils.standardRequest(context, path, r);
@@ -75,6 +76,7 @@ public class Standard implements net.apnic.rdap.conformance.Test
             return false;
         }
 
+        int version = 0;
         String start_address = 
             processIpAddress(context, proto, root, "startAddress");
         String end_address =
@@ -86,12 +88,55 @@ public class Standard implements net.apnic.rdap.conformance.Test
             if (InetAddressUtils.isIPv4Address(start_address)
                     && InetAddressUtils.isIPv4Address(end_address)) {
                 context.addResult(types_match);
+                version = 4;
+            } else if (InetAddressUtils.isIPv6Address(start_address)
+                    && InetAddressUtils.isIPv6Address(end_address)) {
+                context.addResult(types_match);
+                version = 6;
             } else {
                 types_match.setInfo(
                     "start and end address types do not match"
                 );
                 types_match.setStatus(Status.Failure);
                 context.addResult(types_match);
+            }
+        }
+
+        Result vres = new Result(proto);
+        vres.addNode("ipVersion");
+        String ipversion = Utils.castToString(root.get("ipVersion"));
+        if (ipversion == null) {
+            vres.setStatus(Status.Failure);
+            vres.setInfo("not present");
+            context.addResult(vres);
+        } else {
+            vres.setStatus(Status.Success);
+            vres.setInfo("present");
+            context.addResult(vres);
+            Result vres2 = new Result(vres);
+            int check_version = ipversion.equals("v4") ? 4
+                              : ipversion.equals("v6") ? 6
+                                                       : 0;
+            if (check_version == 0) {
+                vres2.setStatus(Status.Failure);
+                vres2.setInfo("invalid");
+                context.addResult(vres2);
+            } else {
+                vres2.setStatus(Status.Success);
+                vres2.setInfo("valid");
+                context.addResult(vres2);
+                if (version != 0) {
+                    Result vres3 = new Result(vres);
+                    if (version == check_version) {
+                        vres3.setStatus(Status.Success);
+                        vres3.setInfo("matches address version");
+                        context.addResult(vres3);
+                    } else {
+                        vres3.setStatus(Status.Failure);
+                        vres3.setInfo("does not match address version");
+                        context.addResult(vres3);
+                    }
+                }
             }
         }
 
