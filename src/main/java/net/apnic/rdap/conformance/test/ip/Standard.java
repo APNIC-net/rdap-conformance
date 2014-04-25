@@ -31,27 +31,29 @@ public class Standard implements net.apnic.rdap.conformance.Test
                                     Map root, String key)
     {
         Result ipres = new Result(proto);
+        ipres.addNode(key);
         String address = (String) root.get(key);
         if (address == null) {
             ipres.setStatus(Status.Failure);
-            ipres.setInfo(key + " element not found");
+            ipres.setInfo("not present");
             context.addResult(ipres);
         } else { 
             ipres.setStatus(Status.Success);
-            ipres.setInfo(key + " element found");
+            ipres.setInfo("present");
             context.addResult(ipres);
             
             Result ipvalid = new Result(proto);
+            ipvalid.addNode(key);
             ipvalid.setStatus(Status.Success);
-            ipvalid.setInfo(key + " element is valid");
+            ipvalid.setInfo("valid");
             if (!(InetAddressUtils.isIPv4Address(address)
                     || InetAddressUtils.isIPv6Address(address))) {
                 ipvalid.setStatus(Status.Failure);
-                ipvalid.setInfo(key + " element is not valid");
+                ipvalid.setInfo("invalid");
                 context.addResult(ipvalid);
             } else {
                 ipvalid.setStatus(Status.Success);
-                ipvalid.setInfo(key + " element is valid");
+                ipvalid.setInfo("valid");
                 context.addResult(ipvalid);
             }
         }
@@ -67,7 +69,10 @@ public class Standard implements net.apnic.rdap.conformance.Test
 
         Result proto = new Result(Status.Notification, path,
                                   "ip.standard",
-                                  "", "", "", "");
+                                  "content", "", 
+                                  "draft-ietf-weirds-json-response-06", 
+                                  "6.4");
+
         proto.setCode("content");
         Result r = new Result(proto);
         r.setCode("response");
