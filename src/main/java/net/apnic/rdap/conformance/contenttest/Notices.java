@@ -1,14 +1,13 @@
 package net.apnic.rdap.conformance.contenttest;
 
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-import net.apnic.rdap.conformance.Context;
+import com.google.common.collect.Sets;
+
 import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Result.Status;
+import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
-
 import net.apnic.rdap.conformance.contenttest.Notice;
 import net.apnic.rdap.conformance.contenttest.Array;
 
@@ -36,5 +35,10 @@ public class Notices implements ContentTest
         nr.setReference("5.3");
 
         return array_test.run(context, nr, arg_data);
+    }
+
+    public Set<String> getKnownAttributes()
+    {
+        return Sets.newHashSet(key != null ? key : "notices");
     }
 }

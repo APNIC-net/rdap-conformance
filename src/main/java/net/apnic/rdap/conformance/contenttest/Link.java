@@ -1,14 +1,28 @@
 package net.apnic.rdap.conformance.contenttest;
 
-import java.lang.IllegalArgumentException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.IllformedLocaleException;
+
 import com.google.common.collect.Sets;
+
+import java.math.BigInteger;
+import java.math.BigDecimal;
+import com.google.common.collect.Sets;
+
+import net.apnic.rdap.conformance.Result;
+import net.apnic.rdap.conformance.Result.Status;
+import net.apnic.rdap.conformance.Context;
+import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.Utils;
+
+import java.lang.IllegalArgumentException;
+import java.util.Locale;
+import java.util.Arrays;
+import java.util.IllformedLocaleException;
+import java.util.Set;
 import com.google.common.net.MediaType;
 
 import org.apache.http.client.HttpClient;
@@ -17,16 +31,13 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.HttpStatus;
 import org.apache.http.Header;
 import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.http.client.config.RequestConfig;
 
-import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Result.Status;
+import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
-
 import net.apnic.rdap.conformance.contenttest.Link;
 
 public class Link implements ContentTest
@@ -374,6 +385,15 @@ public class Link implements ContentTest
             }
         }
 
-        return success;
+        ContentTest ua = new UnknownAttributes(getKnownAttributes());
+        boolean ret2 = ua.run(context, proto, arg_data);
+
+        return (success && ret2);
+    }
+
+    public Set<String> getKnownAttributes()
+    {
+        return Sets.newHashSet("type", "title", "media",
+                               "href", "hreflang", "rel", "value");
     }
 }

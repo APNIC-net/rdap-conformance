@@ -1,24 +1,30 @@
 package net.apnic.rdap.conformance.contenttest;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import org.apache.http.HttpStatus;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
-
 import net.apnic.rdap.conformance.Context;
+import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
-import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 import net.apnic.rdap.conformance.contenttest.RdapConformance;
 import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
-import net.apnic.rdap.conformance.contenttest.Array;
 import net.apnic.rdap.conformance.contenttest.StringTest;
 import net.apnic.rdap.conformance.contenttest.Notices;
 
 public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
 {
+    Set<String> known_attributes = null;
     private int status_code;
 
     public ErrorResponse(int arg_status_code) 
@@ -34,18 +40,24 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
         p.setDocument("draft-ietf-json-response-06");
         p.setReference("7");
 
-        ContentTest rc = new RdapConformance();
-        boolean rcres = rc.run(context, p, root);
-        ContentTest ect = new ScalarAttribute("errorCode");
-        boolean ectres = ect.run(context, p, root);
-        ContentTest sat = new ScalarAttribute("title");
-        boolean satres = sat.run(context, p, root);
-        ContentTest aat = new Array(new StringTest(), "description");
-        Result pd = new Result(p);
-        pd.addNode("description");
-        boolean aatres = aat.run(context, pd, root);
-        ContentTest nt = new Notices();
-        boolean ntres = nt.run(context, p, root);
+        List<ContentTest> tests = new ArrayList(Arrays.asList(
+            new RdapConformance(),
+            new ScalarAttribute("errorCode"),
+            new ScalarAttribute("title"),
+            new Array(new StringTest(), "description"),
+            new Notices()
+        ));
+
+        known_attributes = new HashSet<String>();
+
+        boolean ret = true;
+        for (ContentTest test : tests) {
+            boolean res = test.run(context, p, root);
+            if (!res) {
+                ret = false;
+            }
+            known_attributes.addAll(test.getKnownAttributes());
+        }
 
         Map<String, Object> root_cast;
         try {
@@ -54,7 +66,7 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
             return false;
         }
 
-        if (ectres) {
+        if (ret) {
             Double error_code;
             Result p2 = new Result(p);
             p2.addNode("errorCode");
@@ -84,6 +96,14 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
             context.addResult(p3);
         }
 
-        return (rcres && satres && aatres && ntres);
+        ContentTest ua = new UnknownAttributes(known_attributes);
+        boolean ret2 = ua.run(context, proto, root);
+
+        return (ret && ret2);
+    }
+
+    public Set<String> getKnownAttributes()
+    {
+        return known_attributes;
     }
 }

@@ -1,12 +1,15 @@
 package net.apnic.rdap.conformance.contenttest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Set;
 
-import net.apnic.rdap.conformance.Context;
+import com.google.common.collect.Sets;
+
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
+import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 
 public class RdapConformance implements ContentTest
@@ -78,5 +81,10 @@ public class RdapConformance implements ContentTest
         context.addResult(nr3);
 
         return true;
+    }
+
+    public Set<String> getKnownAttributes()
+    {
+        return Sets.newHashSet("rdapConformance");
     }
 }

@@ -1,8 +1,12 @@
 package net.apnic.rdap.conformance.contenttest;
 
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Map;
 import java.util.ArrayList;
+
+import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Result;
@@ -13,6 +17,7 @@ import net.apnic.rdap.conformance.contenttest.Event;
 
 public class Array implements ContentTest
 {
+    Set<String> known_attributes = null;
     ContentTest element_test = null;
     String key = null;
 
@@ -21,6 +26,7 @@ public class Array implements ContentTest
     {
         element_test = arg_element_test;
         key = arg_key;
+        known_attributes = Sets.newHashSet(arg_key);
     }
 
     public boolean run(Context context, Result proto, 
@@ -80,5 +86,10 @@ public class Array implements ContentTest
         }
 
         return success;
+    }
+
+    public Set<String> getKnownAttributes()
+    {
+        return known_attributes;
     }
 }

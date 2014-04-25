@@ -1,16 +1,24 @@
 package net.apnic.rdap.conformance.contenttest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Set;
 
-import net.apnic.rdap.conformance.Context;
+import com.google.common.collect.Sets;
+
+import java.math.BigInteger;
+import java.math.BigDecimal;
+import com.google.common.collect.Sets;
+
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
+import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.Utils;
+
 
 import net.apnic.rdap.conformance.contenttest.PublicId;
-import net.apnic.rdap.conformance.contenttest.Array;
 
 public class PublicIds implements ContentTest
 {
@@ -28,5 +36,10 @@ public class PublicIds implements ContentTest
         nr.setReference("5.8");
 
         return array_test.run(context, nr, arg_data);
+    }
+
+    public Set<String> getKnownAttributes()
+    {
+        return Sets.newHashSet("publicIds");
     }
 }

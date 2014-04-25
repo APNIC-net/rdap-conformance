@@ -2,8 +2,12 @@ package net.apnic.rdap.conformance.test.domain;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.List;
+
+import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
@@ -11,6 +15,7 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;
+import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
 public class Standard implements net.apnic.rdap.conformance.Test
 {
@@ -60,6 +65,15 @@ public class Standard implements net.apnic.rdap.conformance.Test
         }
 
         ContentTest srt = new StandardResponse();
-        return srt.run(context, proto, root);
+        boolean ret = srt.run(context, proto, root);
+
+        Set<String> known_attributes = new HashSet<String>();
+        known_attributes.addAll(srt.getKnownAttributes());
+        known_attributes.addAll(Sets.newHashSet(
+            "ldhName", "handle", "nameServers"
+        ));
+        ContentTest ua = new UnknownAttributes(known_attributes);
+        boolean ret2 = ua.run(context, proto, root);
+        return (ret && ret2);
     }
 }

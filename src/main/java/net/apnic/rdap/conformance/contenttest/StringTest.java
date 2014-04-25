@@ -1,18 +1,13 @@
 package net.apnic.rdap.conformance.contenttest;
 
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
-import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Utils;
-import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
+import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
-
-import net.apnic.rdap.conformance.contenttest.Notice;
 
 public class StringTest implements ContentTest
 {
@@ -34,5 +29,10 @@ public class StringTest implements ContentTest
 
         context.addResult(nr);
         return success;
+    }
+
+    public Set<String> getKnownAttributes()
+    {
+        return new HashSet<String>();
     }
 }

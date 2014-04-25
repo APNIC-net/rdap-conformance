@@ -1,15 +1,16 @@
 package net.apnic.rdap.conformance.contenttest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Set;
 
-import net.apnic.rdap.conformance.Context;
+import com.google.common.collect.Sets;
+
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
+import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
-import net.apnic.rdap.conformance.contenttest.Links;
 
 public class PublicId implements ContentTest
 {
@@ -37,6 +38,14 @@ public class PublicId implements ContentTest
         ContentTest iat = new ScalarAttribute("identifier");
         boolean iatres = iat.run(context, proto, arg_data);
 
-        return (satres && iatres);
+        ContentTest ua = new UnknownAttributes(getKnownAttributes());
+        boolean ret2 = ua.run(context, proto, arg_data);
+
+        return (satres && iatres && ret2);
+    }
+
+    public Set<String> getKnownAttributes()
+    {
+        return Sets.newHashSet("type", "identifier");
     }
 }

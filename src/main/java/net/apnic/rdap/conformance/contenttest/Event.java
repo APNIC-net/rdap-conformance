@@ -1,19 +1,19 @@
 package net.apnic.rdap.conformance.contenttest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 import java.util.Set;
+
 import com.google.common.collect.Sets;
 import org.joda.time.*;
 import org.joda.time.format.*;
 
-import net.apnic.rdap.conformance.Utils;
-import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
+import net.apnic.rdap.conformance.Context;
+import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.Links;
 
 public class Event implements ContentTest
@@ -136,5 +136,11 @@ public class Event implements ContentTest
         boolean lstres = lst.run(context, proto, arg_data);
 
         return (evtres && evdres && eacres && lstres);
+    }
+
+    public Set<String> getKnownAttributes()
+    {
+        return Sets.newHashSet("eventActor", "eventDate",
+                               "eventAction");
     }
 }
