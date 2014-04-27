@@ -146,6 +146,69 @@ public class Standard implements net.apnic.rdap.conformance.Test
         return ret;
     }
 
+    private boolean confirmParentHandleMatchesParent(Context context,
+                                                     Result proto,
+                                                     Map root)
+    {
+        Result pres = new Result(proto);
+        pres.addNode("parentHandle");
+        String parent_handle = Utils.castToString(root.get("parentHandle"));
+        if (parent_handle == null) {
+            return true;
+        }
+
+        List<Map<String, String>> links = null;
+        try {
+            links = (List<Map<String, String>>) root.get("links");
+        } catch (ClassCastException cce) {
+            return true;
+        }
+
+        Map<String, String> up_link = null;
+        for (Map<String, String> link : links) {
+            String rel = link.get("rel");
+            if ((rel != null) && rel.equals("up")) {
+                up_link = link;
+                break;
+            }
+        }
+
+        /* Inability to fetch the link, or link invalidity, will be
+         * caught by the Links content test. */
+        if (up_link == null) {
+            return true;
+        }
+
+        String href = up_link.get("href");
+        if (href == null) {
+            return true;
+        }
+
+        Map proot = Utils.standardRequest(context, href, proto);
+        if (proot == null) {
+            return true;
+        }
+
+        String handle = (String) proot.get("handle");
+        if (handle == null) {
+            return true;
+        }
+
+        Result res = new Result(proto);
+        res.addNode("parentHandle");
+        if (handle.equals(parent_handle)) {
+            res.setStatus(Result.Status.Success);
+            res.setInfo("parentHandle matches parent handle");
+            context.addResult(res);
+            return true;
+        } else {
+            res.setStatus(Result.Status.Failure);
+            res.setInfo("parentHandle does not match parent handle");
+            context.addResult(res);
+            return false;
+        }
+    }
+
     public boolean run(Context context)
     {
         boolean ret = true;
@@ -201,6 +264,20 @@ public class Standard implements net.apnic.rdap.conformance.Test
                     context, proto, start_address, end_address, version
                 );
             if (!cltret) {
+                ret = false;
+            }
+            /* Issue #12 (IP objects), specified that the
+             * "parentHandle should match the handle of the
+             * next-largest object". However, it's not possible in all
+             * cases to determine the parent object for a given IP
+             * object from the start and end addresses alone, so the
+             * following method relies on the "up" link (if present)
+             * to determine that instead. */
+            boolean pret =
+                confirmParentHandleMatchesParent(
+                    context, proto, root
+                );
+            if (!pret) {
                 ret = false;
             }
         }
