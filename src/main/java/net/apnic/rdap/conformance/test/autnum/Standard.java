@@ -113,7 +113,6 @@ public class Standard implements net.apnic.rdap.conformance.Test
                 new ScalarAttribute("handle"),
                 new ScalarAttribute("type"),
                 new Country(),
-                new Array(new Status(), "status"),
                 new StandardResponse()
             ));
 

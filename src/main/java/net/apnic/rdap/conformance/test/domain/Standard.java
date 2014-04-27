@@ -2,6 +2,8 @@ package net.apnic.rdap.conformance.test.domain;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,6 +16,11 @@ import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.contenttest.SecureDNS;
+import net.apnic.rdap.conformance.contenttest.Nameserver;
+import net.apnic.rdap.conformance.contenttest.Variant;
+import net.apnic.rdap.conformance.contenttest.Array;
+import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
@@ -35,7 +42,9 @@ public class Standard implements net.apnic.rdap.conformance.Test
 
         Result proto = new Result(Status.Notification, path,
                                   "domain.standard",
-                                  "", "", "", "");
+                                  "content", "", 
+                                  "draft-ietf-weirds-json-response-06", 
+                                  "6.3");
         Result r = new Result(proto);
         r.setCode("response");
         Map root = Utils.standardRequest(context, path, r);
@@ -43,35 +52,28 @@ public class Standard implements net.apnic.rdap.conformance.Test
             return false;
         }
 
-        String ldhName = (String) root.get("ldhName");
-        r = new Result(proto);
-        r.setStatus(Status.Success);
-        r.setInfo("ldhName element found");
-        if (ldhName == null) {
-            r.setStatus(Status.Warning);
-            r.setInfo("ldhName element not found");
-        } 
-        results.add(r);
-        if (ldhName != null) {
-            /* todo: won't work for a unicode query. */
-            Result r2 = new Result(proto);
-            r2.setStatus(Status.Success);
-            r2.setInfo("ldhName element matches requested domain");
-            if (!ldhName.equals(domain)) {
-                r2.setStatus(Status.Warning);
-                r2.setInfo("ldhName element does not match requested domain");
-            }
-            results.add(r2);
-        }
-
-        ContentTest srt = new StandardResponse();
-        boolean ret = srt.run(context, proto, root);
+        List<ContentTest> tests =
+            new ArrayList<ContentTest>(Arrays.asList(
+                new ScalarAttribute("handle"),
+                new ScalarAttribute("ldhName"),
+                new ScalarAttribute("unicodeName"),
+                new Array(new Variant(), "variants"),
+                new Array(new Nameserver(), "nameServers"),
+                new SecureDNS(),
+                new StandardResponse()
+            ));
 
         Set<String> known_attributes = new HashSet<String>();
-        known_attributes.addAll(srt.getKnownAttributes());
-        known_attributes.addAll(Sets.newHashSet(
-            "ldhName", "handle", "nameServers"
-        ));
+
+        boolean ret = true;
+        for (ContentTest test : tests) {
+            boolean res = test.run(context, proto, root);
+            if (!res) {
+                ret = false;
+            }
+            known_attributes.addAll(test.getKnownAttributes());
+        }
+ 
         ContentTest ua = new UnknownAttributes(known_attributes);
         boolean ret2 = ua.run(context, proto, root);
         return (ret && ret2);

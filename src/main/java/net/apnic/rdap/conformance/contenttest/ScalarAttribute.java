@@ -56,7 +56,7 @@ public class ScalarAttribute implements ContentTest
         Object value = data.get(attribute_name);
         boolean res;
         if (value == null) {
-            nr.setStatus(Status.Warning);
+            nr.setStatus(Status.Notification);
             nr.setInfo("not present");
             res = false;
         } else {

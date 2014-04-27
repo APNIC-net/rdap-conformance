@@ -184,7 +184,9 @@ public class Standard implements net.apnic.rdap.conformance.Test
             return true;
         }
 
-        Map proot = Utils.standardRequest(context, href, proto);
+        Result parent_proto = new Result(proto);
+        parent_proto.setPath(href);
+        Map proot = Utils.standardRequest(context, href, parent_proto);
         if (proot == null) {
             return true;
         }
@@ -238,6 +240,7 @@ public class Standard implements net.apnic.rdap.conformance.Test
             processIpAddress(context, proto, root, "endAddress");
         if ((start_address != null) && (end_address != null)) {
             Result types_match = new Result(proto);
+            types_match.addNode("startAddress");
             types_match.setInfo("start and end address types match");
             types_match.setStatus(Result.Status.Success);
             if (InetAddressUtils.isIPv4Address(start_address)
@@ -330,7 +333,6 @@ public class Standard implements net.apnic.rdap.conformance.Test
                 new ScalarAttribute("type"),
                 new Country(),
                 new ScalarAttribute("parentHandle"),
-                new Array(new Status(), "status"),
                 new StandardResponse()
             ));
 
