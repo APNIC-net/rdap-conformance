@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -86,36 +87,47 @@ public class Standard implements net.apnic.rdap.conformance.Test
         return value;
     }
 
+    private long addressStringToLong(String addr)
+    {
+        InetAddress obj = null;
+        try {
+            obj = InetAddress.getByName(addr);
+        } catch (UnknownHostException uhe) {
+            return -1;
+        }
+        return bytesToLong(obj.getAddress());
+    }
+
+    private BigInteger addressStringToBigInteger(String addr)
+    {
+        InetAddress obj = null;
+        try {
+            obj = InetAddress.getByName(addr);
+        } catch (UnknownHostException uhe) {
+            return BigInteger.valueOf(-1);
+        }
+        return bytesToBigInteger(obj.getAddress());
+    }
+
     private boolean confirmLessThanOrEqualTo(Context context, Result proto,
                                              String start_address,
                                              String end_address,
                                              int version)
     {
-        InetAddress start_obj = null;
-        try {
-            start_obj = InetAddress.getByName(start_address);
-        } catch (UnknownHostException uhe) {
-            return false;
-        }
-
-        InetAddress end_obj = null;
-        try {
-            end_obj = InetAddress.getByName(end_address);
-        } catch (UnknownHostException uhe) {
-            return false;
-        }
-
-        byte[] start_bytes = start_obj.getAddress();
-        byte[] end_bytes   = end_obj.getAddress();
-
         boolean ret = true;
         if (version == 4) {
-            long start = bytesToLong(start_bytes);
-            long end   = bytesToLong(end_bytes);
+            long start = addressStringToLong(start_address);
+            long end   = addressStringToLong(end_address);
+            if ((start == -1) || (end == -1)) {
+                return false;
+            }
             ret = (start <= end);
         } else if (version == 6) {
-            BigInteger start = bytesToBigInteger(start_bytes);
-            BigInteger end   = bytesToBigInteger(end_bytes);
+            BigInteger start = addressStringToBigInteger(start_address);
+            BigInteger end   = addressStringToBigInteger(end_address);
+            if ((start.equals(-1)) || (end.equals(-1))) {
+                return false;
+            }
             ret = (start.compareTo(end) <= 0);
         }
 
@@ -186,8 +198,7 @@ public class Standard implements net.apnic.rdap.conformance.Test
         if (version != 0) {
             boolean cltret =
                 confirmLessThanOrEqualTo(
-                    context, proto, start_address,
-                    end_address, version
+                    context, proto, start_address, end_address, version
                 );
             if (!cltret) {
                 ret = false;
