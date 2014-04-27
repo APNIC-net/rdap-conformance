@@ -21,7 +21,6 @@ public class Events implements ContentTest
         
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.addNode("events");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.5");
 

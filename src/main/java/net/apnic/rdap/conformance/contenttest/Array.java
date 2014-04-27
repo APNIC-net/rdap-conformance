@@ -33,6 +33,7 @@ public class Array implements ContentTest
                        Object arg_data)
     {
         Result nr = new Result(proto);
+        nr.addNode(key);
 
         Map<String, Object> data;
         try {

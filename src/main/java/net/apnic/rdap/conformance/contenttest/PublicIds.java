@@ -31,7 +31,6 @@ public class PublicIds implements ContentTest
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.addNode("publicIds");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.8");
 

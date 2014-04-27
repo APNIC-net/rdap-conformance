@@ -23,7 +23,6 @@ public class Links implements ContentTest
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.addNode("links");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.2");
 

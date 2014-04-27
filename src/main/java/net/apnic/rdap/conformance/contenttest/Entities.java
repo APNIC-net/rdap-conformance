@@ -26,7 +26,6 @@ public class Entities implements ContentTest
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.addNode("entities");
         /* Only set the reference if it is not already set, since the
          * entities attribute is described separately for each object. */
         if (nr.getDocument() == null) {

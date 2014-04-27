@@ -30,7 +30,6 @@ public class Notices implements ContentTest
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.addNode(mkey);
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.3");
 
