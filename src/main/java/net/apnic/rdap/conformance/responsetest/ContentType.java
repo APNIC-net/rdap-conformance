@@ -35,7 +35,9 @@ public class ContentType implements ResponseTest
         }
 
         String ct = cth.getValue();
-        if (ct.equals("application/rdap+json")) {
+        org.apache.http.entity.ContentType cto =
+            org.apache.http.entity.ContentType.parse(ct);
+        if (cto.getMimeType().equals("application/rdap+json")) {
             nr.setStatus(Status.Success);
             results.add(nr);
             return true;
