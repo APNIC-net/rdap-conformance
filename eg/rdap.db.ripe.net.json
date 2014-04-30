@@ -1,0 +1,26 @@
+{ 
+    "base_url": "http://rdap.db.ripe.net",
+    "object_classes": {
+        "ip": {
+            "supported": true,
+            "exists": ["193.0.0.0/21", "2001:67c:2e8::/48"]
+        },
+        "domain": {
+            "supported": true,
+            "exists": ["0.0.193.in-addr.arpa"],
+            "not_exists": ["google.com"]
+        },
+        "nameserver": {
+            "supported": false
+        },
+        "entity": {
+            "supported": true,
+            "exists": ["GII-RIPE"],
+            "not_exists": ["@@@@@@@@"]
+        },
+        "autnum": {
+            "supported": true,
+            "exists": ["250"]
+        }
+    }
+}
