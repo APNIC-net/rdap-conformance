@@ -1,0 +1,26 @@
+{ 
+    "base_url": "http://rdg.afilias.info/rdap",
+    "object_classes": {
+        "ip": {
+            "supported": false
+        },
+        "domain": {
+            "supported": true,
+            "exists": ["afilias.info"],
+            "not_exists": ["google.com"]
+        },
+        "nameserver": {
+            "supported": true,
+            "exists": ["ns0.centralnic-dns.com"],
+            "not_exists": ["1"]
+        },
+        "entity": {
+            "supported": true,
+            "exists": ["R-R145-LRMS"],
+            "not_exists": ["@@@@@@@@"]
+        },
+        "autnum": {
+            "supported": false
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{ 
+    "base_url": "https://rdap.centralnic.com",
+    "object_classes": {
+        "ip": {
+            "supported": false
+        },
+        "domain": {
+            "supported": true,
+            "exists": ["www.de.com"],
+            "not_exists": ["google.com"]
+        },
+        "nameserver": {
+            "supported": true,
+            "exists": ["ns0.centralnic-dns.com"],
+            "not_exists": ["1"]
+        },
+        "entity": {
+            "supported": true,
+            "exists": ["C11480"],
+            "not_exists": ["@@@@@@@@"]
+        },
+        "autnum": {
+            "supported": false
+        }
+    }
+}

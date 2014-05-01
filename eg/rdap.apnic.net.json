@@ -1,0 +1,26 @@
+{ 
+    "base_url": "http://rdap.apnic.net",
+    "object_classes": {
+        "ip": {
+            "supported": true,
+            "exists": ["203.119.0.0/24", "2001:dc0::/32"]
+        },
+        "domain": {
+            "supported": true,
+            "exists": ["203.in-addr.arpa"],
+            "not_exists": ["google.com"]
+        },
+        "nameserver": {
+            "supported": false
+        },
+        "entity": {
+            "supported": true,
+            "exists": ["TP137-AP"],
+            "not_exists": ["@@@@@@@@"]
+        },
+        "autnum": {
+            "supported": true,
+            "exists": ["4608"]
+        }
+    }
+}
