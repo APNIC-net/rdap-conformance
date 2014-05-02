@@ -4,6 +4,10 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -46,17 +50,43 @@ class Application
         try {
             s = Specification.fromPath(path);
         } catch (Exception e) {
-            System.out.println("Unable to load specification " +
+            System.err.println("Unable to load specification " +
                                "path (" + path + "): " +
                                e.toString());
             System.exit(1);
         }
         if (s == null) {
-            System.out.println("Specification (" + path + ") is empty.");
+            System.err.println("Specification (" + path + ") is empty.");
             System.exit(1);
         }
 
-        HttpClient hc = HttpClientBuilder.create().build();
+        final TrustManager[] trust_all_certs =
+            new TrustManager[] { new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(final X509Certificate[] chain,
+                                               final String authType ) { }
+                @Override
+                public void checkServerTrusted(final X509Certificate[] chain,
+                                               final String authType ) { }
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+            } };
+
+        SSLContext ssl_context = null;
+        try {
+            ssl_context = SSLContext.getInstance( "SSL" );
+            ssl_context.init(null, trust_all_certs,
+                             new java.security.SecureRandom());
+        } catch (Exception e) {
+            System.err.println(e.toString());
+            System.exit(1);
+        }
+
+        HttpClient hc = HttpClientBuilder.create()
+                                         .setSslcontext(ssl_context)
+                                         .build();
         Context c = new Context();
         c.setHttpClient(hc);
         c.setSpecification(s);
