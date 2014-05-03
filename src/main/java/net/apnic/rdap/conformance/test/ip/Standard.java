@@ -303,7 +303,7 @@ public class Standard implements net.apnic.rdap.conformance.Test
                                                        : 0;
             if (check_version == 0) {
                 vres2.setStatus(Result.Status.Failure);
-                vres2.setInfo("invalid");
+                vres2.setInfo("invalid: " + ipversion);
                 context.addResult(vres2);
                 ret = false;
             } else {

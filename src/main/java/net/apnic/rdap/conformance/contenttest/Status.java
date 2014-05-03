@@ -89,12 +89,12 @@ public class Status implements ContentTest
         boolean success = true;
         int i = 0;
         for (Object s : status_entries) {
-            Result r2 = new Result(proto);
+            Result r2 = new Result(nr);
             r2.addNode(Integer.toString(i++));
             r2.setReference("10.2.1");
             if (!statuses.contains((String) s)) {
                 r2.setStatus(Result.Status.Failure);
-                r2.setInfo("value (" + (String) s + ") is invalid");
+                r2.setInfo("invalid: " + ((String) s));
                 success = false;
             } else {
                 r2.setStatus(Result.Status.Success);

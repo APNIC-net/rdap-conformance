@@ -255,7 +255,7 @@ public class Link implements ContentTest
                 valid.setInfo("valid");
                 valid.setStatus(Status.Success);
             } else {
-                valid.setInfo("not valid");
+                valid.setInfo("invalid: " + rel);
                 valid.setStatus(Status.Failure);
                 success = false;
             }
@@ -351,7 +351,7 @@ public class Link implements ContentTest
                      * that has been registered in the meantime, which
                      * is why this is only a warning. */
                     mtr.setStatus(Status.Warning);
-                    mtr.setInfo("not registered");
+                    mtr.setInfo("unregistered: " + media);
                 }
                 results.add(mtr);
             }

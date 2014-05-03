@@ -121,7 +121,7 @@ public class Entity implements ContentTest
                     rr.setStatus(Status.Success);
                     rr.setReference("10.2.3");
                     if (!roles.contains(role)) {
-                        rr.setInfo("not registered");
+                        rr.setInfo("unregistered: " + role);
                         rr.setStatus(Status.Failure);
                     }
                     context.addResult(rr);

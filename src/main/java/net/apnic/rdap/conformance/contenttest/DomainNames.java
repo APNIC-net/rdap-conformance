@@ -153,7 +153,7 @@ public class DomainNames implements ContentTest
             iv.setInfo("valid");
             iv.setStatus(Status.Success);
         } else {
-            iv.setInfo("not valid: " + error);
+            iv.setInfo("invalid: " + error);
             iv.setStatus(Status.Failure);
             res = false;
         }

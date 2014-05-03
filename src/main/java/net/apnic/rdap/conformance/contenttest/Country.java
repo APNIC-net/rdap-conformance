@@ -76,7 +76,7 @@ public class Country implements ContentTest
         Result nr3 = new Result(nr);
         if (!country_codes.contains(country_value)) {
             nr3.setStatus(Result.Status.Failure);
-            nr3.setInfo("invalid");
+            nr3.setInfo("invalid: " + country_value);
             results.add(nr3);
             return false;
         } else {

@@ -13,7 +13,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contentTest.DomainNames;
+import net.apnic.rdap.conformance.contenttest.DomainNames;
 
 public class Nameserver implements ContentTest
 {

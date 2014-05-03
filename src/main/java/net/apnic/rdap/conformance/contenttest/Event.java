@@ -64,8 +64,8 @@ public class Event implements ContentTest
             ear.setStatus(Status.Success);
             results.add(ear);
             Result evr = new Result(proto);
-            ear.setCode("content");
-            ear.addNode("eventAction");
+            evr.setCode("content");
+            evr.addNode("eventAction");
             evr.setDocument("draft-ietf-weirds-json-response-06");
             evr.setReference("10.2.2");
             if (event_actions.contains(event_action)) {
@@ -73,7 +73,7 @@ public class Event implements ContentTest
                 evr.setStatus(Status.Success);
                 results.add(evr);
             } else {
-                evr.setInfo("not registered");
+                evr.setInfo("unregistered: " + event_action);
                 evr.setStatus(Status.Failure);
                 results.add(evr);
                 evtres = false;
@@ -107,7 +107,7 @@ public class Event implements ContentTest
                 edvr.setStatus(Status.Success);
                 results.add(edvr);
             } else {
-                edvr.setInfo("not valid");
+                edvr.setInfo("invalid");
                 edvr.setStatus(Status.Failure);
                 results.add(edvr);
                 evdres = false;
