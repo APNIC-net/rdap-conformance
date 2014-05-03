@@ -13,6 +13,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.contentTest.DomainNames;
 
 public class Nameserver implements ContentTest
 {
@@ -26,8 +27,7 @@ public class Nameserver implements ContentTest
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
                 new ScalarAttribute("handle"),
-                new ScalarAttribute("ldhName"),
-                new ScalarAttribute("unicodeName"),
+                new DomainNames(),
                 new ScalarAttribute("ipAddresses"),
                 new StandardObject()
             ));
