@@ -132,4 +132,46 @@ public class Utils
         } catch (ClassCastException ce) {}
         return sb;
     }
+
+    public static String getStringAttribute(Context context,
+                                            Result proto,
+                                            String key,
+                                            Status missing_status,
+                                            Map<String, Object> data)
+    {
+        Object obj = data.get(key);
+        boolean res = true;
+        Result lnr = new Result(proto);
+        lnr.addNode(key);
+        if (obj == null) {
+            lnr.setStatus(missing_status);
+            lnr.setInfo("not present");
+            res = false;
+        } else {
+            lnr.setStatus(Status.Success);
+            lnr.setInfo("present");
+        }
+        context.addResult(lnr);
+        if (!res) {
+            return null;
+        }
+
+        String str = castToString(obj);
+        Result snr = new Result(proto);
+        snr.addNode(key);
+        if (str == null) {
+            snr.setStatus(Status.Failure);
+            snr.setInfo("not string");
+            res = false;
+        } else {
+            snr.setStatus(Status.Success);
+            snr.setInfo("is string");
+        }
+        context.addResult(snr);
+        if (!res) {
+            return null;
+        }
+
+        return str;
+    }
 }
