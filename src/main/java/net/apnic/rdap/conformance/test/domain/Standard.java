@@ -16,6 +16,7 @@ import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.contenttest.DomainNames;
 import net.apnic.rdap.conformance.contenttest.SecureDNS;
 import net.apnic.rdap.conformance.contenttest.Nameserver;
 import net.apnic.rdap.conformance.contenttest.Variant;
@@ -55,8 +56,7 @@ public class Standard implements net.apnic.rdap.conformance.Test
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
                 new ScalarAttribute("handle"),
-                new ScalarAttribute("ldhName"),
-                new ScalarAttribute("unicodeName"),
+                new DomainNames(),
                 new Array(new Variant(), "variants"),
                 new Array(new Nameserver(), "nameServers"),
                 new SecureDNS(),
