@@ -163,6 +163,12 @@ public class DomainNames implements ContentTest
             Result ms = new Result(nr);
             ms.addNode("unicodeName");
             String ldh_name_canon = ldh_name.toLowerCase();
+            if (ldh_name_canon.charAt(ldh_name_canon.length() - 1) != '.') {
+                ldh_name_canon += ".";
+            }
+            if (ldh_name_check.charAt(ldh_name_check.length() - 1) != '.') {
+                ldh_name_check += ".";
+            }
             if (ldh_name_check.equals(ldh_name_canon)) {
                 ms.setInfo("matches ldhName");
                 ms.setStatus(Status.Success);

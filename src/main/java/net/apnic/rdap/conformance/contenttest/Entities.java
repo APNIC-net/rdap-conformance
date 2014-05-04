@@ -22,7 +22,8 @@ public class Entities implements ContentTest
     public boolean run(Context context, Result proto, 
                        Object arg_data)
     {
-        ContentTest array_test = new Array(new Entity(), "entities");
+        ContentTest array_test =
+            new Array(new Entity(null, true), "entities");
 
         Result nr = new Result(proto);
         nr.setCode("content");

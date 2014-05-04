@@ -23,6 +23,7 @@ import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
 public class Entity implements ContentTest
 {
+    boolean check_unknown = false;
     String handle = null;
     Set<String> known_attributes = null;
 
@@ -41,9 +42,10 @@ public class Entity implements ContentTest
 
     public Entity() {}
 
-    public Entity(String arg_handle) 
+    public Entity(String arg_handle, boolean arg_check_unknown)
     {
         handle = arg_handle;
+        check_unknown = arg_check_unknown;
     }
 
     public boolean run(Context context, Result proto,
@@ -173,11 +175,11 @@ public class Entity implements ContentTest
                     }
                 }
                 VCard vcard = vcards.get(0);
-                ezvcard.ValidationWarnings vws = 
+                ezvcard.ValidationWarnings vws =
                     vcard.validate(vcard.getVersion());
                 String validation_warnings = vws.toString();
                 nrv2 = new Result(nrv);
-                if (validation_warnings.length() == 0) {   
+                if (validation_warnings.length() == 0) {
                     nrv2.setStatus(Status.Success);
                     nrv2.setInfo("valid");
                 } else {
@@ -195,8 +197,11 @@ public class Entity implements ContentTest
         boolean ret = srt.run(context, proto, root);
         known_attributes.addAll(srt.getKnownAttributes());
 
-        ContentTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, root);
+        boolean ret2 = true;
+        if (check_unknown) {
+            ContentTest ua = new UnknownAttributes(known_attributes);
+            ret2 = ua.run(context, proto, root);
+        }
 
         return (ret && vret && ret2);
     }

@@ -51,7 +51,7 @@ public class Standard implements net.apnic.rdap.conformance.Test
 
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
-                new Nameserver(),
+                new Nameserver(false),
                 new RdapConformance(),
                 new Notices()
             ));
