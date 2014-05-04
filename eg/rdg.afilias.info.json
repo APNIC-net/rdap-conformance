@@ -1,5 +1,5 @@
 { 
-    "base_url": "http://rdg.afilias.info/rdap",
+    "base_url": "http://rdg.afilias.info/.well-known/rdap",
     "object_classes": {
         "ip": {
             "supported": false
