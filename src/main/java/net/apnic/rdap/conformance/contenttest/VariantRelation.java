@@ -11,29 +11,16 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 
-public class Status implements ContentTest
+public class VariantRelation implements ContentTest
 {
-    private static final Set<String> statuses =
-        Sets.newHashSet("validated",
-                        "renew prohibited",
-                        "update prohibited",
-                        "transfer prohibited",
-                        "delete prohibited",
-                        "proxy",
-                        "private",
-                        "redacted",
-                        "obscured",
-                        "associated",
-                        "active",
-                        "inactive",
-                        "locked",
-                        "pending create",
-                        "pending renew",
-                        "pending transfer",
-                        "pending update",
-                        "pending delete");
-    
-    public Status() {}
+    private static final Set<String> relations =
+        Sets.newHashSet("registered",
+                        "unregistered",
+                        "registration restricted",
+                        "open registration",
+                        "conjoined");
+ 
+    public VariantRelation() {}
 
     public boolean run(Context context, Result proto, 
                        Object arg_data)
@@ -43,8 +30,8 @@ public class Status implements ContentTest
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("status");
-        nr.setDocument("draft-ietf-weirds-json-response-06");
-        nr.setReference("5.6");
+        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setReference("6.3");
 
         Map<String, Object> data;
         try {
@@ -59,7 +46,7 @@ public class Status implements ContentTest
         Result nr1 = new Result(nr);
         nr1.setInfo("present");
 
-        Object value = data.get("status");
+        Object value = data.get("relation");
         if (value == null) {
             nr1.setStatus(Result.Status.Notification);
             nr1.setInfo("not present");
@@ -73,9 +60,9 @@ public class Status implements ContentTest
         Result nr2 = new Result(nr);
         nr2.setInfo("is an array");
 
-        List<Object> status_entries;
+        List<Object> relation_entries;
         try { 
-            status_entries = (List<Object>) value;
+            relation_entries = (List<Object>) value;
         } catch (ClassCastException e) {
             nr2.setStatus(Result.Status.Failure);
             nr2.setInfo("is not an array");
@@ -88,13 +75,13 @@ public class Status implements ContentTest
 
         boolean success = true;
         int i = 0;
-        for (Object s : status_entries) {
+        for (Object re : relation_entries) {
             Result r2 = new Result(nr);
             r2.addNode(Integer.toString(i++));
-            r2.setReference("10.2.1");
-            if (!statuses.contains((String) s)) {
+            r2.setReference("11.2.4");
+            if (!relation_entries.contains((String) re)) {
                 r2.setStatus(Result.Status.Failure);
-                r2.setInfo("invalid: " + ((String) s));
+                r2.setInfo("invalid: " + ((String) re));
                 success = false;
             } else {
                 r2.setStatus(Result.Status.Success);
@@ -108,6 +95,6 @@ public class Status implements ContentTest
 
     public Set<String> getKnownAttributes()
     {
-        return Sets.newHashSet("status");
+        return Sets.newHashSet("relation");
     }
 }
