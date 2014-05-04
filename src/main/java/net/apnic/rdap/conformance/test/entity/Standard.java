@@ -2,23 +2,32 @@ package net.apnic.rdap.conformance.test.entity;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.List;
+
+import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.StandardResponse;
+import net.apnic.rdap.conformance.contenttest.Entity;
+import net.apnic.rdap.conformance.contenttest.RdapConformance;
+import net.apnic.rdap.conformance.contenttest.Notices;
+import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
 public class Standard implements net.apnic.rdap.conformance.Test
 {
-    String handle = "";
+    String entity = "";
 
-    public Standard(String arg_handle)
+    public Standard(String arg_entity)
     {
-        handle = arg_handle;
+        entity = arg_entity;
     }
 
     public boolean run(Context context)
@@ -26,11 +35,13 @@ public class Standard implements net.apnic.rdap.conformance.Test
         List<Result> results = context.getResults();
 
         String bu = context.getSpecification().getBaseUrl();
-        String path = bu + "/entity/" + handle;
+        String path = bu + "/entity/" + entity;
 
         Result proto = new Result(Status.Notification, path,
                                   "entity.standard",
-                                  "", "", "", "");
+                                  "content", "",
+                                  "draft-ietf-weirds-json-response-07",
+                                  "6.1");
         Result r = new Result(proto);
         r.setCode("response");
         Map root = Utils.standardRequest(context, path, r);
@@ -38,29 +49,26 @@ public class Standard implements net.apnic.rdap.conformance.Test
             return false;
         }
 
-        String response_handle = (String) root.get("handle");
-        r = new Result(proto);
-        r.setStatus(Status.Success);
-        r.setInfo("handle element found");
-        if (response_handle == null) {
-            r.setStatus(Status.Warning);
-            r.setInfo("handle element not found");
-        } 
-        results.add(r);
-        if (response_handle != null) {
-            /* todo: won't work for a unicode query. */
-            Result r2 = new Result(proto);
-            r2.setStatus(Status.Success);
-            r2.setInfo("response handle element matches requested handle");
-            if (!response_handle.equals(handle)) {
-                r2.setStatus(Status.Warning);
-                r2.setInfo("response handle element does not " +
-                           "match requested handle");
+        List<ContentTest> tests =
+            new ArrayList<ContentTest>(Arrays.asList(
+                new Entity(),
+                new RdapConformance(),
+                new Notices()
+            ));
+
+        Set<String> known_attributes = new HashSet<String>();
+
+        boolean ret = true;
+        for (ContentTest test : tests) {
+            boolean res = test.run(context, proto, root);
+            if (!res) {
+                ret = false;
             }
-            results.add(r2);
+            known_attributes.addAll(test.getKnownAttributes());
         }
 
-        ContentTest srt = new StandardResponse();
-        return srt.run(context, proto, root);
+        ContentTest ua = new UnknownAttributes(known_attributes);
+        boolean ret2 = ua.run(context, proto, root);
+        return (ret && ret2);
     }
 }

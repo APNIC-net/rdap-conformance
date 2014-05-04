@@ -1,15 +1,16 @@
 package net.apnic.rdap.conformance.contenttest;
 
+import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-
-import java.math.BigInteger;
-import java.math.BigDecimal;
-import com.google.common.collect.Sets;
+import com.google.gson.Gson;
+import ezvcard.*;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
@@ -130,6 +131,66 @@ public class Entity implements ContentTest
             }
         }
 
+        boolean vret = true;
+        Object vcard_array =
+            Utils.getAttribute(context, nr, "vcardArray", null, root);
+        if (vcard_array != null) {
+            String json = new Gson().toJson(vcard_array);
+            List<VCard> vcards = null;
+            List<List<String>> warnings = null;
+            String error = null;
+            try {
+                Ezvcard.ParserChainJsonString pcjs =
+                    Ezvcard.parseJson(json);
+                warnings = new ArrayList<List<String>>();
+                pcjs.warnings(warnings);
+                vcards = pcjs.all();
+            } catch (Exception e) {
+                error = e.toString();
+            }
+            Result nrv = new Result(nr);
+            Result nrv2 = null;
+            nrv.addNode("vcardArray");
+            if (error != null) {
+                nrv.setStatus(Status.Failure);
+                nrv.setInfo("unable to parse vcard: " + error);
+                vret = false;
+            } else if (vcards.size() == 0) {
+                nrv.setStatus(Status.Failure);
+                nrv.setInfo("vcard not present");
+                vret = false;
+            } else if (vcards.size() > 1) {
+                nrv.setStatus(Status.Failure);
+                nrv.setInfo("multiple vcards present");
+                vret = false;
+            } else {
+                nrv.setStatus(Status.Success);
+                nrv.setInfo("vcard present");
+                if (warnings.size() > 0) {
+                    List<String> vcard_warnings = warnings.get(0);
+                    for (String s : vcard_warnings) {
+                        System.err.println(s);
+                    }
+                }
+                VCard vcard = vcards.get(0);
+                ezvcard.ValidationWarnings vws = 
+                    vcard.validate(vcard.getVersion());
+                String validation_warnings = vws.toString();
+                nrv2 = new Result(nrv);
+                if (validation_warnings.length() == 0) {   
+                    nrv2.setStatus(Status.Success);
+                    nrv2.setInfo("valid");
+                } else {
+                    nrv2.setStatus(Status.Failure);
+                    nrv2.setInfo("invalid: " + validation_warnings);
+                }
+            }
+            context.addResult(nrv);
+            if (nrv2 != null) {
+                context.addResult(nrv2);
+            }
+        }
+
         ContentTest srt = new StandardObject();
         boolean ret = srt.run(context, proto, root);
         known_attributes.addAll(srt.getKnownAttributes());
@@ -137,7 +198,7 @@ public class Entity implements ContentTest
         ContentTest ua = new UnknownAttributes(known_attributes);
         boolean ret2 = ua.run(context, proto, root);
 
-        return (ret && ret2);
+        return (ret && vret && ret2);
     }
 
     public Set<String> getKnownAttributes()

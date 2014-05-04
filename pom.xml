@@ -123,6 +123,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.googlecode.ez-vcard</groupId>
+            <artifactId>ez-vcard</artifactId>
+            <version>0.9.3</version>
+        </dependency>
+
+        <dependency>
             <groupId>vrsn-idna</groupId>
             <artifactId>vrsn-idna</artifactId>
             <version>4.1</version>
