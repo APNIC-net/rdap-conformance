@@ -60,14 +60,14 @@ public class Array implements ContentTest
         }
 
         Result nr2 = new Result(nr);
-        nr2.setInfo("is an array");
+        nr2.setInfo("is array");
 
         List<Object> elements;
         try { 
             elements = (List<Object>) value;
         } catch (ClassCastException e) {
             nr2.setStatus(Status.Failure);
-            nr2.setInfo("is not an array");
+            nr2.setInfo("is not array");
             context.addResult(nr2);
             return false;
         }

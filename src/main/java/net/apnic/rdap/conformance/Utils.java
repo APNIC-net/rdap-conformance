@@ -133,11 +133,11 @@ public class Utils
         return sb;
     }
 
-    public static String getStringAttribute(Context context,
-                                            Result proto,
-                                            String key,
-                                            Status missing_status,
-                                            Map<String, Object> data)
+    public static Object getAttribute(Context context,
+                                      Result proto,
+                                      String key,
+                                      Status missing_status,
+                                      Map<String, Object> data)
     {
         Object obj = data.get(key);
         boolean res = true;
@@ -158,7 +158,21 @@ public class Utils
         if (!res) {
             return null;
         }
+        return obj;
+    }
 
+    public static String getStringAttribute(Context context,
+                                            Result proto,
+                                            String key,
+                                            Status missing_status,
+                                            Map<String, Object> data)
+    {
+        Object obj = getAttribute(context, proto, key, missing_status, data);
+        if (obj == null) {
+            return null;
+        }
+
+        boolean res = true;
         String str = castToString(obj);
         Result snr = new Result(proto);
         snr.addNode(key);
@@ -176,5 +190,34 @@ public class Utils
         }
 
         return str;
+    }
+
+    public static Map<String, Object> getMapAttribute(Context context,
+                                                      Result proto,
+                                                      String key,
+                                                      Status missing_status,
+                                                      Map<String, Object> data)
+    {
+        Object obj = getAttribute(context, proto, key, missing_status, data);
+        if (obj == null) {
+            return null;
+        }
+
+        Map<String, Object> map_data = null;
+        try {
+            map_data = (Map<String, Object>) obj;
+        } catch (ClassCastException e) { }
+        Result snr = new Result(proto);
+        snr.addNode(key);
+        if (map_data == null) {
+            snr.setStatus(Status.Failure);
+            snr.setInfo("not object");
+        } else {
+            snr.setStatus(Status.Success);
+            snr.setInfo("is object");
+        }
+        context.addResult(snr);
+        
+        return map_data;
     }
 }
