@@ -144,6 +144,9 @@ public class Utils
         Result lnr = new Result(proto);
         lnr.addNode(key);
         if (obj == null) {
+            if (missing_status == null) {
+                return null;
+            }
             lnr.setStatus(missing_status);
             lnr.setInfo("not present");
             res = false;

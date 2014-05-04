@@ -42,7 +42,8 @@ public class StandardObject implements net.apnic.rdap.conformance.ContentTest
             new Port43(),
             new PublicIds(),
             new Entities(),
-            new Notices("remarks")
+            new Notices("remarks"),
+            new Lang()
         ));
 
         known_attributes = new HashSet<String>();

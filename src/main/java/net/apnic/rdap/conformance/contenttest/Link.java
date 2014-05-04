@@ -303,7 +303,7 @@ public class Link implements ContentTest
                                           .setLanguageTag(hreflang);
                         } catch (IllformedLocaleException e) {
                             hler.setStatus(Status.Failure);
-                            hler.setInfo(e.toString());
+                            hler.setInfo("invalid: " + e.toString());
                         }
                     }
                     results.add(hler);

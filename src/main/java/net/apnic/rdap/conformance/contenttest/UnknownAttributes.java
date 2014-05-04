@@ -49,7 +49,6 @@ public class UnknownAttributes implements ContentTest
         boolean success = true;
 
         Set<String> attributes = root.keySet();
-        known_attributes.add("lang");
         Sets.SetView<String> unknown_attributes = 
             Sets.difference(attributes, known_attributes);
         for (String unknown_attribute : unknown_attributes) {
