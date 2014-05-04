@@ -24,6 +24,6 @@ public class SecureDNS implements ContentTest
 
     public Set<String> getKnownAttributes()
     {
-        return new HashSet<String>();
+        return Sets.newHashSet("secureDNS");
     }
 }
