@@ -18,6 +18,8 @@ import net.apnic.rdap.conformance.contenttest.Links;
 
 public class Event implements ContentTest
 {
+    boolean allow_actor = true;
+
     private static final Set<String> event_actions = 
         Sets.newHashSet("registration",
                         "reregistration",
@@ -29,7 +31,12 @@ public class Event implements ContentTest
                         "locked",
                         "unlocked");
 
-    public Event() {}
+    public Event(boolean arg_allow_actor)
+    {
+        allow_actor = arg_allow_actor;
+    }
+
+    public Event() { }
 
     public boolean run(Context context, Result proto, 
                        Object arg_data)
@@ -120,7 +127,12 @@ public class Event implements ContentTest
             Result eacr = new Result(proto);
             eacr.setCode("content");
             eacr.addNode("eventActor");
-            if (Utils.castToString(eac) != null) {
+            if (!allow_actor) {
+                eacr.setInfo("not permitted here");
+                eacr.setStatus(Status.Failure);
+                results.add(eacr);
+                eacres = false;
+            } else if (Utils.castToString(eac) != null) {
                 eacr.setInfo("is string");
                 eacr.setStatus(Status.Success);
                 results.add(eacr);

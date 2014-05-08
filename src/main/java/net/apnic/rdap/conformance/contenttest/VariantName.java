@@ -19,7 +19,7 @@ public class VariantName implements ContentTest
 
     public VariantName() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);

@@ -3,6 +3,7 @@ package net.apnic.rdap.conformance.contenttest;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -193,14 +194,25 @@ public class Entity implements ContentTest
             }
         }
 
-        ContentTest srt = new StandardObject();
-        boolean ret = srt.run(context, proto, root);
-        known_attributes.addAll(srt.getKnownAttributes());
+        boolean ret = true;
+        List<ContentTest> tests =
+            new ArrayList<ContentTest>(Arrays.asList(
+                new AsEventActor(),
+                new StandardObject()
+            ));
+
+        for (ContentTest test : tests) {
+            boolean ret_inner = test.run(context, proto, arg_data);
+            if (!ret_inner) {
+                ret = false;
+            }
+            known_attributes.addAll(test.getKnownAttributes());
+        }
 
         boolean ret2 = true;
         if (check_unknown) {
             ContentTest ua = new UnknownAttributes(known_attributes);
-            ret2 = ua.run(context, proto, root);
+            ret2 = ua.run(context, proto, arg_data);
         }
 
         return (ret && vret && ret2);
