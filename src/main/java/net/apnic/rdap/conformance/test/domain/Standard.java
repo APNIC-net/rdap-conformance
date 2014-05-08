@@ -59,7 +59,7 @@ public class Standard implements net.apnic.rdap.conformance.Test
                 new DomainNames(),
                 new Array(new Variant(), "variants"),
                 new Array(new Nameserver(true), "nameServers"),
-                new SecureDNS(),
+                new ScalarAttribute("secureDNS", new SecureDNS()),
                 new StandardResponse()
             ));
 

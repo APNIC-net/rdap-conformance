@@ -25,19 +25,27 @@ import net.apnic.rdap.conformance.Result;
 
 public class ScalarAttribute implements ContentTest
 {
-    private String attribute_name;
+    private String attribute_name = null;
+    private ContentTest attribute_test = null;
 
     public ScalarAttribute(String arg_attribute_name)
     {
         attribute_name = arg_attribute_name;
     }
 
-    public boolean run(Context context, Result proto, 
+    public ScalarAttribute(String arg_attribute_name,
+                           ContentTest arg_attribute_test)
+    {
+        attribute_name = arg_attribute_name;
+        attribute_test = arg_attribute_test;
+    }
+
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);
-        String ucattr_name = 
-            Character.toUpperCase(attribute_name.charAt(0)) + 
+        String ucattr_name =
+            Character.toUpperCase(attribute_name.charAt(0)) +
             attribute_name.substring(1);
         nr.setCode("content");
         nr.addNode(attribute_name);
@@ -52,20 +60,24 @@ public class ScalarAttribute implements ContentTest
             context.addResult(nr);
             return false;
         }
-        
+
         Object value = data.get(attribute_name);
         boolean res;
+        Result nr2 = new Result(nr);
         if (value == null) {
-            nr.setStatus(Status.Notification);
-            nr.setInfo("not present");
+            nr2.setStatus(Status.Notification);
+            nr2.setInfo("not present");
             res = false;
         } else {
-            nr.setStatus(Status.Success);
+            nr2.setStatus(Status.Success);
             res = true;
         }
+        context.addResult(nr2);
 
-        context.addResult(nr);
-        
+        if (attribute_test != null) {
+            return (res && attribute_test.run(context, nr, value));
+        }
+
         return res;
     }
 
