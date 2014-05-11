@@ -55,7 +55,7 @@ public class ScalarAttribute implements ContentTest
         try {
             data = (Map<String, Object>) arg_data;
         } catch (ClassCastException e) {
-            nr.setInfo("structure is invalid");
+            nr.setInfo("structure is invalid: " + e.toString());
             nr.setStatus(Status.Failure);
             context.addResult(nr);
             return false;

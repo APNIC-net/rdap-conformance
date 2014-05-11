@@ -14,29 +14,33 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.BooleanValue;
-import net.apnic.rdap.conformance.contenttest.MaxSigLife;
-import net.apnic.rdap.conformance.contenttest.DsData;
+import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
+import net.apnic.rdap.conformance.contenttest.Events;
+import net.apnic.rdap.conformance.contenttest.Links;
+import net.apnic.rdap.conformance.contenttest.KeyTag;
+import net.apnic.rdap.conformance.contenttest.Algorithm;
 
-public class SecureDNS implements ContentTest
+public class DsData implements ContentTest
 {
     private Set<String> known_attributes = null;
 
-    public SecureDNS() {}
+    public DsData() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         boolean ret = true;
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
-                new ScalarAttribute("zoneSigned", new BooleanValue()),
-                new ScalarAttribute("delegationSigned", new BooleanValue()),
-                new ScalarAttribute("maxSigLife", new MaxSigLife()),
-                new Array(new DsData(), "dsData")
+                new ScalarAttribute("keyTag", new KeyTag()),
+                new ScalarAttribute("algorithm", new Algorithm()),
+                new ScalarAttribute("digest", new Digest()),
+                new ScalarAttribute("digestType", new DigestType()),
+                new Events(),
+                new Links()
             ));
 
-        known_attributes = Sets.newHashSet("keyData");
+        known_attributes = new HashSet<String>();
         for (ContentTest test : tests) {
             boolean ret_inner = test.run(context, proto, arg_data);
             if (!ret_inner) {
