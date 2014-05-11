@@ -13,9 +13,9 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class MaxSigLife implements ContentTest
+public class PublicKey implements ContentTest
 {
-    public MaxSigLife() { }
+    public PublicKey() { }
 
     public boolean run(Context context, Result proto,
                        Object arg_data)
@@ -23,37 +23,32 @@ public class MaxSigLife implements ContentTest
         Result nr = new Result(proto);
 
         boolean res = true;
-        Integer value = null;
+        String value = null;
         try {
-            Double dvalue = (Double) arg_data;
-            if ((dvalue != null) && (dvalue == Math.rint(dvalue))) {
-                value = new Integer((int) Math.round(dvalue));
-            }
+            value = (String) arg_data;
         } catch (ClassCastException ce) {
         }
 
         if (value == null) {
             nr.setStatus(Status.Failure);
-            nr.setInfo("not integer");
+            nr.setInfo("not string");
             res = false;
         } else {
             nr.setStatus(Status.Success);
-            nr.setInfo("is integer");
+            nr.setInfo("is string");
         }
         context.addResult(nr);
 
         Result cvr = new Result(proto);
-        if (value != null) {
-            if (value < 1) {
-                cvr.setStatus(Status.Failure);
-                cvr.setInfo("not positive");
-                res = false;
-            } else {
-                cvr.setStatus(Status.Success);
-                cvr.setInfo("positive");
-            }
-            context.addResult(cvr);
+        if (!value.matches("^[0-9A-Fa-f ]+$")) {
+            cvr.setStatus(Status.Failure);
+            cvr.setInfo("invalid");
+            res = false;
+        } else {
+            cvr.setStatus(Status.Success);
+            cvr.setInfo("valid");
         }
+        context.addResult(cvr);
 
         return res;
     }
