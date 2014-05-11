@@ -14,6 +14,8 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.contenttest.BooleanValue;
+import net.apnic.rdap.conformance.contenttest.MaxSigLife;
 
 public class SecureDNS implements ContentTest
 {
@@ -28,11 +30,11 @@ public class SecureDNS implements ContentTest
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
                 new ScalarAttribute("zoneSigned", new BooleanValue()),
-                new ScalarAttribute("delegationSigned", new BooleanValue())
+                new ScalarAttribute("delegationSigned", new BooleanValue()),
+                new ScalarAttribute("maxSigLife", new MaxSigLife())
             ));
 
-        known_attributes = Sets.newHashSet("maxSigLife",
-                                           "dsData",
+        known_attributes = Sets.newHashSet("dsData",
                                            "keyData");
         for (ContentTest test : tests) {
             boolean ret_inner = test.run(context, proto, arg_data);
