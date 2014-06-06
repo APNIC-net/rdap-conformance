@@ -28,5 +28,7 @@ public class SpecificationTest
         Specification s2 = 
             Specification.fromPath(tempFile.getAbsolutePath());
         assertEquals(s2.getBaseUrl(), "asdf2");
+
+        assertTrue(true);
     }
 }
