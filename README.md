@@ -1,6 +1,8 @@
 rdap-conformance
 ================
 
+[![Build Status](https://travis-ci.org/APNIC-net/rdap-conformance.png)](https://travis-ci.org/APNIC-net/rdap-conformance.png)
+
 Tests an RDAP server for conformance with the current drafts. See
 http://datatracker.ietf.org/wg/weirds.
 
