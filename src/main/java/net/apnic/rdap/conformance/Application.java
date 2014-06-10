@@ -97,6 +97,9 @@ class Application
         );
 
         List<Test> tests = new ArrayList();
+        /* For storing tests that will be re-run with an Accept
+         * content-type of application/json. */
+        List<Test> ct_tests = new ArrayList();
 
         for (String object_type : object_types) {
             ObjectClass oc = s.getObjectClass(object_type);
@@ -114,6 +117,13 @@ class Application
             List<String> exists = oc_ip.getExists();
             for (String e : exists) {
                 tests.add(new net.apnic.rdap.conformance.test.ip.Standard(e));
+            }
+            if (exists.size() >= 1) {
+                ct_tests.add(new
+                    net.apnic.rdap.conformance.test.ip.Standard(
+                        exists.get(0)
+                    )
+                );
             }
             List<String> not_exists = oc_ip.getNotExists();
             for (String e : not_exists) {
@@ -185,8 +195,15 @@ class Application
             tests.add(new net.apnic.rdap.conformance.test.domain.BadRequest());
             List<String> exists = oc_dom.getExists();
             for (String e : exists) {
-                tests.add(
-                    new net.apnic.rdap.conformance.test.domain.Standard(e)
+                tests.add(new
+                    net.apnic.rdap.conformance.test.domain.Standard(e)
+                );
+            }
+            if (exists.size() >= 1) {
+                ct_tests.add(new
+                    net.apnic.rdap.conformance.test.domain.Standard(
+                        exists.get(0)
+                    )
                 );
             }
             List<String> not_exists = oc_dom.getNotExists();
@@ -199,7 +216,13 @@ class Application
 
         for (Test t : tests) {
             t.run(c);
-            c.flushResults();
         }
+
+        c.setContentType("application/json");
+        for (Test ct : ct_tests) {
+            ct.run(c);
+        }
+
+        c.flushResults();
     }
 }

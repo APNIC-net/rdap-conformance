@@ -35,7 +35,7 @@ public class Utils
                                                  String path)
     {
         HttpGet request = new HttpGet(path);
-        request.setHeader("Accept", "application/rdap+json");
+        request.setHeader("Accept", context.getContentType());
         RequestConfig config = 
             RequestConfig.custom()
                          .setConnectionRequestTimeout(5000)

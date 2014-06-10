@@ -14,6 +14,7 @@ public class Context
     private HttpClient http_client = null;
     private Specification specification = null;
     private List<Result> results = new ArrayList<Result>();
+    private String content_type = null;
     private int index;
 
     public Context() 
@@ -50,6 +51,17 @@ public class Context
     public void setSpecification(Specification s)
     {
         specification = s;
+    }
+
+    public String getContentType()
+    {
+        return ((content_type == null) ? "application/rdap+json"
+                                       : content_type);
+    }
+
+    public void setContentType(String s)
+    {
+        content_type = s;
     }
 
     public void flushResults()
