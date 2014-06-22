@@ -17,6 +17,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Test;
 import net.apnic.rdap.conformance.test.domain.BadRequest;
 import net.apnic.rdap.conformance.test.domain.Standard;
+import net.apnic.rdap.conformance.test.common.RawURIRequest;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.specification.ObjectClass;
 
@@ -111,6 +112,13 @@ class Application
             }
         }
 
+        /* Relative URI in the HTTP request. */
+        tests.add(
+            new net.apnic.rdap.conformance.test.common.RawURIRequest(
+                "domain/example.com"
+            )
+        );
+
         ObjectClass oc_ip = s.getObjectClass("ip");
         if ((oc_ip != null) && (oc_ip.isSupported())) {
             tests.add(new net.apnic.rdap.conformance.test.ip.BadRequest());
@@ -131,6 +139,12 @@ class Application
                             "ip/" + e
                          ));
             }
+            /* Unescaped square brackets in the URI. */
+            tests.add(
+                new net.apnic.rdap.conformance.test.common.RawURIRequest(
+                    "/ip/[::]"
+                )
+            );
         }
 
         ObjectClass oc_an = s.getObjectClass("autnum");
