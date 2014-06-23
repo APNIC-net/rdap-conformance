@@ -22,10 +22,16 @@ import com.google.gson.Gson;
 public class RawURIRequest implements net.apnic.rdap.conformance.Test
 {
     String raw_uri = null;
+    Result proto = null;
+    boolean expected_success = false;
 
-    public RawURIRequest(String raw_uri)
+    public RawURIRequest(String raw_uri,
+                         Result proto,
+                         boolean expected_success)
     {
-        this.raw_uri = raw_uri;
+        this.raw_uri          = raw_uri;
+        this.proto            = proto;
+        this.expected_success = expected_success;
     }
 
     public boolean run(Context context)
@@ -70,17 +76,20 @@ public class RawURIRequest implements net.apnic.rdap.conformance.Test
                 success = true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
             error = e.toString();
         }
 
-        Result nr = new Result();
+        Result nr = new Result(proto);
         nr.setPath(raw_uri);
-        nr.setTestName("common.bad-request-uri");
         nr.setCode("content");
-        nr.setStatus(success ? Status.Success : Status.Failure);
-        nr.setInfo(success ? "error content is empty or JSON"
-                           : "error content is not empty or JSON: " + error);
+        if (success) {
+            nr.setStatus(Status.Success);
+        } else if (!nr.getStatusSet()) {
+            nr.setStatus(Status.Failure);
+        }
+        String prefix = (expected_success) ? "content" : "error content";
+        nr.setInfo(success ? prefix + " is empty or JSON"
+                           : prefix + " is not empty or JSON: " + error);
         context.addResult(nr);
 
         return success;

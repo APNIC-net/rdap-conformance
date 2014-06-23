@@ -15,6 +15,7 @@ public class Result
     private String document   = "";
     private String reference  = "";
     private List<String> node = new ArrayList<String>();
+    boolean status_set        = false;
 
     public Result() {}
 
@@ -54,7 +55,13 @@ public class Result
 
     public void setStatus(Status s)
     {
+        status_set = true;
         status = s;
+    }
+
+    public boolean getStatusSet()
+    {
+        return status_set;
     }
 
     public String getPath()

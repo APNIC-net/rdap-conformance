@@ -113,9 +113,37 @@ class Application
         }
 
         /* Relative URI in the HTTP request. */
+        Result relative = new Result();
+        relative.setTestName("common.bad-uri-relative");
+        relative.setStatus(Result.Status.Notification);
         tests.add(
             new net.apnic.rdap.conformance.test.common.RawURIRequest(
-                "domain/example.com"
+                "domain/example.com",
+                relative,
+                false
+            )
+        );
+
+        /* Unprintable characters in the URI in the HTTP request. */
+        Result unprintable = new Result();
+        unprintable.setTestName("common.bad-uri-unprintable");
+        unprintable.setStatus(Result.Status.Notification);
+        tests.add(
+            new net.apnic.rdap.conformance.test.common.RawURIRequest(
+                "/domain/" + new String(Character.toChars(0)),
+                unprintable,
+                false
+            )
+        );
+
+        /* Absolute URI in the HTTP request. */
+        Result absolute = new Result();
+        absolute.setTestName("common.uri-absolute");
+        tests.add(
+            new net.apnic.rdap.conformance.test.common.RawURIRequest(
+                c.getSpecification().getBaseUrl() + "/domain/example.com",
+                absolute,
+                true
             )
         );
 
@@ -140,9 +168,13 @@ class Application
                          ));
             }
             /* Unescaped square brackets in the URI. */
+            Result unescaped = new Result();
+            unescaped.setTestName("ip.bad-uri-unescaped");
             tests.add(
                 new net.apnic.rdap.conformance.test.common.RawURIRequest(
-                    "/ip/[::]"
+                    "/ip/[::]",
+                    unescaped,
+                    false
                 )
             );
         }
