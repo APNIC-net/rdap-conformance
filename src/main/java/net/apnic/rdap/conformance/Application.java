@@ -8,6 +8,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -231,8 +232,11 @@ class Application
             }
             /* That the entity handle happens to be an IP address should
                not cause a 400 to be returned. */
-            tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                           "/entity/1.2.3.4"
+            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
+                              HttpStatus.SC_BAD_REQUEST,
+                              "/entity/1.2.3.4",
+                              "ip.not-bad-request",
+                              true
                       ));
         }
 
@@ -258,6 +262,21 @@ class Application
                             "/domain/" + e
                          )); 
             }
+            /* Number registries should not return 400 on forward
+             * domains. */
+            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
+                              HttpStatus.SC_BAD_REQUEST,
+                              "/domain/example.com",
+                              "domain.not-bad-request",
+                              true
+                      ));
+            /* As above, but for name registries and reverse domains. */
+            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
+                              HttpStatus.SC_BAD_REQUEST,
+                              "/domain/202.in-addr.arpa",
+                              "domain.not-bad-request",
+                              true
+                      ));
         }
 
         for (Test t : tests) {
