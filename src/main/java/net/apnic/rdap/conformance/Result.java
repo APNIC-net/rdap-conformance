@@ -180,9 +180,20 @@ public class Result
 
     public String toString()
     {
+        StringBuilder epath = new StringBuilder();
+        int slen = path.length();
+        for (int i = 0; i < slen; i++){
+            char c = path.charAt(i);
+            if (Character.isISOControl(c)) {
+                epath.append("{\\x" + ((int) c) + "}");
+            } else {
+                epath.append(c);
+            }
+        }
+
         String s =
             getTestName() + "," +
-            getPath() + "," +
+            epath.toString() + "," +
             getStatusAsString() + "," +
             getCode() + "," +
             getInfo() + ",";
