@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import org.apache.http.client.HttpClient;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.HttpStatus;
@@ -24,6 +25,7 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
+import net.apnic.rdap.conformance.responsetest.NotStatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.RdapConformance;
@@ -32,15 +34,30 @@ import net.apnic.rdap.conformance.contenttest.Notices;
 import net.apnic.rdap.conformance.contenttest.ErrorResponse;
 import net.apnic.rdap.conformance.Utils;
 
-public class BadRequest implements net.apnic.rdap.conformance.Test
+public class BasicRequest implements net.apnic.rdap.conformance.Test
 {
+    private int expected_status;
     private String test_name;
     private String url_path;
+    boolean invert_status_test;
 
-    public BadRequest(String arg_test_name, String arg_url_path) 
+    public BasicRequest(int arg_expected_status,
+                        String arg_url_path,
+                        String arg_test_name, 
+                        boolean arg_invert_status_test)
     {
+        expected_status = arg_expected_status;
         test_name = arg_test_name;
         url_path  = arg_url_path;
+        invert_status_test = arg_invert_status_test;
+
+        if (test_name == null) {
+            test_name = "common." +
+                        (arg_invert_status_test ? "not-" : "") +
+                        ((expected_status == 404)
+                            ? "not-found"
+                            : expected_status);
+        }
     }
 
     public boolean run(Context context)
@@ -74,7 +91,10 @@ public class BadRequest implements net.apnic.rdap.conformance.Test
         r.setStatus(Status.Success);
         results.add(r);
 
-        ResponseTest sc = new StatusCode(HttpStatus.SC_BAD_REQUEST);
+        ResponseTest sc = 
+            (invert_status_test)
+                ? new NotStatusCode(expected_status)
+                : new StatusCode(expected_status);
         boolean scres = sc.run(context, proto, response);
         if (!scres) {
             request.releaseConnection();
@@ -120,8 +140,12 @@ public class BadRequest implements net.apnic.rdap.conformance.Test
             return ctres;
         }
 
-        ContentTest ert = new ErrorResponse(HttpStatus.SC_BAD_REQUEST);
-        request.releaseConnection();
-        return ert.run(context, proto, root);
+        if (expected_status >= 400) {
+            ContentTest ert = new ErrorResponse(expected_status);
+            request.releaseConnection();
+            return ert.run(context, proto, root);
+        } else {
+            return ctres;
+        }
     }
 }

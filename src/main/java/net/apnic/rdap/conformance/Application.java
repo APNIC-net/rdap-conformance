@@ -107,7 +107,7 @@ class Application
             if ((oc != null)
                     && (!s.getObjectClass(object_type).isSupported())) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            object_type)
+                            "/" + object_type)
                          );
             }
         }
@@ -164,7 +164,7 @@ class Application
             List<String> not_exists = oc_ip.getNotExists();
             for (String e : not_exists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "ip/" + e
+                            "/ip/" + e
                          ));
             }
             /* Unescaped square brackets in the URI. */
@@ -191,7 +191,7 @@ class Application
             List<String> not_exists = oc_an.getNotExists();
             for (String e : not_exists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "autnum/" + e
+                            "/autnum/" + e
                          ));
             }
         }
@@ -210,7 +210,7 @@ class Application
             List<String> not_exists = oc_ns.getNotExists();
             for (String e : not_exists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "nameserver/" + e
+                            "/nameserver/" + e
                          ));
             }
         }
@@ -226,13 +226,13 @@ class Application
             List<String> not_exists = oc_en.getNotExists();
             for (String e : not_exists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                           "entity/" + e
+                           "/entity/" + e
                           ));
             }
             /* That the entity handle happens to be an IP address should
                not cause a 400 to be returned. */
             tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                           "entity/1.2.3.4"
+                           "/entity/1.2.3.4"
                       ));
         }
 
@@ -255,7 +255,7 @@ class Application
             List<String> not_exists = oc_dom.getNotExists();
             for (String e : not_exists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "domain/" + e
+                            "/domain/" + e
                          )); 
             }
         }
