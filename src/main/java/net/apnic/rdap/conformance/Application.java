@@ -178,6 +178,13 @@ class Application
                     false
                 )
             );
+            /* Extra query parameter. */
+            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
+                              HttpStatus.SC_BAD_REQUEST,
+                              "/ip/1.2.3.4?asdf=zxcv",
+                              "ip.extra-query-parameter",
+                              true
+                      ));
         }
 
         ObjectClass oc_an = s.getObjectClass("autnum");
@@ -195,6 +202,13 @@ class Application
                             "/autnum/" + e
                          ));
             }
+            /* Extra query parameter. */
+            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
+                              HttpStatus.SC_BAD_REQUEST,
+                              "/autnum/1234?asdf=zxcv",
+                              "autnum.extra-query-parameter",
+                              true
+                      ));
         }
 
         ObjectClass oc_ns = s.getObjectClass("nameserver");
@@ -214,6 +228,13 @@ class Application
                             "/nameserver/" + e
                          ));
             }
+            /* Extra query parameter. */
+            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
+                              HttpStatus.SC_BAD_REQUEST,
+                              "/nameserver/example.com?asdf=zxcv",
+                              "nameserver.extra-query-parameter",
+                              true
+                      ));
         }
 
         ObjectClass oc_en = s.getObjectClass("entity");
@@ -235,7 +256,14 @@ class Application
             tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
                               HttpStatus.SC_BAD_REQUEST,
                               "/entity/1.2.3.4",
-                              "ip.not-bad-request",
+                              "entity.not-bad-request",
+                              true
+                      ));
+            /* Extra query parameter. */
+            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
+                              HttpStatus.SC_BAD_REQUEST,
+                              "/entity/asdf?asdf=zxcv",
+                              "entity.extra-query-parameter",
                               true
                       ));
         }
@@ -275,6 +303,13 @@ class Application
                               HttpStatus.SC_BAD_REQUEST,
                               "/domain/202.in-addr.arpa",
                               "domain.not-bad-request",
+                              true
+                      ));
+            /* Extra query parameter. */
+            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
+                              HttpStatus.SC_BAD_REQUEST,
+                              "/domain/example.com?asdf=zxcv",
+                              "domain.extra-query-parameter",
                               true
                       ));
         }
