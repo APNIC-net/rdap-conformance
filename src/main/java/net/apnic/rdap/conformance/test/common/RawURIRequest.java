@@ -40,6 +40,9 @@ public class RawURIRequest implements net.apnic.rdap.conformance.Test
         String error = null;
         try {
             String bu = context.getSpecification().getBaseUrl();
+            if (bu.startsWith("https")) {
+                return true;
+            }
             URI uri = new URI(bu);
             String host = uri.getHost();
 
