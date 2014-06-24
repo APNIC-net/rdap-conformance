@@ -99,9 +99,6 @@ class Application
         );
 
         List<Test> tests = new ArrayList();
-        /* For storing tests that will be re-run with an Accept
-         * content-type of application/json. */
-        List<Test> ct_tests = new ArrayList();
 
         for (String object_type : object_types) {
             ObjectClass oc = s.getObjectClass(object_type);
@@ -148,19 +145,24 @@ class Application
             )
         );
 
+        /* application/json content-type. This is deliberately using
+         * an invalid status code with inverted sense, because so long
+         * as the request is 'successful', it's fine. */
+        c.setContentType("application/json");
+        tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
+                          0,
+                          "/domain/example.com",
+                          "common.application-json",
+                          true
+                  ));
+        c.setContentType(null);
+
         ObjectClass oc_ip = s.getObjectClass("ip");
         if ((oc_ip != null) && (oc_ip.isSupported())) {
             tests.add(new net.apnic.rdap.conformance.test.ip.BadRequest());
             List<String> exists = oc_ip.getExists();
             for (String e : exists) {
                 tests.add(new net.apnic.rdap.conformance.test.ip.Standard(e));
-            }
-            if (exists.size() >= 1) {
-                ct_tests.add(new
-                    net.apnic.rdap.conformance.test.ip.Standard(
-                        exists.get(0)
-                    )
-                );
             }
             List<String> not_exists = oc_ip.getNotExists();
             for (String e : not_exists) {
@@ -277,13 +279,6 @@ class Application
                     net.apnic.rdap.conformance.test.domain.Standard(e)
                 );
             }
-            if (exists.size() >= 1) {
-                ct_tests.add(new
-                    net.apnic.rdap.conformance.test.domain.Standard(
-                        exists.get(0)
-                    )
-                );
-            }
             List<String> not_exists = oc_dom.getNotExists();
             for (String e : not_exists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
@@ -316,11 +311,6 @@ class Application
 
         for (Test t : tests) {
             t.run(c);
-        }
-
-        c.setContentType("application/json");
-        for (Test ct : ct_tests) {
-            ct.run(c);
         }
 
         c.flushResults();
