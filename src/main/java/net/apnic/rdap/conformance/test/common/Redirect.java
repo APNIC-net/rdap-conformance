@@ -17,6 +17,7 @@ import org.apache.http.Header;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Specification;
 import net.apnic.rdap.conformance.Result;
@@ -34,29 +35,19 @@ import net.apnic.rdap.conformance.contenttest.Notices;
 import net.apnic.rdap.conformance.contenttest.ErrorResponse;
 import net.apnic.rdap.conformance.Utils;
 
-public class BasicRequest implements net.apnic.rdap.conformance.Test
+public class Redirect implements net.apnic.rdap.conformance.Test
 {
-    private int expected_status;
-    private String test_name;
     private String url_path;
-    boolean invert_status_test;
+    private String test_name;
 
-    public BasicRequest(int arg_expected_status,
-                        String arg_url_path,
-                        String arg_test_name,
-                        boolean arg_invert_status_test)
+    public Redirect(String arg_url_path,
+                    String arg_test_name)
     {
-        expected_status = arg_expected_status;
-        test_name = arg_test_name;
         url_path  = arg_url_path;
-        invert_status_test = arg_invert_status_test;
+        test_name = arg_test_name;
 
         if (test_name == null) {
-            test_name = "common." +
-                        (arg_invert_status_test ? "not-" : "") +
-                        ((expected_status == 404)
-                            ? "not-found"
-                            : expected_status);
+            test_name = "common.redirect";
         }
     }
 
@@ -76,7 +67,7 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
         HttpRequestBase request = null;
         HttpResponse response = null;
         try {
-            request = Utils.httpGetRequest(context, path, true);
+            request = Utils.httpGetRequest(context, path, false);
             response = context.getHttpClient().execute(request);
         } catch (IOException e) {
             r.setStatus(Status.Failure);
@@ -92,60 +83,22 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
         results.add(r);
 
         ResponseTest sc =
-            (invert_status_test)
-                ? new NotStatusCode(expected_status)
-                : new StatusCode(expected_status);
+            new StatusCode(
+                Sets.newHashSet(HttpStatus.SC_TEMPORARY_REDIRECT,
+                                HttpStatus.SC_MOVED_PERMANENTLY,
+                                HttpStatus.SC_MOVED_TEMPORARILY,
+                                HttpStatus.SC_SEE_OTHER)
+            );
         boolean scres = sc.run(context, proto, response);
         if (!scres) {
             request.releaseConnection();
             return false;
         }
 
-        Header cth = response.getEntity().getContentType();
-        if (cth == null) {
-            /* If there is no content-type, then there shouldn't be a body.
-             * This is fine, since bodies are optional for error responses. */
-            request.releaseConnection();
-            return true;
-        }
+        /* todo: This should run a content test of some sort on the
+         * response, though adjusted to make it clear that errors are
+         * the fault of the server to which the redirection points. */
 
-        ResponseTest ct = new ContentType();
-        boolean ctres = ct.run(context, proto, response);
-
-        if (!(scres && ctres)) {
-            request.releaseConnection();
-            return false;
-        }
-
-        Map root = null;
-        try {
-            InputStream is = response.getEntity().getContent();
-            InputStreamReader isr = new InputStreamReader(is);
-            root = new Gson().fromJson(isr, Map.class);
-        } catch (Exception e) {
-            r = new Result(proto);
-            r.setInfo(e.toString());
-            results.add(r);
-            request.releaseConnection();
-            return false;
-        }
-        if (root == null) {
-            request.releaseConnection();
-            return ctres;
-        }
-
-        Set<String> keys = root.keySet();
-        if (keys.size() == 0) {
-            request.releaseConnection();
-            return ctres;
-        }
-
-        if ((expected_status >= 400) && (!invert_status_test)) {
-            ContentTest ert = new ErrorResponse(expected_status);
-            request.releaseConnection();
-            return ert.run(context, proto, root);
-        } else {
-            return ctres;
-        }
+        return true;
     }
 }

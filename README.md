@@ -70,10 +70,13 @@ the following structure:
                 "supported":  {boolean},
                 "exists":     [ "{path1}", "{path2}", ..., "{pathN}" ],
                 "not_exists": [ "{path1}", "{path2}", ..., "{pathN}" ],
+                "redirects":  [ "{path1}", "{path2}", ..., "{pathN}" ]
             },
             ...
         }
     }
+
+Redirects are not applicable for the entity object class.
 
 If an object class is omitted from the configuration file, it is
 treated as unimplemented.
@@ -85,7 +88,8 @@ For example:
         "object_classes": {
             "ip": {
                 "supported": true,
-                "exists":    ["203.119.0.42/23"]
+                "exists":    ["203.119.0.42/23"],
+                "redirects": ["200.3.14.10"]
             },
             "domain": {
                 "supported":  true,

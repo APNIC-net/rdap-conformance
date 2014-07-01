@@ -32,7 +32,8 @@ import org.apache.http.client.config.RequestConfig;
 public class Utils
 {
     static public HttpRequestBase httpGetRequest(Context context,
-                                                 String path)
+                                                 String path,
+                                                 boolean follow_redirects)
     {
         HttpGet request = new HttpGet(path);
         request.setHeader("Accept", context.getContentType());
@@ -41,6 +42,7 @@ public class Utils
                          .setConnectionRequestTimeout(5000)
                          .setConnectTimeout(5000)
                          .setSocketTimeout(5000)
+                         .setRedirectsEnabled(follow_redirects)
                          .build();
         request.setConfig(config);
         return request;
@@ -59,7 +61,7 @@ public class Utils
         HttpResponse response = null;
         HttpEntity entity;
         try {
-            request = httpGetRequest(context, path);
+            request = httpGetRequest(context, path, true);
             response = context.getHttpClient().execute(request);
             entity = response.getEntity();
         } catch (IOException e) {

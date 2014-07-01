@@ -182,7 +182,7 @@ public class Result
     {
         StringBuilder epath = new StringBuilder();
         int slen = path.length();
-        for (int i = 0; i < slen; i++){
+        for (int i = 0; i < slen; i++) {
             char c = path.charAt(i);
             if (Character.isISOControl(c)) {
                 epath.append("{\\x" + ((int) c) + "}");

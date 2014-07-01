@@ -16,6 +16,7 @@ public class ObjectClass
     private boolean supported = false;
     private List<String> exists = new ArrayList<String>();
     private List<String> not_exists = new ArrayList<String>();
+    private List<String> redirects = new ArrayList<String>();
     
     private ObjectClass() {}
 
@@ -32,5 +33,10 @@ public class ObjectClass
     public List<String> getNotExists()
     {
         return not_exists;
+    }
+
+    public List<String> getRedirects()
+    {
+        return redirects;
     }
 }

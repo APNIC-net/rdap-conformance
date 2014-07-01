@@ -170,6 +170,12 @@ class Application
                             "/ip/" + e
                          ));
             }
+            List<String> redirects = oc_ip.getRedirects();
+            for (String e : redirects) {
+                tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
+                            "/ip/" + e, "ip.redirect"
+                          ));
+            }
             /* Unescaped square brackets in the URI. */
             Result unescaped = new Result();
             unescaped.setTestName("ip.bad-uri-unescaped");
@@ -204,6 +210,12 @@ class Application
                             "/autnum/" + e
                          ));
             }
+            List<String> redirects = oc_an.getRedirects();
+            for (String e : redirects) {
+                tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
+                            "/autnum/" + e, "autnum.redirect"
+                          ));
+            }
             /* Extra query parameter. */
             tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
                               HttpStatus.SC_BAD_REQUEST,
@@ -229,6 +241,12 @@ class Application
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                             "/nameserver/" + e
                          ));
+            }
+            List<String> redirects = oc_ns.getRedirects();
+            for (String e : redirects) {
+                tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
+                            "/nameserver/" + e, "nameserver.redirect"
+                          ));
             }
             /* Extra query parameter. */
             tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
@@ -284,6 +302,12 @@ class Application
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                             "/domain/" + e
                          )); 
+            }
+            List<String> redirects = oc_dom.getRedirects();
+            for (String e : redirects) {
+                tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
+                            "/domain/" + e, "domain.redirect"
+                          ));
             }
             /* Number registries should not return 400 on forward
              * domains. */
