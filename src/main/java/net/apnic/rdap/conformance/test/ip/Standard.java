@@ -18,6 +18,7 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
+import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.Status;
 import net.apnic.rdap.conformance.contenttest.Array;
@@ -26,13 +27,22 @@ import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
-public class Standard implements net.apnic.rdap.conformance.Test
+public class Standard implements ObjectTest
 {
-    String ip = "";
+    String ip = null;
+    String url = null;
 
-    public Standard(String arg_ip)
+    public Standard() {}
+
+    public Standard(String ip)
     {
-        ip = arg_ip;
+        this.ip = ip;
+    }
+
+    public void setUrl(String url)
+    {
+        ip = null;
+        this.url = url;
     }
 
     private String processIpAddress(Context context, Result proto, 
@@ -216,8 +226,10 @@ public class Standard implements net.apnic.rdap.conformance.Test
         boolean ret = true;
         List<Result> results = context.getResults();
 
-        String bu = context.getSpecification().getBaseUrl();
-        String path = bu + "/ip/" + ip;
+        String path =
+            (url != null)
+                ? url
+                : context.getSpecification().getBaseUrl() + "/ip/" + ip;
 
         Result proto = new Result(Result.Status.Notification, path,
                                   "ip.standard",

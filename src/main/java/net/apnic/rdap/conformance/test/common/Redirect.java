@@ -24,6 +24,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 
 import net.apnic.rdap.conformance.Context;
+import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.NotStatusCode;
@@ -39,12 +40,26 @@ public class Redirect implements net.apnic.rdap.conformance.Test
 {
     private String url_path;
     private String test_name;
+    private ObjectTest result_test;
 
     public Redirect(String arg_url_path,
                     String arg_test_name)
     {
-        url_path  = arg_url_path;
-        test_name = arg_test_name;
+        url_path    = arg_url_path;
+        test_name   = arg_test_name;
+
+        if (test_name == null) {
+            test_name = "common.redirect";
+        }
+    }
+
+    public Redirect(ObjectTest arg_result_test,
+                    String arg_url_path,
+                    String arg_test_name)
+    {
+        result_test = arg_result_test;
+        url_path    = arg_url_path;
+        test_name   = arg_test_name;
 
         if (test_name == null) {
             test_name = "common.redirect";
@@ -95,10 +110,13 @@ public class Redirect implements net.apnic.rdap.conformance.Test
             return false;
         }
 
-        /* todo: This should run a content test of some sort on the
-         * response, though adjusted to make it clear that errors are
-         * the fault of the server to which the redirection points. */
-
-        return true;
+        if (result_test != null) {
+            String location = response.getFirstHeader("Location")
+                                      .getValue();
+            result_test.setUrl(location);
+            return result_test.run(context);
+        } else {
+            return true;
+        }
     }
 }

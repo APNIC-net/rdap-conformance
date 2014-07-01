@@ -173,6 +173,7 @@ class Application
             List<String> redirects = oc_ip.getRedirects();
             for (String e : redirects) {
                 tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
+                            new net.apnic.rdap.conformance.test.ip.Standard(),
                             "/ip/" + e, "ip.redirect"
                           ));
             }
