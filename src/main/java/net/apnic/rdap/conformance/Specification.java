@@ -14,6 +14,7 @@ import net.apnic.rdap.conformance.specification.ObjectClass;
 public class Specification
 {
     private String base_url = null;
+    private double requests_per_second = 0;
     private Map<String, ObjectClass> object_classes = null;
 
     private Specification() {}
@@ -44,5 +45,10 @@ public class Specification
     public ObjectClass getObjectClass(String type)
     {
         return object_classes.get(type);
+    }
+
+    public double getRequestsPerSecond()
+    {
+        return requests_per_second;
     }
 }

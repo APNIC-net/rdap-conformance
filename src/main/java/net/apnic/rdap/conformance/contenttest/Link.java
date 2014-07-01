@@ -150,7 +150,7 @@ public class Link implements ContentTest
                              .build();
             request.setConfig(config);
             HttpResponse response = 
-                context.getHttpClient().execute(request);
+                context.executeRequest(request);
             code = response.getStatusLine().getStatusCode();
         } catch (Exception e) {
             vnr.setStatus(Status.Failure);

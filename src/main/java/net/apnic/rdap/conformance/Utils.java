@@ -62,7 +62,7 @@ public class Utils
         HttpEntity entity;
         try {
             request = httpGetRequest(context, path, true);
-            response = context.getHttpClient().execute(request);
+            response = context.executeRequest(request);
             entity = response.getEntity();
         } catch (IOException e) {
             r.setStatus(Status.Failure);

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
-import org.apache.http.client.HttpClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -77,7 +76,7 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
         HttpResponse response = null;
         try {
             request = Utils.httpGetRequest(context, path, true);
-            response = context.getHttpClient().execute(request);
+            response = context.executeRequest(request);
         } catch (IOException e) {
             r.setStatus(Status.Failure);
             r.setInfo(e.toString());

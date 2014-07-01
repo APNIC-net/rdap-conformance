@@ -83,7 +83,7 @@ public class Redirect implements net.apnic.rdap.conformance.Test
         HttpResponse response = null;
         try {
             request = Utils.httpGetRequest(context, path, false);
-            response = context.getHttpClient().execute(request);
+            response = context.executeRequest(request);
         } catch (IOException e) {
             r.setStatus(Status.Failure);
             r.setInfo(e.toString());

@@ -65,6 +65,7 @@ the following structure:
 
     {
         "base_url": "{base-url}",
+        "requests_per_second": "{requests-per-second}",
         "object_classes": {
             "{object-class}": {
                 "supported":  {boolean},
@@ -75,6 +76,9 @@ the following structure:
             ...
         }
     }
+
+requests-per-second is an optional configuration entry. By default,
+there is no limit on the number of requests issued per second.
 
 Redirects are not applicable for the entity object class.
 

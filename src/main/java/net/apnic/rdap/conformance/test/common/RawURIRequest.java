@@ -46,6 +46,7 @@ public class RawURIRequest implements net.apnic.rdap.conformance.Test
             URI uri = new URI(bu);
             String host = uri.getHost();
 
+            context.acquireRequestPermit();
             Socket socket = new Socket(host, 80);
             OutputStream os = socket.getOutputStream();
             String request = "GET " + raw_uri + " HTTP/1.1\n" +
