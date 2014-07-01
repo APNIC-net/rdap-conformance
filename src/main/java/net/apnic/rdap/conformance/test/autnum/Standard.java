@@ -14,6 +14,7 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
+import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.Status;
 import net.apnic.rdap.conformance.contenttest.Array;
@@ -22,13 +23,22 @@ import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
-public class Standard implements net.apnic.rdap.conformance.Test
+public class Standard implements ObjectTest
 {
-    String autnum = "";
+    String autnum = null;
+    String url = null;
 
-    public Standard(String arg_autnum)
+    public Standard() {}
+
+    public Standard(String autnum)
     {
-        autnum = arg_autnum;
+        this.autnum = autnum;
+    }
+
+    public void setUrl(String url)
+    {
+        autnum = null;
+        this.url = url;
     }
 
     private BigInteger processAutnum(Context context, Result proto,
@@ -72,9 +82,12 @@ public class Standard implements net.apnic.rdap.conformance.Test
     {
         List<Result> results = context.getResults();
 
-        String bu = context.getSpecification().getBaseUrl();
-        String path = bu + "/autnum/" + autnum;
-        
+        String path =
+            (url != null)
+                ? url
+                : context.getSpecification().getBaseUrl()
+                    + "/autnum/" + autnum;
+
         Result proto = new Result(Result.Status.Notification, path,
                                   "autnum.standard",
                                   "content", "",

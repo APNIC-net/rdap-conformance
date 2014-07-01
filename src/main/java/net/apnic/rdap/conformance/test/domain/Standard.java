@@ -15,6 +15,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
+import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.DomainNames;
 import net.apnic.rdap.conformance.contenttest.SecureDNS;
@@ -25,21 +26,33 @@ import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
-public class Standard implements net.apnic.rdap.conformance.Test
+public class Standard implements ObjectTest
 {
-    String domain = "";
+    String domain = null;
+    String url = null;
 
-    public Standard(String arg_domain)
+    public Standard() {}
+
+    public Standard(String domain)
     {
-        domain = arg_domain;
+        this.domain = domain;
+    }
+
+    public void setUrl(String url)
+    {
+        domain = null;
+        this.url = url;
     }
 
     public boolean run(Context context)
     {
         List<Result> results = context.getResults();
 
-        String bu = context.getSpecification().getBaseUrl();
-        String path = bu + "/domain/" + domain;
+        String path =
+            (url != null)
+                ? url
+                : context.getSpecification().getBaseUrl() 
+                    + "/domain/" + domain;
 
         Result proto = new Result(Status.Notification, path,
                                   "domain.standard",

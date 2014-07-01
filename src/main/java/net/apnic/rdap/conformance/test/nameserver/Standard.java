@@ -15,27 +15,40 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
+import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.Nameserver;
 import net.apnic.rdap.conformance.contenttest.RdapConformance;
 import net.apnic.rdap.conformance.contenttest.Notices;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
-public class Standard implements net.apnic.rdap.conformance.Test
+public class Standard implements ObjectTest
 {
-    String nameserver = "";
+    String nameserver = null;
+    String url = null;
 
-    public Standard(String arg_nameserver)
+    public Standard() {}
+
+    public Standard(String nameserver)
     {
-        nameserver = arg_nameserver;
+        this.nameserver = nameserver;
+    }
+
+    public void setUrl(String url)
+    {
+        nameserver = null;
+        this.url = url;
     }
 
     public boolean run(Context context)
     {
         List<Result> results = context.getResults();
 
-        String bu = context.getSpecification().getBaseUrl();
-        String path = bu + "/nameserver/" + nameserver;
+        String path =
+            (url != null)
+                ? url
+                : context.getSpecification().getBaseUrl()
+                    + "/nameserver/" + nameserver;
 
         Result proto = new Result(Status.Notification, path,
                                   "domain.standard",

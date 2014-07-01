@@ -21,7 +21,8 @@
         },
         "autnum": {
             "supported": true,
-            "exists": ["4608"]
+            "exists": ["4608"],
+            "redirects": ["28001"]
         }
     }
 }

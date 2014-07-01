@@ -105,8 +105,8 @@ public class Redirect implements net.apnic.rdap.conformance.Test
                                 HttpStatus.SC_SEE_OTHER)
             );
         boolean scres = sc.run(context, proto, response);
+        request.releaseConnection();
         if (!scres) {
-            request.releaseConnection();
             return false;
         }
 
