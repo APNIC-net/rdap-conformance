@@ -63,7 +63,7 @@ public class Standard implements ObjectTest
 
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
-                new Domain(),
+                new Domain(false),
                 new StandardResponse()
             ));
 

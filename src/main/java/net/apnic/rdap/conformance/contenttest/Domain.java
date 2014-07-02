@@ -31,9 +31,13 @@ import net.apnic.rdap.conformance.contenttest.Domain;
 
 public class Domain implements ContentTest
 {
+    boolean check_unknown = false;
     Set<String> known_attributes = null;
 
-    public Domain() {}
+    public Domain(boolean arg_check_unknown)
+    {
+        check_unknown = arg_check_unknown;
+    }
 
     public boolean run(Context context, Result proto,
                        Object arg_data)
@@ -60,8 +64,11 @@ public class Domain implements ContentTest
             known_attributes.addAll(test.getKnownAttributes());
         }
 
-        ContentTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, arg_data);
+        boolean ret2 = true;
+        if (check_unknown) {
+            ContentTest ua = new UnknownAttributes(known_attributes);
+            ret2 = ua.run(context, proto, arg_data);
+        }
         return (ret && ret2);
     }
 
