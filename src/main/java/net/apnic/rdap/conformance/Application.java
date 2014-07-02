@@ -41,6 +41,37 @@ class Application
         return jar_name;
     }
 
+    private static void runSearchTests(List<Test> tests,
+                                       ObjectClass oc,
+                                       ContentTest ct,
+                                       String prefix,
+                                       String test_name,
+                                       String search_key)
+        throws Exception
+    {
+        ObjectClassSearch ocs = oc.getObjectClassSearch();
+        if ((ocs != null) && (ocs.isSupported())) {
+            Map<String, List<String>> values = ocs.getValues();
+            for (Map.Entry<String, List<String>> entry : values.entrySet()) {
+                String key = entry.getKey();
+                List<String> key_values = entry.getValue();
+                for (String key_value : key_values) {
+                    tests.add(
+                        new net.apnic.rdap.conformance.test.common.Search(
+                            ct,
+                            "/" + prefix + "?" + key + "=" +
+                            java.net.URLEncoder.encode(
+                                key_value, "UTF-8"
+                            ),
+                            test_name,
+                            search_key
+                        )
+                    );
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) throws Exception
     {
         if (args.length != 1) {
@@ -261,6 +292,12 @@ class Application
                               "nameserver.extra-query-parameter",
                               true
                       ));
+            /*
+            runSearchTests(tests, oc_ns,
+                           new net.apnic.rdap.conformance.contenttest.Nameserver(),
+                           "nameservers", "nameserver.search",
+                           "nameserverSearchResults");
+            */
         }
 
         ObjectClass oc_en = s.getObjectClass("entity");
@@ -292,27 +329,9 @@ class Application
                               "entity.extra-query-parameter",
                               true
                       ));
-            ObjectClassSearch ocs_en = oc_en.getObjectClassSearch();
-            if ((ocs_en != null) && (ocs_en.isSupported())) {
-                Map<String, List<String>> values = ocs_en.getValues();
-                for (Map.Entry<String, List<String>> entry : values.entrySet()) {
-                    String key = entry.getKey();
-                    List<String> key_values = entry.getValue();
-                    for (String key_value : key_values) {
-                        tests.add(
-                            new net.apnic.rdap.conformance.test.common.Search(
-                                new net.apnic.rdap.conformance.contenttest.Entity(),
-                                "/entities?" + key + "=" +
-                                java.net.URLEncoder.encode(
-                                    key_value, "UTF-8"
-                                ),
-                                "entity.search",
-                                "entitySearchResults"
-                            )
-                        );
-                    }
-                }
-            }
+            runSearchTests(tests, oc_en,
+                           new net.apnic.rdap.conformance.contenttest.Entity(),
+                           "entities", "entity.search", "entitySearchResults");
         }
 
         ObjectClass oc_dom = s.getObjectClass("domain");
@@ -359,6 +378,9 @@ class Application
                               "domain.extra-query-parameter",
                               true
                       ));
+            runSearchTests(tests, oc_dom,
+                           new net.apnic.rdap.conformance.contenttest.Domain(),
+                           "domains", "domain.search", "domainSearchResults");
         }
 
         for (Test t : tests) {

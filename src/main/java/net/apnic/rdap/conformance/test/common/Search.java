@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import org.apache.http.client.HttpClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
@@ -30,10 +32,13 @@ import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.NotStatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.contenttest.Array;
 import net.apnic.rdap.conformance.contenttest.RdapConformance;
 import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.Notices;
-import net.apnic.rdap.conformance.contenttest.ErrorResponse;
+import net.apnic.rdap.conformance.contenttest.StandardResponse;
+import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
+import net.apnic.rdap.conformance.contenttest.BooleanValue;
 import net.apnic.rdap.conformance.Utils;
 
 public class Search implements net.apnic.rdap.conformance.Test
@@ -54,7 +59,7 @@ public class Search implements net.apnic.rdap.conformance.Test
         content_test = arg_content_test;
 
         if (test_name == null) {
-            test_name = "common.redirect";
+            test_name = "common.search";
         }
     }
 
@@ -76,6 +81,26 @@ public class Search implements net.apnic.rdap.conformance.Test
             return false;
         }
 
-        return true;
+        List<ContentTest> tests =
+            new ArrayList<ContentTest>(Arrays.asList(
+                new Array(content_test, search_results_key),
+                new ScalarAttribute("resultsTruncated",
+                                    new BooleanValue()),
+                new StandardResponse()
+            ));
+
+        boolean res = true;
+        HashSet<String> known_attributes = new HashSet<String>();
+        for (ContentTest test : tests) {
+            boolean res_inner = test.run(context, proto, root);
+            if (!res_inner) {
+                res = false;
+            }
+            known_attributes.addAll(test.getKnownAttributes());
+        }
+
+        ContentTest ua = new UnknownAttributes(known_attributes);
+        boolean ret2 = ua.run(context, proto, root);
+        return (res && ret2);
     }
 }

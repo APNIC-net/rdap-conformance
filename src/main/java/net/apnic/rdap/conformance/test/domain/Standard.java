@@ -17,14 +17,9 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.DomainNames;
-import net.apnic.rdap.conformance.contenttest.SecureDNS;
-import net.apnic.rdap.conformance.contenttest.Nameserver;
-import net.apnic.rdap.conformance.contenttest.Variant;
-import net.apnic.rdap.conformance.contenttest.Array;
-import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
+import net.apnic.rdap.conformance.contenttest.Domain;
 
 public class Standard implements ObjectTest
 {
@@ -68,11 +63,7 @@ public class Standard implements ObjectTest
 
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
-                new ScalarAttribute("handle"),
-                new DomainNames(),
-                new Array(new Variant(), "variants"),
-                new Array(new Nameserver(true), "nameServers"),
-                new ScalarAttribute("secureDNS", new SecureDNS()),
+                new Domain(),
                 new StandardResponse()
             ));
 

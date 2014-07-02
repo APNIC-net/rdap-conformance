@@ -9,7 +9,13 @@
         "domain": {
             "supported": true,
             "exists": ["203.in-addr.arpa", "187.2.103.in-addr.arpa"],
-            "not_exists": ["google.com"]
+            "not_exists": ["google.com"],
+            "search": {
+                "supported": true,
+                "values": {
+                    "name": ["20*"]
+                }
+            }
         },
         "nameserver": {
             "supported": false
