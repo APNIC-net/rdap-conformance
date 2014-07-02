@@ -293,9 +293,7 @@ class Application
                               true
                       ));
             ObjectClassSearch ocs_en = oc_en.getObjectClassSearch();
-            System.out.println("pre ocs");
             if ((ocs_en != null) && (ocs_en.isSupported())) {
-                System.out.println("in ocs");
                 Map<String, List<String>> values = ocs_en.getValues();
                 for (Map.Entry<String, List<String>> entry : values.entrySet()) {
                     String key = entry.getKey();
@@ -315,7 +313,6 @@ class Application
                     }
                 }
             }
-            System.out.println("post ocs");
         }
 
         ObjectClass oc_dom = s.getObjectClass("domain");
