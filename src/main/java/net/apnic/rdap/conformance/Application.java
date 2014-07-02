@@ -292,12 +292,10 @@ class Application
                               "nameserver.extra-query-parameter",
                               true
                       ));
-            /*
             runSearchTests(tests, oc_ns,
-                           new net.apnic.rdap.conformance.contenttest.Nameserver(),
+                           new net.apnic.rdap.conformance.contenttest.Nameserver(true),
                            "nameservers", "nameserver.search",
                            "nameserverSearchResults");
-            */
         }
 
         ObjectClass oc_en = s.getObjectClass("entity");

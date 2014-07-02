@@ -91,8 +91,7 @@ requests\_per\_second is an optional configuration entry. By default,
 there is no limit on the number of requests issued per second.
 
 Redirects are not applicable for the entity object class. Searches are
-only applicable for entities, domains and nameservers, and are
-currently only supported for entities.
+only applicable for entities, domains and nameservers.
 
 If an object class is omitted from the configuration file, it is
 treated as unimplemented.
