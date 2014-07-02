@@ -71,16 +71,28 @@ the following structure:
                 "supported":  {boolean},
                 "exists":     [ "{path1}", "{path2}", ..., "{pathN}" ],
                 "not_exists": [ "{path1}", "{path2}", ..., "{pathN}" ],
-                "redirects":  [ "{path1}", "{path2}", ..., "{pathN}" ]
+                "redirects":  [ "{path1}", "{path2}", ..., "{pathN}" ],
+                "search": {
+                    "supported": {boolean},
+                    "values": {
+                        "{parameter1}": [ "{value1}", "{value2}", ...,
+                                          "{valueN}" ],
+                        "{parameter2}": [ "{value1}", "{value2}", ...,
+                                          "{valueN}" ],
+                        ...
+                    }
+                }
             },
             ...
         }
     }
 
-requests-per-second is an optional configuration entry. By default,
+requests\_per\_second is an optional configuration entry. By default,
 there is no limit on the number of requests issued per second.
 
-Redirects are not applicable for the entity object class.
+Redirects are not applicable for the entity object class. Searches are
+only applicable for entities, domains and nameservers, and are
+currently only supported for entities.
 
 If an object class is omitted from the configuration file, it is
 treated as unimplemented.
@@ -106,7 +118,14 @@ For example:
             "entity": {
                 "supported":  true,
                 "exists":     ["TP137-AP"],
-                "not_exists": ["@@@@@@@@"]
+                "not_exists": ["@@@@@@@@"],
+                "search": {
+                    "supported": true,
+                    "values": {
+                        "fn": [ "Test*" ],
+                        "handle": [ "TP*" ]
+                    }
+                }
             },
             "autnum": {
                 "supported": true,
