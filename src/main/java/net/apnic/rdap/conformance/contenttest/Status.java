@@ -32,10 +32,10 @@ public class Status implements ContentTest
                         "pending transfer",
                         "pending update",
                         "pending delete");
-    
+
     public Status() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         List<Result> results = context.getResults();
@@ -74,7 +74,7 @@ public class Status implements ContentTest
         nr2.setInfo("is an array");
 
         List<Object> status_entries;
-        try { 
+        try {
             status_entries = (List<Object>) value;
         } catch (ClassCastException e) {
             nr2.setStatus(Result.Status.Failure);

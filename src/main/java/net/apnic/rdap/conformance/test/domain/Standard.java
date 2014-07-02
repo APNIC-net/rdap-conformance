@@ -51,13 +51,13 @@ public class Standard implements ObjectTest
         String path =
             (url != null)
                 ? url
-                : context.getSpecification().getBaseUrl() 
+                : context.getSpecification().getBaseUrl()
                     + "/domain/" + domain;
 
         Result proto = new Result(Status.Notification, path,
                                   "domain.standard",
-                                  "content", "", 
-                                  "draft-ietf-weirds-json-response-06", 
+                                  "content", "",
+                                  "draft-ietf-weirds-json-response-06",
                                   "6.3");
         Result r = new Result(proto);
         r.setCode("response");
@@ -86,7 +86,7 @@ public class Standard implements ObjectTest
             }
             known_attributes.addAll(test.getKnownAttributes());
         }
- 
+
         ContentTest ua = new UnknownAttributes(known_attributes);
         boolean ret2 = ua.run(context, proto, root);
         return (ret && ret2);

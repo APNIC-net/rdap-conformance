@@ -29,7 +29,7 @@ public class Array implements ContentTest
         known_attributes = Sets.newHashSet(arg_key);
     }
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);
@@ -63,7 +63,7 @@ public class Array implements ContentTest
         nr2.setInfo("is array");
 
         List<Object> elements;
-        try { 
+        try {
             elements = (List<Object>) value;
         } catch (ClassCastException e) {
             nr2.setStatus(Status.Failure);

@@ -25,7 +25,7 @@ public class Country implements ContentTest
 
     public Country() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         List<Result> results = context.getResults();

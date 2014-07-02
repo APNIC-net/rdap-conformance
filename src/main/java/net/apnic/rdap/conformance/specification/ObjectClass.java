@@ -17,7 +17,8 @@ public class ObjectClass
     private List<String> exists = new ArrayList<String>();
     private List<String> not_exists = new ArrayList<String>();
     private List<String> redirects = new ArrayList<String>();
-    
+    private ObjectClassSearch search = new ObjectClassSearch();
+
     private ObjectClass() {}
 
     public boolean isSupported()
@@ -38,5 +39,10 @@ public class ObjectClass
     public List<String> getRedirects()
     {
         return redirects;
+    }
+
+    public ObjectClassSearch getObjectClassSearch()
+    {
+        return search;
     }
 }

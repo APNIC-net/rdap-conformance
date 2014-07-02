@@ -13,14 +13,14 @@ public class StringTest implements ContentTest
 {
     public StringTest() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);
         boolean success = true;
         nr.setStatus(Status.Success);
         nr.setInfo("is string");
-        
+
         if (Utils.castToString(arg_data) == null) {
             nr.setStatus(Status.Failure);
             nr.setInfo("is not string");

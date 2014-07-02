@@ -23,13 +23,13 @@ public class Variant implements ContentTest
 
     public Variant() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
-        nr.setReference("6.3"); 
+        nr.setReference("6.3");
 
         boolean res = true;
         Map<String, Object> data;
@@ -40,7 +40,7 @@ public class Variant implements ContentTest
             nr.setStatus(Status.Failure);
             context.addResult(nr);
             return false;
-        } 
+        }
 
         /* In 6.3, regarding idnTable, the document has 'the name of
          * the IDN table of codepoints, such as one listed with the
@@ -64,7 +64,7 @@ public class Variant implements ContentTest
 
         ContentTest ua = new UnknownAttributes(known_attributes);
         boolean ret2 = ua.run(context, proto, arg_data);
-        return (res && ret2); 
+        return (res && ret2);
     }
 
     public Set<String> getKnownAttributes()

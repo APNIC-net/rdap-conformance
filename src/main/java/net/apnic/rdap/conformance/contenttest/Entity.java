@@ -77,7 +77,7 @@ public class Entity implements ContentTest
         if (response_handle == null) {
             r.setStatus(Status.Warning);
             r.setInfo("not present");
-        } 
+        }
         context.addResult(r);
         if ((response_handle != null) && (handle != null)) {
             Result r2 = new Result(nr);

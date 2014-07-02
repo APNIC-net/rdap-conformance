@@ -16,7 +16,7 @@ public class Notice implements ContentTest
 {
     public Notice() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         List<Result> results = context.getResults();

@@ -64,7 +64,7 @@ public class Standard implements ObjectTest
         asn2res.addNode(key);
         asn2res.setInfo("valid");
         BigInteger asn = null;
-        try { 
+        try {
             asn = BigDecimal.valueOf((Double) root.get(key))
                             .toBigIntegerExact();
         } catch (Exception e) {
@@ -91,7 +91,7 @@ public class Standard implements ObjectTest
         Result proto = new Result(Result.Status.Notification, path,
                                   "autnum.standard",
                                   "content", "",
-                                  "draft-ietf-weirds-json-response-06", 
+                                  "draft-ietf-weirds-json-response-06",
                                   "6.5");
         Result r = new Result(proto);
         r.setCode("response");

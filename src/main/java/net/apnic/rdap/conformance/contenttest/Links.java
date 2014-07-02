@@ -16,7 +16,7 @@ public class Links implements ContentTest
 {
     public Links() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         ContentTest array_test = new Array(new Link(), "links");

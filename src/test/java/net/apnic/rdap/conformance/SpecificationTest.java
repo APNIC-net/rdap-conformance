@@ -26,7 +26,7 @@ public class SpecificationTest
         String json_text = "{base_url: 'asdf2'}";
         os.write(json_text.getBytes());
 
-        Specification s2 = 
+        Specification s2 =
             Specification.fromPath(tempFile.getAbsolutePath());
         assertEquals(s2.getBaseUrl(), "asdf2");
 

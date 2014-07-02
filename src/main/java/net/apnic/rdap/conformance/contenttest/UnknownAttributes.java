@@ -28,7 +28,7 @@ public class UnknownAttributes implements ContentTest
         known_attributes = arg_known_attributes;
     }
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);
@@ -49,7 +49,7 @@ public class UnknownAttributes implements ContentTest
         boolean success = true;
 
         Set<String> attributes = root.keySet();
-        Sets.SetView<String> unknown_attributes = 
+        Sets.SetView<String> unknown_attributes =
             Sets.difference(attributes, known_attributes);
         for (String unknown_attribute : unknown_attributes) {
             if (unknown_attribute.indexOf('_') == -1) {
@@ -70,4 +70,4 @@ public class UnknownAttributes implements ContentTest
     {
         return new HashSet<String>();
     }
-} 
+}

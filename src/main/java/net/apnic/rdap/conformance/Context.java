@@ -23,7 +23,7 @@ public class Context
     private int index;
     private RateLimiter rate_limiter = null;
 
-    public Context() 
+    public Context()
     {
         index = 0;
     }

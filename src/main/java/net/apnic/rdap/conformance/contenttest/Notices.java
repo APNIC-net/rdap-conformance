@@ -22,7 +22,7 @@ public class Notices implements ContentTest
         key = arg_key;
     }
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         String mkey = (key != null) ? key : "notices";

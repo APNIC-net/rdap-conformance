@@ -37,7 +37,7 @@ public class Result
 
     public Result(Status arg_status,    String arg_path, String arg_test_name,
                   String arg_code,      String arg_info, String arg_document,
-                  String arg_reference) 
+                  String arg_reference)
     {
         status    = arg_status;
         path      = arg_path;
@@ -129,7 +129,7 @@ public class Result
         return node;
     }
 
-    public void setNode(List<String> n) 
+    public void setNode(List<String> n)
     {
         node = n;
     }
@@ -171,7 +171,7 @@ public class Result
         for (int i = 0; i < (len - 1); i++) {
             s += nodeToString(node.get(i)) + ", ";
         }
-        if (len >= 1) { 
+        if (len >= 1) {
             s += nodeToString(node.get(len - 1));
         }
         s += "] }";
@@ -201,7 +201,7 @@ public class Result
         for (int i = 0; i < (len - 1); i++) {
             s += nodeToString(node.get(i)) + ":";
         }
-        if (len >= 1) { 
+        if (len >= 1) {
             s += nodeToString(node.get(len - 1));
         }
         s += "," + getDocument() + "," + getReference();

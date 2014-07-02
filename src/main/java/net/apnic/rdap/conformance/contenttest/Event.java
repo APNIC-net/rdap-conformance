@@ -20,7 +20,7 @@ public class Event implements ContentTest
 {
     boolean allow_actor = true;
 
-    private static final Set<String> event_actions = 
+    private static final Set<String> event_actions =
         Sets.newHashSet("registration",
                         "reregistration",
                         "last changed",
@@ -38,7 +38,7 @@ public class Event implements ContentTest
 
     public Event() { }
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         List<Result> results = context.getResults();
@@ -66,7 +66,7 @@ public class Event implements ContentTest
             ear.setStatus(Status.Failure);
             results.add(ear);
             evtres = false;
-        } else {    
+        } else {
             ear.setInfo("present");
             ear.setStatus(Status.Success);
             results.add(ear);

@@ -19,20 +19,20 @@ import net.apnic.rdap.conformance.contenttest.DomainNames;
 public class Nameserver implements ContentTest
 {
     boolean check_unknown = false;
-    Set<String> known_attributes = null; 
+    Set<String> known_attributes = null;
 
     public Nameserver(boolean arg_check_unknown)
     {
         check_unknown = arg_check_unknown;
     }
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
-        nr.setReference("6.2"); 
+        nr.setReference("6.2");
 
         Map<String, Object> data;
         try {
@@ -62,7 +62,7 @@ public class Nameserver implements ContentTest
             known_attributes.addAll(test.getKnownAttributes());
         }
 
-        Map<String, Object> ip_addresses = 
+        Map<String, Object> ip_addresses =
             Utils.getMapAttribute(context, proto, "ipAddresses",
                                   Status.Notification, data);
         if (ip_addresses != null) {

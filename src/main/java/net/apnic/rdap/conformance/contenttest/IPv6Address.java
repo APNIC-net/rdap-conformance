@@ -19,7 +19,7 @@ public class IPv6Address implements ContentTest
 {
     public IPv6Address() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);

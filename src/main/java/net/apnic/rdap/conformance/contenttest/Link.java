@@ -149,7 +149,7 @@ public class Link implements ContentTest
                              .setSocketTimeout(5000)
                              .build();
             request.setConfig(config);
-            HttpResponse response = 
+            HttpResponse response =
                 context.executeRequest(request);
             code = response.getStatusLine().getStatusCode();
         } catch (Exception e) {
@@ -173,7 +173,7 @@ public class Link implements ContentTest
         return success;
     }
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         List<Result> results = context.getResults();
@@ -298,7 +298,7 @@ public class Link implements ContentTest
                         hler.setInfo("empty");
                     } else {
                         try {
-                            Locale.Builder hlt = 
+                            Locale.Builder hlt =
                                 new Locale.Builder()
                                           .setLanguageTag(hreflang);
                         } catch (IllformedLocaleException e) {
@@ -310,7 +310,7 @@ public class Link implements ContentTest
                 }
             }
         }
-        
+
         if (data.get("title") != null) {
             Result tr = new Result(nr);
             tr.addNode("title");

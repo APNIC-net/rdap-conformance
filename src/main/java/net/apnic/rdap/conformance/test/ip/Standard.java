@@ -45,7 +45,7 @@ public class Standard implements ObjectTest
         this.url = url;
     }
 
-    private String processIpAddress(Context context, Result proto, 
+    private String processIpAddress(Context context, Result proto,
                                     Map root, String key)
     {
         Result ipres = new Result(proto);
@@ -55,11 +55,11 @@ public class Standard implements ObjectTest
             ipres.setStatus(Result.Status.Failure);
             ipres.setInfo("not present");
             context.addResult(ipres);
-        } else { 
+        } else {
             ipres.setStatus(Result.Status.Success);
             ipres.setInfo("present");
             context.addResult(ipres);
-            
+
             Result ipvalid = new Result(proto);
             ipvalid.addNode(key);
             ipvalid.setStatus(Result.Status.Success);
@@ -233,8 +233,8 @@ public class Standard implements ObjectTest
 
         Result proto = new Result(Result.Status.Notification, path,
                                   "ip.standard",
-                                  "content", "", 
-                                  "draft-ietf-weirds-json-response-06", 
+                                  "content", "",
+                                  "draft-ietf-weirds-json-response-06",
                                   "6.4");
 
         proto.setCode("content");
@@ -246,7 +246,7 @@ public class Standard implements ObjectTest
         }
 
         int version = 0;
-        String start_address = 
+        String start_address =
             processIpAddress(context, proto, root, "startAddress");
         String end_address =
             processIpAddress(context, proto, root, "endAddress");
@@ -338,7 +338,7 @@ public class Standard implements ObjectTest
             }
         }
 
-        List<ContentTest> tests = 
+        List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
                 new ScalarAttribute("name"),
                 new ScalarAttribute("handle"),

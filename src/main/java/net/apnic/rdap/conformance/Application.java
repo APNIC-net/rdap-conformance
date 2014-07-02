@@ -2,11 +2,13 @@ package net.apnic.rdap.conformance;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.net.URLEncoder;
 import java.security.cert.X509Certificate;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -21,6 +23,7 @@ import net.apnic.rdap.conformance.test.domain.Standard;
 import net.apnic.rdap.conformance.test.common.RawURIRequest;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.specification.ObjectClass;
+import net.apnic.rdap.conformance.specification.ObjectClassSearch;
 
 class Application
 {
@@ -38,11 +41,11 @@ class Application
         return jar_name;
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         if (args.length != 1) {
             System.out.println("Usage: java -jar " +
-                               getJarName() + 
+                               getJarName() +
                                " <configuration-path>");
             System.exit(10);
         }
@@ -289,6 +292,30 @@ class Application
                               "entity.extra-query-parameter",
                               true
                       ));
+            ObjectClassSearch ocs_en = oc_en.getObjectClassSearch();
+            System.out.println("pre ocs");
+            if ((ocs_en != null) && (ocs_en.isSupported())) {
+                System.out.println("in ocs");
+                Map<String, List<String>> values = ocs_en.getValues();
+                for (Map.Entry<String, List<String>> entry : values.entrySet()) {
+                    String key = entry.getKey();
+                    List<String> key_values = entry.getValue();
+                    for (String key_value : key_values) {
+                        tests.add(
+                            new net.apnic.rdap.conformance.test.common.Search(
+                                new net.apnic.rdap.conformance.contenttest.Entity(),
+                                "/entities?" + key + "=" +
+                                java.net.URLEncoder.encode(
+                                    key_value, "UTF-8"
+                                ),
+                                "entity.search",
+                                "entitySearchResults"
+                            )
+                        );
+                    }
+                }
+            }
+            System.out.println("post ocs");
         }
 
         ObjectClass oc_dom = s.getObjectClass("domain");
@@ -304,7 +331,7 @@ class Application
             for (String e : not_exists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                             "/domain/" + e
-                         )); 
+                         ));
             }
             List<String> redirects = oc_dom.getRedirects();
             for (String e : redirects) {

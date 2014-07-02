@@ -14,11 +14,11 @@ public class Events implements ContentTest
 {
     public Events() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         ContentTest array_test = new Array(new Event(), "events");
-        
+
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-06");

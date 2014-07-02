@@ -21,7 +21,7 @@ public class Lang implements ContentTest
 {
     public Lang() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         List<Result> results = context.getResults();
@@ -52,7 +52,7 @@ public class Lang implements ContentTest
 
         Result vr = new Result(nr);
         boolean res = true;
-        try { 
+        try {
             Locale.Builder hlt =
                 new Locale.Builder().setLanguageTag(lang);
         } catch (IllformedLocaleException e) {

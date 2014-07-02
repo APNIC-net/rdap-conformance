@@ -25,7 +25,7 @@ public class SecureDNS implements ContentTest
 
     public SecureDNS() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         boolean ret = true;

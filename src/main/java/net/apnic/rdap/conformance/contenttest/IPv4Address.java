@@ -19,7 +19,7 @@ public class IPv4Address implements ContentTest
 {
     public IPv4Address() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);

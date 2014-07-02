@@ -19,7 +19,7 @@ public class Entities implements ContentTest
 
     public Entities() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         ContentTest array_test =
@@ -38,7 +38,7 @@ public class Entities implements ContentTest
 
         return array_test.run(context, nr, arg_data);
     }
- 
+
     public Set<String> getKnownAttributes()
     {
         return known_attributes;

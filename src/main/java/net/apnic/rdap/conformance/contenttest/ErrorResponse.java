@@ -27,7 +27,7 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
     Set<String> known_attributes = null;
     private int status_code;
 
-    public ErrorResponse(int arg_status_code) 
+    public ErrorResponse(int arg_status_code)
     {
         status_code = arg_status_code;
     }

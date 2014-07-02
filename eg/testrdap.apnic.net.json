@@ -17,7 +17,14 @@
         "entity": {
             "supported": true,
             "exists": ["TP137-AP"],
-            "not_exists": ["@@@@@@@@"]
+            "not_exists": ["@@@@@@@@"],
+            "search": {
+                "supported": true,
+                "values": {
+                    "fn": [ "Test" ],
+                    "handle": [ "TP*" ]
+                }
+            }
         },
         "autnum": {
             "supported": true,

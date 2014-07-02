@@ -33,7 +33,7 @@ public class Port43 implements ContentTest
 
     public Port43() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         List<Result> results = context.getResults();
@@ -72,7 +72,7 @@ public class Port43 implements ContentTest
         nr2.setInfo("is a string");
 
         String port43;
-        try { 
+        try {
             port43 = (String) value;
         } catch (ClassCastException e) {
             nr2.setStatus(Status.Failure);

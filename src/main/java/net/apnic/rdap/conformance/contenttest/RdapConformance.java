@@ -16,7 +16,7 @@ public class RdapConformance implements ContentTest
 {
     public RdapConformance() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         Result nr = new Result(proto);
@@ -56,7 +56,7 @@ public class RdapConformance implements ContentTest
         nr2.setInfo("is an array");
 
         List<Object> rcs;
-        try { 
+        try {
             rcs = (List<Object>) value;
         } catch (ClassCastException e) {
             nr2.setStatus(Status.Failure);

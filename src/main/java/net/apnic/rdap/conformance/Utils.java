@@ -37,7 +37,7 @@ public class Utils
     {
         HttpGet request = new HttpGet(path);
         request.setHeader("Accept", context.getContentType());
-        RequestConfig config = 
+        RequestConfig config =
             RequestConfig.custom()
                          .setConnectionRequestTimeout(5000)
                          .setConnectTimeout(5000)
@@ -219,7 +219,7 @@ public class Utils
             snr.setInfo("is object");
         }
         context.addResult(snr);
-        
+
         return map_data;
     }
 }

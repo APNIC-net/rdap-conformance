@@ -19,10 +19,10 @@ public class VariantRelation implements ContentTest
                         "registration restricted",
                         "open registration",
                         "conjoined");
- 
+
     public VariantRelation() {}
 
-    public boolean run(Context context, Result proto, 
+    public boolean run(Context context, Result proto,
                        Object arg_data)
     {
         List<Result> results = context.getResults();
@@ -61,7 +61,7 @@ public class VariantRelation implements ContentTest
         nr2.setInfo("is an array");
 
         List<Object> relation_entries;
-        try { 
+        try {
             relation_entries = (List<Object>) value;
         } catch (ClassCastException e) {
             nr2.setStatus(Result.Status.Failure);
