@@ -14,9 +14,10 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.contenttest.DomainNames;
 
-public class Nameserver implements ContentTest
+public class Nameserver implements SearchTest
 {
     boolean check_unknown = false;
     Set<String> known_attributes = null;
@@ -24,6 +25,10 @@ public class Nameserver implements ContentTest
     public Nameserver(boolean arg_check_unknown)
     {
         check_unknown = arg_check_unknown;
+    }
+
+    public void setSearchDetails(String key, String pattern)
+    {
     }
 
     public boolean run(Context context, Result proto,

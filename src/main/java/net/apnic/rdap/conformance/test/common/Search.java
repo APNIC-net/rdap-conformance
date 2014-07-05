@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.net.URLEncoder;
 import org.apache.http.client.HttpClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
@@ -28,6 +29,7 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.ResponseTest;
+import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.NotStatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
@@ -44,19 +46,35 @@ import net.apnic.rdap.conformance.Utils;
 public class Search implements net.apnic.rdap.conformance.Test
 {
     private String url_path;
+    private String prefix;
+    private String key;
+    private String pattern;
     private String test_name;
     private String search_results_key;
-    private ContentTest content_test;
+    private SearchTest search_test;
 
-    public Search(ContentTest arg_content_test,
-                  String arg_url_path,
+    public Search(SearchTest arg_search_test,
+                  String arg_prefix,
+                  String arg_key,
+                  String arg_pattern,
                   String arg_test_name,
                   String arg_search_results_key)
     {
-        url_path  = arg_url_path;
+        prefix = arg_prefix;
+        key = arg_key;
+        pattern = arg_pattern;
+        try {
+            url_path  = "/" + prefix + "?" + key + "=" +
+                        java.net.URLEncoder.encode(
+                            pattern, "UTF-8"
+                        );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         test_name = arg_test_name;
         search_results_key = arg_search_results_key;
-        content_test = arg_content_test;
+        search_test = arg_search_test;
+        search_test.setSearchDetails(key, pattern);
 
         if (test_name == null) {
             test_name = "common.search";
@@ -83,7 +101,7 @@ public class Search implements net.apnic.rdap.conformance.Test
 
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
-                new Array(content_test, search_results_key),
+                new Array(search_test, search_results_key),
                 new ScalarAttribute("resultsTruncated",
                                     new BooleanValue()),
                 new StandardResponse()

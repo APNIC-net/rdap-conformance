@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
@@ -17,15 +18,18 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.contenttest.StandardObject;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
-public class Entity implements ContentTest
+public class Entity implements SearchTest
 {
     boolean check_unknown = false;
+    boolean search_context = false;
     String handle = null;
+    String fn = null;
     Set<String> known_attributes = null;
 
     private static final Set<String> roles =
@@ -47,6 +51,22 @@ public class Entity implements ContentTest
     {
         handle = arg_handle;
         check_unknown = arg_check_unknown;
+        search_context = false;
+    }
+
+    public void setSearchDetails(String key, String pattern)
+    {
+        fn = null;
+        handle = null;
+        search_context = false;
+
+        if (key.equals("handle")) {
+            handle = pattern;
+            search_context = true;
+        } else if (key.equals("fn")) {
+            fn = pattern;
+            search_context = true;
+        }
     }
 
     public boolean run(Context context, Result proto,
@@ -81,13 +101,34 @@ public class Entity implements ContentTest
         context.addResult(r);
         if ((response_handle != null) && (handle != null)) {
             Result r2 = new Result(nr);
-            r.addNode("handle");
+            r2.addNode("handle");
             r2.setStatus(Status.Success);
-            r2.setInfo("response handle element matches requested handle");
-            if (!response_handle.equals(handle)) {
-                r2.setStatus(Status.Warning);
-                r2.setInfo("response handle element does not " +
-                           "match requested handle");
+            if (search_context) {
+                r2.setInfo("response handle matches search pattern");
+                String handle_pattern = handle.replaceAll("\\*", ".*");
+                /* At least some servers will add implicit ".*" to the
+                 * beginning and the end of the pattern, so add those
+                 * here too. This may become configurable, so that
+                 * stricter servers can verify their behaviour.
+                 * Searches are presumed to be case-insensitive as
+                 * well. */
+                handle_pattern = ".*" + handle_pattern + ".*";
+                Pattern p =
+                    Pattern.compile(handle_pattern,
+                                    Pattern.CASE_INSENSITIVE
+                                  | Pattern.UNICODE_CASE);
+                if (!p.matcher(response_handle).matches()) {
+                    r2.setStatus(Status.Warning);
+                    r2.setInfo("response handle does not " +
+                               "match search pattern");
+                }
+            } else {
+                r2.setInfo("response handle matches requested handle");
+                if (!response_handle.equals(handle)) {
+                    r2.setStatus(Status.Warning);
+                    r2.setInfo("response handle does not " +
+                               "match requested handle");
+                }
             }
             context.addResult(r2);
         }
@@ -137,6 +178,7 @@ public class Entity implements ContentTest
         boolean vret = true;
         Object vcard_array =
             Utils.getAttribute(context, nr, "vcardArray", null, root);
+        VCard vcard = null;
         if (vcard_array != null) {
             String json = new Gson().toJson(vcard_array);
             List<VCard> vcards = null;
@@ -175,7 +217,7 @@ public class Entity implements ContentTest
                         System.err.println(s);
                     }
                 }
-                VCard vcard = vcards.get(0);
+                vcard = vcards.get(0);
                 ezvcard.ValidationWarnings vws =
                     vcard.validate(vcard.getVersion());
                 String validation_warnings = vws.toString();
@@ -192,6 +234,33 @@ public class Entity implements ContentTest
             if (nrv2 != null) {
                 context.addResult(nrv2);
             }
+        }
+
+        if ((fn != null) && search_context) {
+            Result r2 = new Result(nr);
+            r2.addNode("vcardArray");
+            if ((vcard == null)
+                    || (vcard.getFormattedName().getValue() == null)) {
+                r2.setStatus(Status.Warning);
+                r2.setInfo("no vcard or name in response so unable to " +
+                           "check search pattern");
+            } else {
+                r2.setStatus(Status.Success);
+                r2.setInfo("response name matches search pattern");
+                String fn_pattern = fn.replaceAll("\\*", ".*");
+                fn_pattern = ".*" + fn_pattern + ".*";
+                Pattern p =
+                    Pattern.compile(fn_pattern,
+                                    Pattern.CASE_INSENSITIVE
+                                  | Pattern.UNICODE_CASE);
+                String name = vcard.getFormattedName().getValue();
+                if (!p.matcher(name).matches()) {
+                    r2.setStatus(Status.Warning);
+                    r2.setInfo("response name does not " +
+                               "match search pattern");
+                }
+            }
+            context.addResult(r2);
         }
 
         boolean ret = true;

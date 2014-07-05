@@ -8,12 +8,12 @@ import java.util.Arrays;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.net.URLEncoder;
 import java.security.cert.X509Certificate;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.commons.lang.SerializationUtils;
 
 import net.apnic.rdap.conformance.Specification;
 import net.apnic.rdap.conformance.Context;
@@ -43,7 +43,7 @@ class Application
 
     private static void runSearchTests(List<Test> tests,
                                        ObjectClass oc,
-                                       ContentTest ct,
+                                       SearchTest st,
                                        String prefix,
                                        String test_name,
                                        String search_key)
@@ -58,11 +58,10 @@ class Application
                 for (String key_value : key_values) {
                     tests.add(
                         new net.apnic.rdap.conformance.test.common.Search(
-                            ct,
-                            "/" + prefix + "?" + key + "=" +
-                            java.net.URLEncoder.encode(
-                                key_value, "UTF-8"
-                            ),
+                            (SearchTest) SerializationUtils.clone(st),
+                            prefix,
+                            key,
+                            key_value,
                             test_name,
                             search_key
                         )

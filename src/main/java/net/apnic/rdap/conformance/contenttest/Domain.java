@@ -17,6 +17,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.contenttest.StandardObject;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;
@@ -29,11 +30,17 @@ import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 import net.apnic.rdap.conformance.contenttest.Domain;
 
-public class Domain implements ContentTest
+public class Domain implements SearchTest
 {
     Set<String> known_attributes = null;
+    String key = null;
+    String pattern = null;
 
     public Domain() {}
+
+    public void setSearchDetails(String key, String pattern)
+    {
+    }
 
     public boolean run(Context context, Result proto,
                        Object arg_data)
