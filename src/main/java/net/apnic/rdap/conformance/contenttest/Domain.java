@@ -42,8 +42,10 @@ public class Domain implements SearchTest
         check_unknown = arg_check_unknown;
     }
 
-    public void setSearchDetails(String key, String pattern)
+    public void setSearchDetails(String arg_key, String arg_pattern)
     {
+        key = arg_key;
+        pattern = arg_pattern;
     }
 
     public boolean run(Context context, Result proto,
@@ -51,13 +53,19 @@ public class Domain implements SearchTest
     {
         List<Result> results = context.getResults();
 
+        SearchTest domain_names = new DomainNames();
+        if (key != null) {
+            domain_names.setSearchDetails(key, pattern);
+        }
+
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
                 new ScalarAttribute("handle"),
-                new DomainNames(),
+                domain_names,
                 new Array(new Variant(), "variants"),
                 new Array(new Nameserver(true), "nameServers"),
-                new ScalarAttribute("secureDNS", new SecureDNS())
+                new ScalarAttribute("secureDNS", new SecureDNS()),
+                new StandardObject()
             ));
 
         known_attributes = new HashSet<String>();

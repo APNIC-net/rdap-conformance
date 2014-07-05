@@ -13,7 +13,7 @@
             "search": {
                 "supported": true,
                 "values": {
-                    "name": ["20*"]
+                    "name": ["20*", "202.in-addr.arpa"]
                 }
             }
         },

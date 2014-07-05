@@ -19,7 +19,9 @@ import net.apnic.rdap.conformance.contenttest.DomainNames;
 
 public class Nameserver implements SearchTest
 {
-    boolean check_unknown = false;
+    private String key = null;
+    private String pattern = null;
+    private boolean check_unknown = false;
     Set<String> known_attributes = null;
 
     public Nameserver(boolean arg_check_unknown)
@@ -27,8 +29,10 @@ public class Nameserver implements SearchTest
         check_unknown = arg_check_unknown;
     }
 
-    public void setSearchDetails(String key, String pattern)
+    public void setSearchDetails(String arg_key, String arg_pattern)
     {
+        key = arg_key;
+        pattern = arg_pattern;
     }
 
     public boolean run(Context context, Result proto,
@@ -49,10 +53,15 @@ public class Nameserver implements SearchTest
             return false;
         }
 
+        SearchTest domain_names = new DomainNames();
+        if (key != null) {
+            domain_names.setSearchDetails(key, pattern);
+        }
+
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
                 new ScalarAttribute("handle"),
-                new DomainNames(),
+                domain_names,
                 new StandardObject()
             ));
 

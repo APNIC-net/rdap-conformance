@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.text.Normalizer;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
 
 import com.google.common.collect.Sets;
@@ -18,9 +20,18 @@ import com.vgrs.xcode.idna.Idna;
 import com.vgrs.xcode.idna.Punycode;
 import com.vgrs.xcode.util.XcodeException;
 
-public class DomainNames implements ContentTest
+public class DomainNames implements SearchTest
 {
+    private String key = null;
+    private String pattern = null;
+
     public DomainNames() {}
+
+    public void setSearchDetails(String arg_key, String arg_pattern)
+    {
+        key = arg_key;
+        pattern = arg_pattern;
+    }
 
     private int isValidLdhName(String ldh_name)
     {
@@ -87,6 +98,25 @@ public class DomainNames implements ContentTest
             res = false;
         }
         context.addResult(dn);
+
+        if (!a_label_found && (pattern != null)) {
+            Result rp = new Result(nr);
+            rp.addNode("ldhName");
+            String ldh_pattern = pattern.replaceAll("\\*", ".*");
+            ldh_pattern = ".*" + ldh_pattern + ".*";
+            Pattern p = Pattern.compile(ldh_pattern,
+                                        Pattern.CASE_INSENSITIVE);
+            if (!p.matcher(ldh_name).matches()) {
+                rp.setStatus(Status.Warning);
+                rp.setInfo("response domain name does not " +
+                           "match search pattern");
+            } else {
+                rp.setStatus(Status.Success);
+                rp.setInfo("response domain name matches " +
+                           "search pattern");
+            }
+            context.addResult(rp);
+        }
 
         Object unicode_name_obj = data.get("unicodeName");
         if (unicode_name_obj == null) {
@@ -178,6 +208,29 @@ public class DomainNames implements ContentTest
                 res = false;
             }
             context.addResult(ms);
+        }
+
+        if ((unicode_name != null) && (pattern != null)) {
+            Result rp = new Result(nr);
+            rp.addNode("unicodeName");
+            String un_pattern = pattern.replaceAll("\\*", ".*");
+            un_pattern = ".*" + un_pattern + ".*";
+            un_pattern =
+                Normalizer.normalize(un_pattern,
+                                     Normalizer.Form.NFKC);
+            Pattern p = Pattern.compile(un_pattern,
+                                        Pattern.CASE_INSENSITIVE |
+                                        Pattern.UNICODE_CASE);
+            if (!p.matcher(unicode_name).matches()) {
+                rp.setStatus(Status.Warning);
+                rp.setInfo("response domain name does not " +
+                           "match search pattern");
+            } else {
+                rp.setStatus(Status.Success);
+                rp.setInfo("response domain name matches " +
+                           "search pattern");
+            }
+            context.addResult(rp);
         }
 
         return res;

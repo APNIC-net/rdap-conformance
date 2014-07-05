@@ -56,7 +56,8 @@ public class UnknownAttributes implements ContentTest
                 Result ua = new Result(nr);
                 ua.setStatus(Status.Failure);
                 ua.addNode(unknown_attribute);
-                ua.setInfo("attribute is non-standard and does not " +
+                ua.setInfo("attribute is not permitted here or is " +
+                           "non-standard and does not " +
                            "contain an underscore");
                 context.addResult(ua);
                 success = false;
