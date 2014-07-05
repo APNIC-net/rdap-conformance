@@ -376,7 +376,7 @@ class Application
                               true
                       ));
             runSearchTests(tests, oc_dom,
-                           new net.apnic.rdap.conformance.contenttest.Domain(),
+                           new net.apnic.rdap.conformance.contenttest.Domain(true),
                            "domains", "domain.search", "domainSearchResults");
         }
 
