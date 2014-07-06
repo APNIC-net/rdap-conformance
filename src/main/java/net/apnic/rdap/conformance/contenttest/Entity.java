@@ -84,16 +84,10 @@ public class Entity implements SearchTest
             return false;
         }
 
-        String response_handle = Utils.castToString(data.get("handle"));
-        Result r = new Result(nr);
-        r.setStatus(Status.Success);
-        r.addNode("handle");
-        r.setInfo("present");
-        if (response_handle == null) {
-            r.setStatus(Status.Warning);
-            r.setInfo("not present");
-        }
-        context.addResult(r);
+        String response_handle =
+            Utils.getStringAttribute(context, nr, "handle",
+                                     Status.Warning, data);
+
         if ((response_handle != null) && (handle != null)) {
             Result r2 = new Result(nr);
             r2.addNode("handle");

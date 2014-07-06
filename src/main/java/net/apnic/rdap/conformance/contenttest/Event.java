@@ -52,19 +52,12 @@ public class Event implements ContentTest
         }
 
         boolean evtres = true;
-        String event_action = Utils.castToString(data.get("eventAction"));
-        Result ear = new Result(proto);
-        ear.setCode("content");
-        ear.addNode("eventAction");
+        String event_action =
+            Utils.getStringAttribute(context, nr, "eventAction",
+                                     Status.Failure, data);
         if (event_action == null) {
-            ear.setInfo("not present");
-            ear.setStatus(Status.Failure);
-            results.add(ear);
             evtres = false;
         } else {
-            ear.setInfo("present");
-            ear.setStatus(Status.Success);
-            results.add(ear);
             Result evr = new Result(proto);
             evr.setCode("content");
             evr.addNode("eventAction");
@@ -85,19 +78,12 @@ public class Event implements ContentTest
         DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
 
         boolean evdres = true;
-        String event_date = Utils.castToString(data.get("eventDate"));
-        Result edr = new Result(proto);
-        edr.setCode("content");
-        edr.addNode("eventDate");
+        String event_date =
+            Utils.getStringAttribute(context, nr, "eventDate",
+                                     Status.Failure, data);
         if (event_date == null) {
-            edr.setInfo("not present");
-            edr.setStatus(Status.Failure);
-            results.add(edr);
             evdres = false;
         } else {
-            edr.setInfo("present");
-            edr.setStatus(Status.Success);
-            results.add(edr);
             Result edvr = new Result(proto);
             edvr.setCode("content");
             edvr.addNode("eventDate");
@@ -117,26 +103,17 @@ public class Event implements ContentTest
         }
 
         boolean eacres = true;
-        Object eac = data.get("eventActor");
-        if (eac != null) {
+        String event_actor =
+            Utils.getStringAttribute(context, nr, "eventActor",
+                                     Status.Notification, data);
+        if ((event_actor != null) && !allow_actor) {
             Result eacr = new Result(proto);
             eacr.setCode("content");
             eacr.addNode("eventActor");
-            if (!allow_actor) {
-                eacr.setInfo("not permitted here");
-                eacr.setStatus(Status.Failure);
-                results.add(eacr);
-                eacres = false;
-            } else if (Utils.castToString(eac) != null) {
-                eacr.setInfo("is string");
-                eacr.setStatus(Status.Success);
-                results.add(eacr);
-            } else {
-                eacr.setInfo("is not string");
-                eacr.setStatus(Status.Failure);
-                results.add(eacr);
-                eacres = false;
-            }
+            eacr.setInfo("not permitted here");
+            eacr.setStatus(Status.Failure);
+            results.add(eacr);
+            eacres = false;
         }
 
         ContentTest lst = new Links();
