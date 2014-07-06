@@ -34,8 +34,8 @@ public class SecureDNS implements ContentTest
                 new ScalarAttribute("zoneSigned", new BooleanValue()),
                 new ScalarAttribute("delegationSigned", new BooleanValue()),
                 new ScalarAttribute("maxSigLife", new MaxSigLife()),
-                new Array(new DsData(), "dsData"),
-                new Array(new KeyData(), "keyData")
+                new ArrayAttribute(new DsData(), "dsData"),
+                new ArrayAttribute(new KeyData(), "keyData")
             ));
 
         known_attributes = Sets.newHashSet();

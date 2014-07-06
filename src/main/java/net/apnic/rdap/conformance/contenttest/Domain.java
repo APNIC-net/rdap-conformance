@@ -25,7 +25,7 @@ import net.apnic.rdap.conformance.contenttest.DomainNames;
 import net.apnic.rdap.conformance.contenttest.SecureDNS;
 import net.apnic.rdap.conformance.contenttest.Nameserver;
 import net.apnic.rdap.conformance.contenttest.Variant;
-import net.apnic.rdap.conformance.contenttest.Array;
+import net.apnic.rdap.conformance.contenttest.ArrayAttribute;
 import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 import net.apnic.rdap.conformance.contenttest.Domain;
@@ -62,8 +62,8 @@ public class Domain implements SearchTest
             new ArrayList<ContentTest>(Arrays.asList(
                 new ScalarAttribute("handle"),
                 domain_names,
-                new Array(new Variant(), "variants"),
-                new Array(new Nameserver(true), "nameServers"),
+                new ArrayAttribute(new Variant(), "variants"),
+                new ArrayAttribute(new Nameserver(true), "nameServers"),
                 new ScalarAttribute("secureDNS", new SecureDNS()),
                 new StandardObject()
             ));

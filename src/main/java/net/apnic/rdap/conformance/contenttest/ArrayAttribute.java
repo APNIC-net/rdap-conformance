@@ -15,14 +15,14 @@ import net.apnic.rdap.conformance.ContentTest;
 
 import net.apnic.rdap.conformance.contenttest.Event;
 
-public class Array implements ContentTest
+public class ArrayAttribute implements ContentTest
 {
     Set<String> known_attributes = null;
     ContentTest element_test = null;
     String key = null;
 
-    public Array(ContentTest arg_element_test,
-                 String arg_key)
+    public ArrayAttribute(ContentTest arg_element_test,
+                          String arg_key)
     {
         element_test = arg_element_test;
         key = arg_key;

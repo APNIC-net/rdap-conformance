@@ -50,7 +50,7 @@ public class Variant implements ContentTest
             new ArrayList<ContentTest>(Arrays.asList(
                 new VariantRelation(),
                 new ScalarAttribute("idnTable"),
-                new Array(new VariantName(), "variantNames")
+                new ArrayAttribute(new VariantName(), "variantNames")
             ));
 
         known_attributes = new HashSet<String>();

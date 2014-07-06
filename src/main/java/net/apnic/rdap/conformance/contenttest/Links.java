@@ -19,7 +19,7 @@ public class Links implements ContentTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        ContentTest array_test = new Array(new Link(), "links");
+        ContentTest array_test = new ArrayAttribute(new Link(), "links");
 
         Result nr = new Result(proto);
         nr.setCode("content");

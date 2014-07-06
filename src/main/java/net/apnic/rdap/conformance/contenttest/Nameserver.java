@@ -15,7 +15,6 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.SearchTest;
-import net.apnic.rdap.conformance.contenttest.DomainNames;
 
 public class Nameserver implements SearchTest
 {
@@ -82,8 +81,8 @@ public class Nameserver implements SearchTest
         if (ip_addresses != null) {
             Result nr2 = new Result(nr);
             nr2.addNode("ipAddresses");
-            ContentTest v4 = new Array(new IPv4Address(), "v4");
-            ContentTest v6 = new Array(new IPv6Address(), "v6");
+            ContentTest v4 = new ArrayAttribute(new IPv4Address(), "v4");
+            ContentTest v6 = new ArrayAttribute(new IPv6Address(), "v6");
             boolean v4res = v4.run(context, nr2, ip_addresses);
             boolean v6res = v6.run(context, nr2, ip_addresses);
             if (!v4res || !v6res) {

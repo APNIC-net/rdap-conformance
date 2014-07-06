@@ -21,7 +21,6 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.Status;
-import net.apnic.rdap.conformance.contenttest.Array;
 import net.apnic.rdap.conformance.contenttest.Country;
 import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.StandardResponse;

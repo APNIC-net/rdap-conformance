@@ -34,7 +34,7 @@ import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.NotStatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
 import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.Array;
+import net.apnic.rdap.conformance.contenttest.ArrayAttribute;
 import net.apnic.rdap.conformance.contenttest.RdapConformance;
 import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
 import net.apnic.rdap.conformance.contenttest.Notices;
@@ -101,7 +101,7 @@ public class Search implements net.apnic.rdap.conformance.Test
 
         List<ContentTest> tests =
             new ArrayList<ContentTest>(Arrays.asList(
-                new Array(search_test, search_results_key),
+                new ArrayAttribute(search_test, search_results_key),
                 new ScalarAttribute("resultsTruncated",
                                     new BooleanValue()),
                 new StandardResponse()

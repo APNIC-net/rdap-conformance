@@ -17,7 +17,7 @@ public class Events implements ContentTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        ContentTest array_test = new Array(new Event(), "events");
+        ContentTest array_test = new ArrayAttribute(new Event(), "events");
 
         Result nr = new Result(proto);
         nr.setCode("content");

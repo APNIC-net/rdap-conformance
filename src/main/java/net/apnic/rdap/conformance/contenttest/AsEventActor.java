@@ -17,7 +17,8 @@ public class AsEventActor implements ContentTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        ContentTest array_test = new Array(new Event(false), "asEventActor");
+        ContentTest array_test =
+            new ArrayAttribute(new Event(false), "asEventActor");
 
         Result nr = new Result(proto);
         nr.setCode("content");

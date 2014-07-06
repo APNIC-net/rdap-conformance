@@ -9,7 +9,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.Notice;
-import net.apnic.rdap.conformance.contenttest.Array;
+import net.apnic.rdap.conformance.contenttest.ArrayAttribute;
 
 public class Notices implements ContentTest
 {
@@ -26,7 +26,7 @@ public class Notices implements ContentTest
                        Object arg_data)
     {
         String mkey = (key != null) ? key : "notices";
-        ContentTest array_test = new Array(new Notice(), mkey);
+        ContentTest array_test = new ArrayAttribute(new Notice(), mkey);
 
         Result nr = new Result(proto);
         nr.setCode("content");

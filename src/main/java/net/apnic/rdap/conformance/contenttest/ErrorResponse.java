@@ -44,7 +44,7 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
             new RdapConformance(),
             new ScalarAttribute("errorCode"),
             new ScalarAttribute("title"),
-            new Array(new StringTest(), "description"),
+            new ArrayAttribute(new StringTest(), "description"),
             new Notices(),
             new Lang()
         ));

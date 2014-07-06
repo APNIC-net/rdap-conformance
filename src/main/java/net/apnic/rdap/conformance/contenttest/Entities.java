@@ -11,7 +11,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.contenttest.Entity;
-import net.apnic.rdap.conformance.contenttest.Array;
+import net.apnic.rdap.conformance.contenttest.ArrayAttribute;
 
 public class Entities implements ContentTest
 {
@@ -23,7 +23,7 @@ public class Entities implements ContentTest
                        Object arg_data)
     {
         ContentTest array_test =
-            new Array(new Entity(null, true), "entities");
+            new ArrayAttribute(new Entity(null, true), "entities");
 
         Result nr = new Result(proto);
         nr.setCode("content");

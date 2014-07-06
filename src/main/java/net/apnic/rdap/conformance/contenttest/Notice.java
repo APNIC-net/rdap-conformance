@@ -36,7 +36,7 @@ public class Notice implements ContentTest
 
         ContentTest sat = new ScalarAttribute("title");
         boolean satres = sat.run(context, nr, arg_data);
-        ContentTest aat = new Array(new StringTest(), "description");
+        ContentTest aat = new ArrayAttribute(new StringTest(), "description");
         boolean aatres = aat.run(context, nr, arg_data);
         ContentTest lst = new Links();
         boolean lstres = lst.run(context, nr, arg_data);
