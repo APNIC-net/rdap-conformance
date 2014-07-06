@@ -13,9 +13,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.VariantRelation;
-import net.apnic.rdap.conformance.contenttest.VariantName;
-import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
+import net.apnic.rdap.conformance.Utils;
 
 public class Variant implements ContentTest
 {
@@ -32,13 +30,8 @@ public class Variant implements ContentTest
         nr.setReference("6.3");
 
         boolean res = true;
-        Map<String, Object> data;
-        try {
-            data = (Map<String, Object>) arg_data;
-        } catch (ClassCastException e) {
-            nr.setInfo("structure is invalid");
-            nr.setStatus(Status.Failure);
-            context.addResult(nr);
+        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
+        if (data == null) {
             return false;
         }
 

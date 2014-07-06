@@ -36,19 +36,14 @@ public class UnknownAttributes implements ContentTest
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("3.2");
 
-        Map<String, Object> root;
-        try {
-            root = (Map<String, Object>) arg_data;
-        } catch (ClassCastException e) {
-            nr.setInfo("structure is invalid");
-            nr.setStatus(Status.Failure);
-            context.addResult(nr);
+        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
+        if (data == null) {
             return false;
         }
 
         boolean success = true;
 
-        Set<String> attributes = root.keySet();
+        Set<String> attributes = data.keySet();
         Sets.SetView<String> unknown_attributes =
             Sets.difference(attributes, known_attributes);
         for (String unknown_attribute : unknown_attributes) {

@@ -10,6 +10,7 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.Utils;
 
 public class VariantRelation implements ContentTest
 {
@@ -33,13 +34,8 @@ public class VariantRelation implements ContentTest
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("6.3");
 
-        Map<String, Object> data;
-        try {
-            data = (Map<String, Object>) arg_data;
-        } catch (ClassCastException e) {
-            nr.setInfo("structure is invalid");
-            nr.setStatus(Result.Status.Failure);
-            context.addResult(nr);
+        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
+        if (data == null) {
             return false;
         }
 

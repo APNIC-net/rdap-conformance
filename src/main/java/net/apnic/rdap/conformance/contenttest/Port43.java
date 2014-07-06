@@ -44,13 +44,8 @@ public class Port43 implements ContentTest
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.7");
 
-        Map<String, Object> data;
-        try {
-            data = (Map<String, Object>) arg_data;
-        } catch (ClassCastException e) {
-            nr.setInfo("structure is invalid");
-            nr.setStatus(Status.Failure);
-            context.addResult(nr);
+        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
+        if (data == null) {
             return false;
         }
 

@@ -10,6 +10,7 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.Utils;
 
 public class Status implements ContentTest
 {
@@ -46,13 +47,8 @@ public class Status implements ContentTest
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.6");
 
-        Map<String, Object> data;
-        try {
-            data = (Map<String, Object>) arg_data;
-        } catch (ClassCastException e) {
-            nr.setInfo("structure is invalid");
-            nr.setStatus(Result.Status.Failure);
-            context.addResult(nr);
+        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
+        if (data == null) {
             return false;
         }
 

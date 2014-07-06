@@ -79,17 +79,12 @@ public class Entity implements SearchTest
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("6.1");
 
-        Map<String, Object> root;
-        try {
-            root = (Map<String, Object>) arg_data;
-        } catch (ClassCastException e) {
-            nr.setInfo("structure is invalid");
-            nr.setStatus(Status.Failure);
-            context.addResult(nr);
+        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
+        if (data == null) {
             return false;
         }
 
-        String response_handle = Utils.castToString(root.get("handle"));
+        String response_handle = Utils.castToString(data.get("handle"));
         Result r = new Result(nr);
         r.setStatus(Status.Success);
         r.addNode("handle");
@@ -137,7 +132,7 @@ public class Entity implements SearchTest
         hr.setStatus(Status.Success);
         hr.addNode("roles");
         hr.setInfo("present");
-        Object response_roles = root.get("roles");
+        Object response_roles = data.get("roles");
         if (response_roles == null) {
             hr.setStatus(Status.Notification);
             hr.setInfo("not present");
@@ -177,7 +172,7 @@ public class Entity implements SearchTest
 
         boolean vret = true;
         Object vcard_array =
-            Utils.getAttribute(context, nr, "vcardArray", null, root);
+            Utils.getAttribute(context, nr, "vcardArray", null, data);
         VCard vcard = null;
         if (vcard_array != null) {
             String json = new Gson().toJson(vcard_array);

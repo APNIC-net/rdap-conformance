@@ -11,6 +11,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
+import net.apnic.rdap.conformance.Utils;
 
 public class Notice implements ContentTest
 {
@@ -24,13 +25,8 @@ public class Notice implements ContentTest
         Result nr = new Result(proto);
         nr.setCode("content");
 
-        Map<String, Object> data;
-        try {
-            data = (Map<String, Object>) arg_data;
-        } catch (ClassCastException e) {
-            nr.setInfo("structure is invalid");
-            nr.setStatus(Status.Failure);
-            results.add(nr);
+        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
+        if (data == null) {
             return false;
         }
 

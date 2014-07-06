@@ -135,6 +135,22 @@ public class Utils
         return sb;
     }
 
+    public static Map<String, Object> castToMap(Context context,
+                                                Result proto,
+                                                Object obj)
+    {
+        Map<String, Object> data = null;
+        Result cast_result = new Result(proto);
+        try {
+            data = (Map<String, Object>) obj;
+        } catch (ClassCastException e) {
+            cast_result.setInfo("structure is invalid");
+            cast_result.setStatus(Status.Failure);
+            context.addResult(cast_result);
+        }
+        return data;
+    }
+
     public static Object getAttribute(Context context,
                                       Result proto,
                                       String key,
