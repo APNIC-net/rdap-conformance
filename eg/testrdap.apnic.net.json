@@ -28,7 +28,7 @@
                 "supported": true,
                 "values": {
                     "fn": [ "Test" ],
-                    "handle": [ "TP*" ]
+                    "handle": [ "TP13*" ]
                 }
             }
         },
