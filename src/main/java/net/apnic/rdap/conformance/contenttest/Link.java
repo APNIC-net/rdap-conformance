@@ -134,10 +134,12 @@ public class Link implements ContentTest
 
     private boolean urlIsFetchable(Context context,
                                    Result proto,
+                                   String key,
                                    String url)
     {
         boolean success = true;
         Result vnr = new Result(proto);
+        vnr.addNode(key);
         int code = 0;
         HttpGet request = null;
         try {
@@ -188,63 +190,26 @@ public class Link implements ContentTest
             return false;
         }
 
-        String value = null;
-        Result vnr = new Result(nr);
-        vnr.addNode("value");
         boolean success = true;
-        try {
-            value = (String) data.get("value");
-        } catch (ClassCastException e) {}
-        if (value == null) {
-            vnr.setStatus(Status.Failure);
-            vnr.setInfo("not present");
-            results.add(vnr);
+        String value = Utils.getStringAttribute(context, nr, "value",
+                                                Status.Failure, data);
+        if ((value == null)
+                || (!urlIsFetchable(context, nr, "value", value))) {
             success = false;
-        } else {
-            vnr.setStatus(Status.Success);
-            vnr.setInfo("present");
-            results.add(vnr);
-            if (!urlIsFetchable(context, vnr, value)) {
-                success = false;
-            }
         }
 
-        String href = null;
-        Result vhr = new Result(nr);
-        vhr.addNode("href");
-        try {
-            href = (String) data.get("href");
-        } catch (ClassCastException e) {}
-        if (href == null) {
-            vhr.setStatus(Status.Failure);
-            vhr.setInfo("not present");
-            results.add(vhr);
+        String href = Utils.getStringAttribute(context, nr, "href",
+                                               Status.Failure, data);
+        if ((href == null)
+                || (!urlIsFetchable(context, nr, "href", href))) {
             success = false;
-        } else {
-            vhr.setStatus(Status.Success);
-            vhr.setInfo("present");
-            results.add(vhr);
-            if (!urlIsFetchable(context, vhr, href)) {
-                success = false;
-            }
         }
 
-        String rel = null;
-        Result vrr = new Result(nr);
-        vrr.addNode("rel");
-        try {
-            rel = (String) data.get("rel");
-        } catch (ClassCastException e) {}
+        String rel = Utils.getStringAttribute(context, nr, "rel",
+                                              Status.Failure, data);
         if (rel == null) {
-            vrr.setStatus(Status.Failure);
-            vrr.setInfo("not present");
-            results.add(vrr);
             success = false;
         } else {
-            vrr.setStatus(Status.Success);
-            vrr.setInfo("present");
-            results.add(vrr);
-
             Result valid = new Result(nr);
             if (link_relations.contains(rel)) {
                 valid.setInfo("valid");
@@ -306,78 +271,40 @@ public class Link implements ContentTest
             }
         }
 
-        if (data.get("title") != null) {
-            Result tr = new Result(nr);
-            tr.addNode("title");
-            tr.setStatus(Status.Success);
-            tr.setInfo("valid");
-            try {
-                String title = (String) data.get("title");
-            } catch (ClassCastException e) {
-                tr.setStatus(Status.Failure);
-                /* The example currently present in 5.2 has an array
-                 * of titles. However, RFC 5988 only allows for one
-                 * title to be present: see 5.4. */
-                tr.setInfo("structure is invalid");
+        String title = Utils.getStringAttribute(context, nr, "title",
+                                                Status.Notification, data);
+
+        String media = Utils.getStringAttribute(context, nr, "media",
+                                                Status.Notification, data);
+        if (media != null) {
+            Result mtr = new Result(nr);
+            mtr.addNode("media");
+            mtr.setStatus(Status.Success);
+            mtr.setInfo("registered");
+            if (!media_types.contains(media)) {
+                /* It's not impossible that the media type is one
+                    * that has been registered in the meantime, which
+                    * is why this is only a warning. */
+                mtr.setStatus(Status.Warning);
+                mtr.setInfo("unregistered: " + media);
             }
-            results.add(tr);
+            results.add(mtr);
         }
 
-        if (data.get("media") != null) {
-            Result tr = new Result(nr);
-            tr.addNode("media");
-            tr.setStatus(Status.Success);
-            tr.setInfo("present");
-            String media = null;
+        String type = Utils.getStringAttribute(context, nr, "type",
+                                               Status.Notification, data);
+        if (type != null) {
+            Result tvr = new Result(nr);
+            tvr.addNode("type");
+            tvr.setStatus(Status.Success);
+            tvr.setInfo("valid");
             try {
-                media = (String) data.get("media");
-            } catch (ClassCastException e) {
-                tr.setStatus(Status.Failure);
-                tr.setInfo("structure is invalid");
+                MediaType.parse(type);
+            } catch (IllegalArgumentException e) {
+                tvr.setInfo(e.toString());
+                tvr.setStatus(Status.Failure);
             }
-            results.add(tr);
-            if (media != null) {
-                Result mtr = new Result(nr);
-                mtr.addNode("media");
-                mtr.setStatus(Status.Success);
-                mtr.setInfo("registered");
-                if (!media_types.contains(media)) {
-                    /* It's not impossible that the media type is one
-                     * that has been registered in the meantime, which
-                     * is why this is only a warning. */
-                    mtr.setStatus(Status.Warning);
-                    mtr.setInfo("unregistered: " + media);
-                }
-                results.add(mtr);
-            }
-        }
-
-        if (data.get("type") != null) {
-            Result tr = new Result(nr);
-            tr.addNode("type");
-            tr.setStatus(Status.Success);
-            tr.setInfo("present");
-            String type = null;
-            try {
-                type = (String) data.get("type");
-            } catch (ClassCastException e) {
-                tr.setStatus(Status.Failure);
-                tr.setInfo("structure is invalid");
-            }
-            results.add(tr);
-            if (type != null) {
-                Result tvr = new Result(nr);
-                tvr.addNode("type");
-                tvr.setStatus(Status.Success);
-                tvr.setInfo("valid");
-                try {
-                    MediaType.parse(type);
-                } catch (IllegalArgumentException e) {
-                    tvr.setInfo(e.toString());
-                    tvr.setStatus(Status.Failure);
-                }
-                results.add(tvr);
-            }
+            results.add(tvr);
         }
 
         ContentTest ua = new UnknownAttributes(getKnownAttributes());
