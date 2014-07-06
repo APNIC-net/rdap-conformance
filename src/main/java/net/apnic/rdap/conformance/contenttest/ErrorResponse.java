@@ -33,7 +33,7 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
     }
 
     public boolean run(Context context, Result proto,
-                       Object root)
+                       Object arg_data)
     {
         Result p = new Result(proto);
         p.setCode("content");
@@ -53,16 +53,16 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
 
         boolean ret = true;
         for (ContentTest test : tests) {
-            boolean res = test.run(context, p, root);
+            boolean res = test.run(context, p, arg_data);
             if (!res) {
                 ret = false;
             }
             known_attributes.addAll(test.getKnownAttributes());
         }
 
-        Map<String, Object> root_cast;
+        Map<String, Object> data;
         try {
-            root_cast = (Map<String, Object>) root;
+            data = (Map<String, Object>) arg_data;
         } catch (ClassCastException e) {
             return false;
         }
@@ -73,7 +73,7 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
             p2.addNode("errorCode");
             p2.setInfo("is a number");
             try {
-                error_code = (Double) root_cast.get("errorCode");
+                error_code = (Double) data.get("errorCode");
             } catch (Exception e) {
                 p2.setStatus(Status.Failure);
                 p2.setInfo("is not a number");
@@ -98,7 +98,7 @@ public class ErrorResponse implements net.apnic.rdap.conformance.ContentTest
         }
 
         ContentTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, root);
+        boolean ret2 = ua.run(context, proto, arg_data);
 
         return (ret && ret2);
     }

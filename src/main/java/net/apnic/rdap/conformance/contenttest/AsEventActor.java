@@ -17,14 +17,13 @@ public class AsEventActor implements ContentTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        ContentTest array_test =
-            new ArrayAttribute(new Event(false), "asEventActor");
-
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("6.1");
 
+        ContentTest array_test =
+            new ArrayAttribute(new Event(false), "asEventActor");
         return array_test.run(context, nr, arg_data);
     }
 

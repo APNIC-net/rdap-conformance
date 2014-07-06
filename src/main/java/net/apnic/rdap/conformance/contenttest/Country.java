@@ -44,28 +44,12 @@ public class Country implements ContentTest
         Result nr1 = new Result(nr);
         nr1.setInfo("present");
 
-        Object value = data.get("country");
-        if (value == null) {
-            nr1.setStatus(Result.Status.Notification);
-            nr1.setInfo("not present");
-            results.add(nr1);
-            return false;
-        } else {
-            nr1.setStatus(Result.Status.Success);
-            results.add(nr1);
-        }
-
-        Result nr2 = new Result(nr);
-        String country_value = Utils.castToString(value);
+        String country_value =
+            Utils.getStringAttribute(context, nr1, "country",
+                                     Result.Status.Notification,
+                                     data);
         if (country_value == null) {
-            nr2.setStatus(Result.Status.Failure);
-            nr2.setInfo("is not string");
-            results.add(nr2);
             return false;
-        } else {
-            nr2.setStatus(Result.Status.Success);
-            nr2.setInfo("is string");
-            results.add(nr2);
         }
 
         Result nr3 = new Result(nr);
