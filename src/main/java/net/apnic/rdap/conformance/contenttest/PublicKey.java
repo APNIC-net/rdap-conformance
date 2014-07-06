@@ -23,12 +23,7 @@ public class PublicKey implements ContentTest
         Result nr = new Result(proto);
 
         boolean res = true;
-        String value = null;
-        try {
-            value = (String) arg_data;
-        } catch (ClassCastException ce) {
-        }
-
+        String value = Utils.castToString(arg_data);
         if (value == null) {
             nr.setStatus(Status.Failure);
             nr.setInfo("not string");

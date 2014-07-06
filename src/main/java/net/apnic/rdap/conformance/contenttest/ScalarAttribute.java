@@ -44,30 +44,21 @@ public class ScalarAttribute implements ContentTest
                        Object arg_data)
     {
         Result nr = new Result(proto);
+        nr.setCode("content");
+        nr.setInfo("present");
+
         String ucattr_name =
             Character.toUpperCase(attribute_name.charAt(0)) +
             attribute_name.substring(1);
-        nr.setCode("content");
-        nr.addNode(attribute_name);
-        nr.setInfo("present");
 
         Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
         if (data == null) {
             return false;
         }
 
-        Object value = data.get(attribute_name);
-        boolean res;
-        Result nr2 = new Result(nr);
-        if (value == null) {
-            nr2.setStatus(Status.Notification);
-            nr2.setInfo("not present");
-            res = false;
-        } else {
-            nr2.setStatus(Status.Success);
-            res = true;
-        }
-        context.addResult(nr2);
+        Object value = Utils.getAttribute(context, nr, attribute_name,
+                                          Status.Notification, data);
+        boolean res = (value != null);
 
         if (attribute_test != null) {
             return (res && attribute_test.run(context, nr, value));

@@ -40,7 +40,6 @@ public class Port43 implements ContentTest
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.addNode("port43");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.7");
 
@@ -49,35 +48,12 @@ public class Port43 implements ContentTest
             return false;
         }
 
-        Result nr1 = new Result(nr);
-        nr1.setInfo("present");
-
-        Object value = data.get("port43");
-        if (value == null) {
-            nr1.setStatus(Status.Notification);
-            nr1.setInfo("not present");
-            results.add(nr1);
-            return false;
-        } else {
-            nr1.setStatus(Status.Success);
-            results.add(nr1);
+        String port43 = Utils.getStringAttribute(context, nr, "port43",
+                                                 Status.Notification,
+                                                 data);
+        if (port43 == null) {
+            return true;
         }
-
-        Result nr2 = new Result(nr);
-        nr2.setInfo("is a string");
-
-        String port43;
-        try {
-            port43 = (String) value;
-        } catch (ClassCastException e) {
-            nr2.setStatus(Status.Failure);
-            nr2.setInfo("is not a string");
-            results.add(nr2);
-            return false;
-        }
-        nr2.setStatus(Status.Success);
-        results.add(nr2);
-
         if (hosts_checked.contains(port43)) {
             return true;
         }

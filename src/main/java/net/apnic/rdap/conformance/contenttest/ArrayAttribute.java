@@ -42,6 +42,7 @@ public class ArrayAttribute implements ContentTest
         }
 
         Result nr1 = new Result(nr);
+        nr1.setCode("content");
         nr1.setInfo("present");
 
         Object value = data.get(key);
