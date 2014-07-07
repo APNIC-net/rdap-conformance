@@ -14,43 +14,26 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.BooleanValue;
-import net.apnic.rdap.conformance.contenttest.MaxSigLife;
-import net.apnic.rdap.conformance.contenttest.DsData;
-import net.apnic.rdap.conformance.contenttest.KeyData;
 
 public class SecureDNS implements ContentTest
 {
-    private Set<String> known_attributes = null;
+    private Set<String> known_attributes = new HashSet<String>();
 
     public SecureDNS() {}
 
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        boolean ret = true;
-        List<ContentTest> tests =
-            new ArrayList<ContentTest>(Arrays.asList(
+        return Utils.runTestList(
+            context, proto, arg_data, known_attributes, true,
+            Arrays.asList(
                 new ScalarAttribute("zoneSigned", new BooleanValue()),
                 new ScalarAttribute("delegationSigned", new BooleanValue()),
                 new ScalarAttribute("maxSigLife", new MaxSigLife()),
                 new ArrayAttribute(new DsData(), "dsData"),
                 new ArrayAttribute(new KeyData(), "keyData")
-            ));
-
-        known_attributes = Sets.newHashSet();
-        for (ContentTest test : tests) {
-            boolean ret_inner = test.run(context, proto, arg_data);
-            if (!ret_inner) {
-                ret = false;
-            }
-            known_attributes.addAll(test.getKnownAttributes());
-        }
-
-        ContentTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, arg_data);
-
-        return (ret && ret2);
+            )
+        );
     }
 
     public Set<String> getKnownAttributes()

@@ -29,35 +29,19 @@ public class Variant implements ContentTest
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("6.3");
 
-        boolean res = true;
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
-
         /* In 6.3, regarding idnTable, the document has 'the name of
          * the IDN table of codepoints, such as one listed with the
          * IANA'. Not sure if this means others might be allowed, so
          * leaving it as ScalarAttribute for now. */
-        List<ContentTest> tests =
-            new ArrayList<ContentTest>(Arrays.asList(
+
+        return Utils.runTestList(
+            context, nr, arg_data, known_attributes, true,
+            Arrays.asList(
                 new VariantRelation(),
                 new ScalarAttribute("idnTable"),
                 new ArrayAttribute(new VariantName(), "variantNames")
-            ));
-
-        known_attributes = new HashSet<String>();
-        for (ContentTest test : tests) {
-            boolean res_inner = test.run(context, proto, arg_data);
-            if (!res_inner) {
-                res = false;
-            }
-            known_attributes.addAll(test.getKnownAttributes());
-        }
-
-        ContentTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, arg_data);
-        return (res && ret2);
+            )
+        );
     }
 
     public Set<String> getKnownAttributes()

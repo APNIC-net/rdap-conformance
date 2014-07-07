@@ -19,16 +19,6 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
-import net.apnic.rdap.conformance.contenttest.StandardObject;
-import net.apnic.rdap.conformance.contenttest.StandardResponse;
-import net.apnic.rdap.conformance.contenttest.DomainNames;
-import net.apnic.rdap.conformance.contenttest.SecureDNS;
-import net.apnic.rdap.conformance.contenttest.Nameserver;
-import net.apnic.rdap.conformance.contenttest.Variant;
-import net.apnic.rdap.conformance.contenttest.ArrayAttribute;
-import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
-import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
-import net.apnic.rdap.conformance.contenttest.Domain;
 
 public class Domain implements SearchTest
 {
@@ -58,33 +48,19 @@ public class Domain implements SearchTest
             domain_names.setSearchDetails(key, pattern);
         }
 
-        List<ContentTest> tests =
-            new ArrayList<ContentTest>(Arrays.asList(
+        known_attributes = new HashSet<String>();
+
+        return Utils.runTestList(
+            context, proto, arg_data, known_attributes, check_unknown,
+            Arrays.asList(
                 new ScalarAttribute("handle"),
                 domain_names,
                 new ArrayAttribute(new Variant(), "variants"),
                 new ArrayAttribute(new Nameserver(true), "nameServers"),
                 new ScalarAttribute("secureDNS", new SecureDNS()),
                 new StandardObject()
-            ));
-
-        known_attributes = new HashSet<String>();
-
-        boolean ret = true;
-        for (ContentTest test : tests) {
-            boolean res = test.run(context, proto, arg_data);
-            if (!res) {
-                ret = false;
-            }
-            known_attributes.addAll(test.getKnownAttributes());
-        }
-
-        boolean ret2 = true;
-        if (check_unknown) {
-            ContentTest ua = new UnknownAttributes(known_attributes);
-            ret2 = ua.run(context, proto, arg_data);
-        }
-        return (ret && ret2);
+            )
+        );
     }
 
     public Set<String> getKnownAttributes()

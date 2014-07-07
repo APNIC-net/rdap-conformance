@@ -20,9 +20,6 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ContentTest;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
-import net.apnic.rdap.conformance.contenttest.StandardObject;
-import net.apnic.rdap.conformance.contenttest.StandardResponse;
-import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
 
 public class Entity implements SearchTest
 {
@@ -252,28 +249,15 @@ public class Entity implements SearchTest
             context.addResult(r2);
         }
 
-        boolean ret = true;
-        List<ContentTest> tests =
-            new ArrayList<ContentTest>(Arrays.asList(
+        boolean ret = Utils.runTestList(
+            context, proto, arg_data, known_attributes, check_unknown,
+            Arrays.asList(
                 new AsEventActor(),
                 new StandardObject()
-            ));
+            )
+        );
 
-        for (ContentTest test : tests) {
-            boolean ret_inner = test.run(context, proto, arg_data);
-            if (!ret_inner) {
-                ret = false;
-            }
-            known_attributes.addAll(test.getKnownAttributes());
-        }
-
-        boolean ret2 = true;
-        if (check_unknown) {
-            ContentTest ua = new UnknownAttributes(known_attributes);
-            ret2 = ua.run(context, proto, arg_data);
-        }
-
-        return (ret && vret && ret2);
+        return (ret && vret);
     }
 
     public Set<String> getKnownAttributes()
