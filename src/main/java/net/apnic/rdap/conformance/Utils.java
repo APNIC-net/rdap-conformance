@@ -17,7 +17,7 @@ import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
 import net.apnic.rdap.conformance.responsetest.AccessControl;
-import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
+import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.HttpRequest;
@@ -245,10 +245,10 @@ public class Utils
                                       Object arg_data,
                                       Set<String> known_attributes,
                                       boolean check_unknown,
-                                      List<ContentTest> tests)
+                                      List<AttributeTest> tests)
     {
         boolean ret = true;
-        for (ContentTest test : tests) {
+        for (AttributeTest test : tests) {
             boolean res = test.run(context, proto, arg_data);
             if (!res) {
                 ret = false;
@@ -258,7 +258,7 @@ public class Utils
 
         boolean ret2 = true;
         if (check_unknown) {
-            ContentTest ua = new UnknownAttributes(known_attributes);
+            AttributeTest ua = new UnknownAttributes(known_attributes);
             ret2 = ua.run(context, proto, arg_data);
         }
         return (ret && ret2);

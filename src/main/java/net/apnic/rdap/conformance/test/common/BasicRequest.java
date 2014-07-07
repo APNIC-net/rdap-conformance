@@ -26,11 +26,11 @@ import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.NotStatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
-import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.RdapConformance;
-import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
-import net.apnic.rdap.conformance.contenttest.Notices;
-import net.apnic.rdap.conformance.contenttest.ErrorResponse;
+import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.attributetest.RdapConformance;
+import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
+import net.apnic.rdap.conformance.attributetest.Notices;
+import net.apnic.rdap.conformance.attributetest.ErrorResponse;
 import net.apnic.rdap.conformance.Utils;
 
 public class BasicRequest implements net.apnic.rdap.conformance.Test
@@ -140,7 +140,7 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
         }
 
         if ((expected_status >= 400) && (!invert_status_test)) {
-            ContentTest ert = new ErrorResponse(expected_status);
+            AttributeTest ert = new ErrorResponse(expected_status);
             request.releaseConnection();
             return ert.run(context, proto, root);
         } else {

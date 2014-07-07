@@ -16,11 +16,11 @@ import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
-import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.Nameserver;
-import net.apnic.rdap.conformance.contenttest.RdapConformance;
-import net.apnic.rdap.conformance.contenttest.Notices;
-import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
+import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.attributetest.Nameserver;
+import net.apnic.rdap.conformance.attributetest.RdapConformance;
+import net.apnic.rdap.conformance.attributetest.Notices;
+import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 
 public class Standard implements ObjectTest
 {
@@ -62,8 +62,8 @@ public class Standard implements ObjectTest
             return false;
         }
 
-        List<ContentTest> tests =
-            new ArrayList<ContentTest>(Arrays.asList(
+        List<AttributeTest> tests =
+            new ArrayList<AttributeTest>(Arrays.asList(
                 new Nameserver(false),
                 new RdapConformance(),
                 new Notices()
@@ -72,7 +72,7 @@ public class Standard implements ObjectTest
         Set<String> known_attributes = new HashSet<String>();
 
         boolean ret = true;
-        for (ContentTest test : tests) {
+        for (AttributeTest test : tests) {
             boolean res = test.run(context, proto, root);
             if (!res) {
                 ret = false;
@@ -80,7 +80,7 @@ public class Standard implements ObjectTest
             known_attributes.addAll(test.getKnownAttributes());
         }
 
-        ContentTest ua = new UnknownAttributes(known_attributes);
+        AttributeTest ua = new UnknownAttributes(known_attributes);
         boolean ret2 = ua.run(context, proto, root);
         return (ret && ret2);
     }

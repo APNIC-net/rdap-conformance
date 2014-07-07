@@ -292,7 +292,7 @@ class Application
                               true
                       ));
             runSearchTests(tests, oc_ns,
-                           new net.apnic.rdap.conformance.contenttest.Nameserver(true),
+                           new net.apnic.rdap.conformance.attributetest.Nameserver(true),
                            "nameservers", "nameserver.search",
                            "nameserverSearchResults");
         }
@@ -327,7 +327,7 @@ class Application
                               true
                       ));
             runSearchTests(tests, oc_en,
-                           new net.apnic.rdap.conformance.contenttest.Entity(),
+                           new net.apnic.rdap.conformance.attributetest.Entity(),
                            "entities", "entity.search", "entitySearchResults");
         }
 
@@ -376,7 +376,7 @@ class Application
                               true
                       ));
             runSearchTests(tests, oc_dom,
-                           new net.apnic.rdap.conformance.contenttest.Domain(true),
+                           new net.apnic.rdap.conformance.attributetest.Domain(true),
                            "domains", "domain.search", "domainSearchResults");
         }
 

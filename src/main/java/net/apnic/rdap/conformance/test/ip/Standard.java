@@ -19,12 +19,12 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
-import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.Status;
-import net.apnic.rdap.conformance.contenttest.Country;
-import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
-import net.apnic.rdap.conformance.contenttest.StandardResponse;
-import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
+import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.attributetest.Status;
+import net.apnic.rdap.conformance.attributetest.Country;
+import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
+import net.apnic.rdap.conformance.attributetest.StandardResponse;
+import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 
 public class Standard implements ObjectTest
 {
@@ -337,8 +337,8 @@ public class Standard implements ObjectTest
             }
         }
 
-        List<ContentTest> tests =
-            new ArrayList<ContentTest>(Arrays.asList(
+        List<AttributeTest> tests =
+            new ArrayList<AttributeTest>(Arrays.asList(
                 new ScalarAttribute("name"),
                 new ScalarAttribute("handle"),
                 new ScalarAttribute("type"),
@@ -349,7 +349,7 @@ public class Standard implements ObjectTest
 
         Set<String> known_attributes = new HashSet<String>();
 
-        for (ContentTest test : tests) {
+        for (AttributeTest test : tests) {
             boolean res = test.run(context, proto, root);
             if (!res) {
                 ret = false;
@@ -359,7 +359,7 @@ public class Standard implements ObjectTest
         known_attributes.addAll(Sets.newHashSet("startAddress",
                                                 "endAddress", "ipVersion"));
 
-        ContentTest ua = new UnknownAttributes(known_attributes);
+        AttributeTest ua = new UnknownAttributes(known_attributes);
         boolean ret2 = ua.run(context, proto, root);
         return (ret && ret2);
     }

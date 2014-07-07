@@ -33,14 +33,14 @@ import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.NotStatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
-import net.apnic.rdap.conformance.ContentTest;
-import net.apnic.rdap.conformance.contenttest.ArrayAttribute;
-import net.apnic.rdap.conformance.contenttest.RdapConformance;
-import net.apnic.rdap.conformance.contenttest.ScalarAttribute;
-import net.apnic.rdap.conformance.contenttest.Notices;
-import net.apnic.rdap.conformance.contenttest.StandardResponse;
-import net.apnic.rdap.conformance.contenttest.UnknownAttributes;
-import net.apnic.rdap.conformance.contenttest.BooleanValue;
+import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
+import net.apnic.rdap.conformance.attributetest.RdapConformance;
+import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
+import net.apnic.rdap.conformance.attributetest.Notices;
+import net.apnic.rdap.conformance.attributetest.StandardResponse;
+import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
+import net.apnic.rdap.conformance.attributetest.BooleanValue;
 import net.apnic.rdap.conformance.Utils;
 
 public class Search implements net.apnic.rdap.conformance.Test
@@ -99,8 +99,8 @@ public class Search implements net.apnic.rdap.conformance.Test
             return false;
         }
 
-        List<ContentTest> tests =
-            new ArrayList<ContentTest>(Arrays.asList(
+        List<AttributeTest> tests =
+            new ArrayList<AttributeTest>(Arrays.asList(
                 new ArrayAttribute(search_test, search_results_key),
                 new ScalarAttribute("resultsTruncated",
                                     new BooleanValue()),
@@ -109,7 +109,7 @@ public class Search implements net.apnic.rdap.conformance.Test
 
         boolean res = true;
         HashSet<String> known_attributes = new HashSet<String>();
-        for (ContentTest test : tests) {
+        for (AttributeTest test : tests) {
             boolean res_inner = test.run(context, proto, root);
             if (!res_inner) {
                 res = false;
@@ -117,7 +117,7 @@ public class Search implements net.apnic.rdap.conformance.Test
             known_attributes.addAll(test.getKnownAttributes());
         }
 
-        ContentTest ua = new UnknownAttributes(known_attributes);
+        AttributeTest ua = new UnknownAttributes(known_attributes);
         boolean ret2 = ua.run(context, proto, root);
         return (res && ret2);
     }
