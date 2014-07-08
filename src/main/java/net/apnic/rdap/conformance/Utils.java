@@ -60,11 +60,9 @@ public class Utils
 
         HttpRequestBase request = null;
         HttpResponse response = null;
-        HttpEntity entity;
         try {
             request = httpGetRequest(context, path, true);
             response = context.executeRequest(request);
-            entity = response.getEntity();
         } catch (IOException e) {
             r.setStatus(Status.Failure);
             r.setInfo(e.toString());
@@ -93,7 +91,7 @@ public class Utils
         Map root = null;
         try {
             InputStream is = response.getEntity().getContent();
-            InputStreamReader isr = new InputStreamReader(is);
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
             root = new Gson().fromJson(isr, Map.class);
         } catch (Exception e) {
             r = new Result(proto);

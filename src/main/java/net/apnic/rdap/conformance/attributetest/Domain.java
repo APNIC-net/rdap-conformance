@@ -42,8 +42,6 @@ public class Domain implements SearchTest
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        List<Result> results = context.getResults();
-
         SearchTest domain_names = new DomainNames();
         if (key != null) {
             domain_names.setSearchDetails(key, pattern);

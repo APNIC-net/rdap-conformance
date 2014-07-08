@@ -16,7 +16,7 @@ public class MaxSigLife implements ValueTest
         try {
             Double dvalue = (Double) arg_data;
             if ((dvalue != null) && (dvalue == Math.rint(dvalue))) {
-                value = new Integer((int) Math.round(dvalue));
+                value = Integer.valueOf((int) Math.round(dvalue));
             }
         } catch (ClassCastException ce) {
         }

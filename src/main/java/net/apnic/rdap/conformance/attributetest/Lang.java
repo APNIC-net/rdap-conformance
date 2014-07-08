@@ -24,8 +24,6 @@ public class Lang implements AttributeTest
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        List<Result> results = context.getResults();
-
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("lang");
@@ -43,8 +41,7 @@ public class Lang implements AttributeTest
         Result vr = new Result(nr);
         boolean res = true;
         try {
-            Locale.Builder hlt =
-                new Locale.Builder().setLanguageTag(lang);
+            new Locale.Builder().setLanguageTag(lang);
         } catch (IllformedLocaleException e) {
             vr.setStatus(Status.Failure);
             vr.setInfo("invalid: " + e.toString());

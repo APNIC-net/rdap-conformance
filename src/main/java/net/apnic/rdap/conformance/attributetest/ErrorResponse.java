@@ -80,7 +80,7 @@ public class ErrorResponse implements net.apnic.rdap.conformance.AttributeTest
             p3.addNode("errorCode");
             p3.setInfo("matches the response code");
 
-            if (error_code != HttpStatus.SC_BAD_REQUEST) {
+            if (error_code != status_code) {
                 p3.setStatus(Status.Failure);
                 p3.setInfo("does not match the response code");
                 context.addResult(p3);

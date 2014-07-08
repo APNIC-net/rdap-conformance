@@ -22,8 +22,6 @@ public class Notice implements AttributeTest
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        List<Result> results = context.getResults();
-
         Result nr = new Result(proto);
         nr.setCode("content");
 

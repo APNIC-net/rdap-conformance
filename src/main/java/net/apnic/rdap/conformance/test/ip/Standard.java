@@ -90,8 +90,8 @@ public class Standard implements ObjectTest
     {
         BigInteger value = BigInteger.valueOf(0);
         for (int i = 0; i < bytes.length; i++) {
-            value.shiftLeft(8);
-            value.add(BigInteger.valueOf(bytes[i] & 0xff));
+            value = value.shiftLeft(8);
+            value = value.add(BigInteger.valueOf(bytes[i] & 0xff));
         }
         return value;
     }
@@ -134,7 +134,8 @@ public class Standard implements ObjectTest
         } else if (version == 6) {
             BigInteger start = addressStringToBigInteger(start_address);
             BigInteger end   = addressStringToBigInteger(end_address);
-            if ((start.equals(-1)) || (end.equals(-1))) {
+            if ((start.compareTo(BigInteger.valueOf(-1)) == 0) ||
+                  (end.compareTo(BigInteger.valueOf(-1)) == 0)) {
                 return false;
             }
             ret = (start.compareTo(end) <= 0);
@@ -223,7 +224,6 @@ public class Standard implements ObjectTest
     public boolean run(Context context)
     {
         boolean ret = true;
-        List<Result> results = context.getResults();
 
         String path =
             (url != null)

@@ -42,8 +42,6 @@ public class Standard implements ObjectTest
 
     public boolean run(Context context)
     {
-        List<Result> results = context.getResults();
-
         String path =
             (url != null)
                 ? url

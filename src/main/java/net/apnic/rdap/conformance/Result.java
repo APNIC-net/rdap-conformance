@@ -1,7 +1,10 @@
 package net.apnic.rdap.conformance;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import com.google.common.base.Joiner;
 
 public class Result
 {
@@ -196,14 +199,11 @@ public class Result
                  "\"document\": \"" + getDocument() + "\", " +
                  "\"reference\": \"" + getReference() + "\", " +
                  "\"node\": [";
-        int len = node.size();
-        for (int i = 0; i < (len - 1); i++) {
-            s += nodeToString(node.get(i)) + ", ";
+        List<String> node_mapped = new ArrayList<String>();
+        for (String n : node) {
+            node_mapped.add(nodeToString(n));
         }
-        if (len >= 1) {
-            s += nodeToString(node.get(len - 1));
-        }
-        s += "] }";
+        s += Joiner.on(", ").join(node_mapped) + "] }";
         return s;
     }
 
@@ -220,20 +220,21 @@ public class Result
             }
         }
 
-        String s =
-            getTestName() + "," +
-            epath.toString() + "," +
-            getStatusAsString() + "," +
-            getCode() + "," +
-            getInfo() + ",";
-        int len = node.size();
-        for (int i = 0; i < (len - 1); i++) {
-            s += nodeToString(node.get(i)) + ":";
+        List<String> node_mapped = new ArrayList<String>();
+        for (String n : node) {
+            node_mapped.add(nodeToString(n));
         }
-        if (len >= 1) {
-            s += nodeToString(node.get(len - 1));
-        }
-        s += "," + getDocument() + "," + getReference();
-        return s;
+
+        return
+            Joiner.on(",").join(
+                Arrays.asList(getTestName(),
+                              epath.toString(),
+                              getStatusAsString(),
+                              getCode(),
+                              getInfo(),
+                              Joiner.on(":").join(node_mapped),
+                              getDocument(),
+                              getReference())
+            );
     }
 }

@@ -35,7 +35,7 @@ public class DomainNames implements SearchTest
 
     private int isValidLdhName(String ldh_name)
     {
-        String[] labels = ldh_name.split(".");
+        String[] labels = ldh_name.split("\\.");
         Pattern ldh_pattern = Pattern.compile(
             "[\\p{Alnum}][\\p{Alnum}-]*[\\p{Alnum}]?"
         );
@@ -184,7 +184,7 @@ public class DomainNames implements SearchTest
             context.addResult(ms);
         }
 
-        if ((unicode_name != null) && (pattern != null)) {
+        if (pattern != null) {
             Result rp = new Result(nr);
             rp.addNode("unicodeName");
             String un_pattern = pattern.replaceAll("\\*", ".*");

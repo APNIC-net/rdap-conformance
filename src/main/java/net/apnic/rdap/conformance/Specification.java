@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 
 import java.util.Map;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,13 +30,20 @@ public class Specification
     public static Specification fromPath(String path)
         throws FileNotFoundException, IOException
     {
-        BufferedReader reader = new BufferedReader(new FileReader(path));
-        String data = "";
+        BufferedReader reader =
+            new BufferedReader(
+                new InputStreamReader(
+                    new FileInputStream(path),
+                    "UTF-8"
+                )
+            );
         String line = null;
+        StringBuilder data = new StringBuilder();
         while ((line = reader.readLine()) != null) {
-            data += line;
+            data.append(line);
         }
-        return fromString(data);
+        reader.close();
+        return fromString(data.toString());
     }
 
     public String getBaseUrl()

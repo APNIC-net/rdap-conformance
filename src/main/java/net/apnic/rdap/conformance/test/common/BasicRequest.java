@@ -119,7 +119,7 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
         Map root = null;
         try {
             InputStream is = response.getEntity().getContent();
-            InputStreamReader isr = new InputStreamReader(is);
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
             root = new Gson().fromJson(isr, Map.class);
         } catch (Exception e) {
             r = new Result(proto);

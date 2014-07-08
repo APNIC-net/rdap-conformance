@@ -32,8 +32,6 @@ public class Standard implements net.apnic.rdap.conformance.Test
 
     public boolean run(Context context)
     {
-        List<Result> results = context.getResults();
-
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + "/entity/" + entity;
 

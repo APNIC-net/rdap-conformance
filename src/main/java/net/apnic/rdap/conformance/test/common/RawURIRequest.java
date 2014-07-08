@@ -52,7 +52,7 @@ public class RawURIRequest implements net.apnic.rdap.conformance.Test
             String request = "GET " + raw_uri + " HTTP/1.1\n" +
                              "Host: " + host + "\n" +
                              "Accept: application/rdap+json\n\n";
-            os.write(request.getBytes());
+            os.write(request.getBytes("UTF-8"));
             InputStream is  = socket.getInputStream();
             SessionInputBufferImpl sibl =
                 new SessionInputBufferImpl(
@@ -75,8 +75,8 @@ public class RawURIRequest implements net.apnic.rdap.conformance.Test
                 success = true;
             } else {
                 InputStream isc = he.getContent();
-                InputStreamReader iscr = new InputStreamReader(isc);
-                Object root = new Gson().fromJson(iscr, Map.class);
+                InputStreamReader iscr = new InputStreamReader(isc, "UTF-8");
+                new Gson().fromJson(iscr, Map.class);
                 success = true;
             }
         } catch (Exception e) {
