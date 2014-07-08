@@ -16,9 +16,6 @@ public class KeyTag implements ValueTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        Result nr = new Result(proto);
-
-        boolean res = true;
         Integer value = null;
         try {
             Double dvalue = (Double) arg_data;
@@ -28,34 +25,18 @@ public class KeyTag implements ValueTest
         } catch (ClassCastException ce) {
         }
 
-        if (value == null) {
-            nr.setStatus(Status.Failure);
-            nr.setInfo("not integer");
-            res = false;
-        } else {
-            nr.setStatus(Status.Success);
-            nr.setInfo("is integer");
-        }
+        Result nr = new Result(proto);
+        nr.setDetails((value != null), "is integer", "not integer");
         context.addResult(nr);
 
         if (value != null) {
             Result cvr = new Result(proto);
-            if ((value < 0) || (value > 65535)) {
-                cvr.setStatus(Status.Failure);
-                cvr.setInfo("invalid");
-                res = false;
-            } else {
-                cvr.setStatus(Status.Success);
-                cvr.setInfo("valid");
-            }
+            boolean res = cvr.setDetails(((value >= 0) && (value <= 65535)),
+                                         "valid", "invalid");
             context.addResult(cvr);
+            return res;
+        } else {
+            return false;
         }
-
-        return res;
-    }
-
-    public Set<String> getKnownAttributes()
-    {
-        return Sets.newHashSet();
     }
 }

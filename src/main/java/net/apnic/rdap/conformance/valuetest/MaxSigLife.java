@@ -12,8 +12,6 @@ public class MaxSigLife implements ValueTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        Result nr = new Result(proto);
-
         Integer value = null;
         try {
             Double dvalue = (Double) arg_data;
@@ -23,6 +21,7 @@ public class MaxSigLife implements ValueTest
         } catch (ClassCastException ce) {
         }
 
+        Result nr = new Result(proto);
         nr.setDetails((value != null), "is integer", "not integer");
         context.addResult(nr);
 

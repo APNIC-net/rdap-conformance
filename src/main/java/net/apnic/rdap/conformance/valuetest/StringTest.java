@@ -1,11 +1,7 @@
 package net.apnic.rdap.conformance.valuetest;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 
@@ -17,22 +13,9 @@ public class StringTest implements ValueTest
                        Object arg_data)
     {
         Result nr = new Result(proto);
-        boolean success = true;
-        nr.setStatus(Status.Success);
-        nr.setInfo("is string");
-
-        if (Utils.castToString(arg_data) == null) {
-            nr.setStatus(Status.Failure);
-            nr.setInfo("is not string");
-            success = false;
-        }
-
+        boolean res = nr.setDetails((Utils.castToString(arg_data) != null),
+                                    "is string", "not string");
         context.addResult(nr);
-        return success;
-    }
-
-    public Set<String> getKnownAttributes()
-    {
-        return new HashSet<String>();
+        return res;
     }
 }

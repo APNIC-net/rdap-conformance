@@ -5,7 +5,6 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 
@@ -20,9 +19,6 @@ public class Algorithm implements ValueTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        Result nr = new Result(proto);
-
-        boolean res = true;
         Integer value = null;
         try {
             Double dvalue = (Double) arg_data;
@@ -32,34 +28,18 @@ public class Algorithm implements ValueTest
         } catch (ClassCastException ce) {
         }
 
-        if (value == null) {
-            nr.setStatus(Status.Failure);
-            nr.setInfo("not integer");
-            res = false;
-        } else {
-            nr.setStatus(Status.Success);
-            nr.setInfo("is integer");
-        }
+        Result nr = new Result(proto);
+        nr.setDetails((value != null), "is integer", "not integer");
         context.addResult(nr);
 
         if (value != null) {
             Result cvr = new Result(proto);
-            if (!algorithms.contains(value)) {
-                cvr.setStatus(Status.Failure);
-                cvr.setInfo("invalid");
-                res = false;
-            } else {
-                cvr.setStatus(Status.Success);
-                cvr.setInfo("valid");
-            }
+            boolean res = cvr.setDetails(algorithms.contains(value),
+                                         "valid", "invalid");
             context.addResult(cvr);
+            return res;
+        } else {
+            return false;
         }
-
-        return res;
-    }
-
-    public Set<String> getKnownAttributes()
-    {
-        return Sets.newHashSet();
     }
 }
