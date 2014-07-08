@@ -1,17 +1,8 @@
 package net.apnic.rdap.conformance.valuetest;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.Sets;
-
 import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
-import net.apnic.rdap.conformance.Utils;
 
 public class BooleanValue implements ValueTest
 {
@@ -22,28 +13,16 @@ public class BooleanValue implements ValueTest
     {
         Result nr = new Result(proto);
 
-        boolean res = true;
         Boolean value = null;
         try {
             value = (Boolean) arg_data;
         } catch (ClassCastException ce) {
         }
 
-        if (value == null) {
-            nr.setStatus(Status.Failure);
-            nr.setInfo("not boolean");
-            res = false;
-        } else {
-            nr.setStatus(Status.Success);
-            nr.setInfo("is boolean");
-        }
+        Boolean res = nr.setDetails((value != null), "is boolean",
+                                    "not boolean");
+
         context.addResult(nr);
-
         return res;
-    }
-
-    public Set<String> getKnownAttributes()
-    {
-        return Sets.newHashSet();
     }
 }

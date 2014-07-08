@@ -139,6 +139,35 @@ public class Result
         node.add(s);
     }
 
+    public void setStatusAndInfo(Status s, String i)
+    {
+        setStatus(s);
+        setInfo(i);
+    }
+
+    public boolean setDetails(boolean success,
+                              String success_info,
+                              String failure_info)
+    {
+        return setDetails(success,
+                          Status.Success, success_info,
+                          Status.Failure, failure_info);
+    }
+
+    public boolean setDetails(boolean success,
+                              Status success_status,
+                              String success_info,
+                              Status failure_status,
+                              String failure_info)
+    {
+        if (success) {
+            setStatusAndInfo(success_status, success_info);
+        } else {
+            setStatusAndInfo(failure_status, failure_info);
+        }
+        return success;
+    }
+
     private String getStatusAsString()
     {
         return (status == Status.Success)      ? "success"
