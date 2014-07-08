@@ -20,7 +20,7 @@ public class Entities implements AttributeTest
     public Entities() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         AttributeTest array_test =
             new ArrayAttribute(new Entity(null, true), "entities");
@@ -36,7 +36,7 @@ public class Entities implements AttributeTest
 
         known_attributes = array_test.getKnownAttributes();
 
-        return array_test.run(context, nr, arg_data);
+        return array_test.run(context, nr, data);
     }
 
     public Set<String> getKnownAttributes()

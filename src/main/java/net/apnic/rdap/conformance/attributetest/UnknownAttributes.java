@@ -29,17 +29,12 @@ public class UnknownAttributes implements AttributeTest
     }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("3.2");
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         boolean success = true;
 

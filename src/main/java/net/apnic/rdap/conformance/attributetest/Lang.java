@@ -22,7 +22,7 @@ public class Lang implements AttributeTest
     public Lang() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         List<Result> results = context.getResults();
 
@@ -31,11 +31,6 @@ public class Lang implements AttributeTest
         nr.addNode("lang");
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("5.4");
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         String lang = Utils.getStringAttribute(context,
                                                nr, "lang",

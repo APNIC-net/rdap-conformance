@@ -34,7 +34,7 @@ public class Port43 implements AttributeTest
     public Port43() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         List<Result> results = context.getResults();
 
@@ -42,11 +42,6 @@ public class Port43 implements AttributeTest
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.7");
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         String port43 = Utils.getStringAttribute(context, nr, "port43",
                                                  Status.Notification,

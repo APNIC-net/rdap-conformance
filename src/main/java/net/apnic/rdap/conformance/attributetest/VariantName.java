@@ -21,18 +21,13 @@ public class VariantName implements AttributeTest
     public VariantName() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("status");
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("6.3");
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         boolean ret = true;
         List<AttributeTest> tests =
@@ -42,7 +37,7 @@ public class VariantName implements AttributeTest
 
         known_attributes = new HashSet<String>();
         for (AttributeTest test : tests) {
-            boolean ret_inner = test.run(context, proto, arg_data);
+            boolean ret_inner = test.run(context, proto, data);
             if (!ret_inner) {
                 ret = false;
             }
@@ -50,7 +45,7 @@ public class VariantName implements AttributeTest
         }
 
         AttributeTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, arg_data);
+        boolean ret2 = ua.run(context, proto, data);
         return (ret && ret2);
     }
 

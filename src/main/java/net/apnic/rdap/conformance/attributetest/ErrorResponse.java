@@ -19,7 +19,7 @@ import net.apnic.rdap.conformance.responsetest.ContentType;
 import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
-import net.apnic.rdap.conformance.attributetest.StringTest;
+import net.apnic.rdap.conformance.valuetest.StringTest;
 import net.apnic.rdap.conformance.attributetest.Notices;
 
 public class ErrorResponse implements net.apnic.rdap.conformance.AttributeTest
@@ -33,7 +33,7 @@ public class ErrorResponse implements net.apnic.rdap.conformance.AttributeTest
     }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         Result p = new Result(proto);
         p.setCode("content");
@@ -53,18 +53,11 @@ public class ErrorResponse implements net.apnic.rdap.conformance.AttributeTest
 
         boolean ret = true;
         for (AttributeTest test : tests) {
-            boolean res = test.run(context, p, arg_data);
+            boolean res = test.run(context, p, data);
             if (!res) {
                 ret = false;
             }
             known_attributes.addAll(test.getKnownAttributes());
-        }
-
-        Map<String, Object> data;
-        try {
-            data = (Map<String, Object>) arg_data;
-        } catch (ClassCastException e) {
-            return false;
         }
 
         if (ret) {
@@ -98,7 +91,7 @@ public class ErrorResponse implements net.apnic.rdap.conformance.AttributeTest
         }
 
         AttributeTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, arg_data);
+        boolean ret2 = ua.run(context, proto, data);
 
         return (ret && ret2);
     }

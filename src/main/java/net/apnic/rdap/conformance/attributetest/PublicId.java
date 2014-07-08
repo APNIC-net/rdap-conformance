@@ -18,24 +18,19 @@ public class PublicId implements AttributeTest
     public PublicId() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
 
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
-
         AttributeTest sat = new ScalarAttribute("type");
-        boolean satres = sat.run(context, proto, arg_data);
+        boolean satres = sat.run(context, proto, data);
         AttributeTest iat = new ScalarAttribute("identifier");
-        boolean iatres = iat.run(context, proto, arg_data);
+        boolean iatres = iat.run(context, proto, data);
 
         AttributeTest ua = new UnknownAttributes(getKnownAttributes());
-        boolean ret2 = ua.run(context, proto, arg_data);
+        boolean ret2 = ua.run(context, proto, data);
 
         return (satres && iatres && ret2);
     }

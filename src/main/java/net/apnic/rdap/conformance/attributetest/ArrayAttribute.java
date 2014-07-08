@@ -12,6 +12,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
 import net.apnic.rdap.conformance.attributetest.Event;
@@ -19,27 +20,31 @@ import net.apnic.rdap.conformance.attributetest.Event;
 public class ArrayAttribute implements AttributeTest
 {
     Set<String> known_attributes = null;
-    AttributeTest element_test = null;
+    ValueTest element_value_test = null;
+    AttributeTest element_attribute_test = null;
     String key = null;
+
+    public ArrayAttribute(ValueTest arg_element_test,
+                          String arg_key)
+    {
+        element_value_test = arg_element_test;
+        key = arg_key;
+        known_attributes = Sets.newHashSet(arg_key);
+    }
 
     public ArrayAttribute(AttributeTest arg_element_test,
                           String arg_key)
     {
-        element_test = arg_element_test;
+        element_attribute_test = arg_element_test;
         key = arg_key;
         known_attributes = Sets.newHashSet(arg_key);
     }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         Result nr = new Result(proto);
         nr.addNode(key);
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         Result nr1 = new Result(nr);
         nr1.setCode("content");
@@ -77,9 +82,23 @@ public class ArrayAttribute implements AttributeTest
         for (Object e : elements) {
             Result proto2 = new Result(nr);
             proto2.addNode(Integer.toString(i++));
-            boolean element_success = element_test.run(context, proto2, e);
-            if (!element_success) {
-                success = false;
+            if (element_value_test != null) {
+                boolean element_success = 
+                    element_value_test.run(context, proto2, e);
+                if (!element_success) {
+                    success = false;
+                }
+            } else {
+                Map<String, Object> subdata = Utils.castToMap(context, proto2, e);
+                if (subdata == null) {
+                    success = false;
+                } else {
+                    boolean attribute_success = 
+                        element_attribute_test.run(context, proto2, subdata);
+                    if (!attribute_success) {
+                        success = false;
+                    }
+                }
             }
         }
 

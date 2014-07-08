@@ -19,6 +19,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
+import net.apnic.rdap.conformance.valuetest.Variant;
 
 public class Domain implements SearchTest
 {
@@ -39,7 +40,7 @@ public class Domain implements SearchTest
     }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         List<Result> results = context.getResults();
 
@@ -51,7 +52,7 @@ public class Domain implements SearchTest
         known_attributes = new HashSet<String>();
 
         return Utils.runTestList(
-            context, proto, arg_data, known_attributes, check_unknown,
+            context, proto, data, known_attributes, check_unknown,
             Arrays.asList(
                 new ScalarAttribute("handle"),
                 domain_names,

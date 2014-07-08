@@ -2,6 +2,7 @@ package net.apnic.rdap.conformance.attributetest;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Map;
 
 import com.google.common.collect.Sets;
 
@@ -15,7 +16,7 @@ public class AsEventActor implements AttributeTest
     public AsEventActor() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> arg_data)
     {
         Result nr = new Result(proto);
         nr.setCode("content");

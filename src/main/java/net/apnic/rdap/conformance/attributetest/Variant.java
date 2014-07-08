@@ -1,4 +1,4 @@
-package net.apnic.rdap.conformance.attributetest;
+package net.apnic.rdap.conformance.valuetest;
 
 import java.util.Map;
 import java.util.HashSet;
@@ -12,13 +12,15 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
+import net.apnic.rdap.conformance.attributetest.VariantRelation;
+import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
+import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
+import net.apnic.rdap.conformance.attributetest.VariantName;
 
-public class Variant implements AttributeTest
+public class Variant implements ValueTest
 {
-    Set<String> known_attributes = null;
-
     public Variant() {}
 
     public boolean run(Context context, Result proto,
@@ -34,18 +36,19 @@ public class Variant implements AttributeTest
          * IANA'. Not sure if this means others might be allowed, so
          * leaving it as ScalarAttribute for now. */
 
+        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
+        if (data == null) {
+            return false;
+        }
+
+        Set<String> known_attributes = new HashSet<String>();
         return Utils.runTestList(
-            context, nr, arg_data, known_attributes, true,
+            context, nr, data, known_attributes, true,
             Arrays.asList(
                 new VariantRelation(),
                 new ScalarAttribute("idnTable"),
                 new ArrayAttribute(new VariantName(), "variantNames")
             )
         );
-    }
-
-    public Set<String> getKnownAttributes()
-    {
-        return known_attributes;
     }
 }

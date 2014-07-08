@@ -242,14 +242,14 @@ public class Utils
 
     public static boolean runTestList(Context context,
                                       Result proto,
-                                      Object arg_data,
+                                      Map<String, Object> data,
                                       Set<String> known_attributes,
                                       boolean check_unknown,
                                       List<AttributeTest> tests)
     {
         boolean ret = true;
         for (AttributeTest test : tests) {
-            boolean res = test.run(context, proto, arg_data);
+            boolean res = test.run(context, proto, data);
             if (!res) {
                 ret = false;
             }
@@ -259,7 +259,7 @@ public class Utils
         boolean ret2 = true;
         if (check_unknown) {
             AttributeTest ua = new UnknownAttributes(known_attributes);
-            ret2 = ua.run(context, proto, arg_data);
+            ret2 = ua.run(context, proto, data);
         }
         return (ret && ret2);
     }

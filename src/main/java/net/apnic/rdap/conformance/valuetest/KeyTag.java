@@ -1,4 +1,4 @@
-package net.apnic.rdap.conformance.attributetest;
+package net.apnic.rdap.conformance.valuetest;
 
 import java.util.Set;
 
@@ -7,15 +7,11 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.ValueTest;
 
-public class Flags implements AttributeTest
+public class KeyTag implements ValueTest
 {
-    static Set<Integer> algorithms = Sets.newHashSet(
-        0, 256, 257
-    );
-
-    public Flags() { }
+    public KeyTag() { }
 
     public boolean run(Context context, Result proto,
                        Object arg_data)
@@ -44,7 +40,7 @@ public class Flags implements AttributeTest
 
         if (value != null) {
             Result cvr = new Result(proto);
-            if (!algorithms.contains(value)) {
+            if ((value < 0) || (value > 65535)) {
                 cvr.setStatus(Status.Failure);
                 cvr.setInfo("invalid");
                 res = false;

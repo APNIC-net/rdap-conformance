@@ -30,10 +30,10 @@ public class StandardObject implements net.apnic.rdap.conformance.AttributeTest
     public StandardObject() { }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         return Utils.runTestList(
-            context, proto, arg_data, known_attributes, false,
+            context, proto, data, known_attributes, false,
             Arrays.asList(
                 new Links(),
                 new Events(),

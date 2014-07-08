@@ -1,6 +1,7 @@
 package net.apnic.rdap.conformance.attributetest;
 
 import java.util.Set;
+import java.util.Map;
 
 import com.google.common.collect.Sets;
 
@@ -13,7 +14,7 @@ public class Events implements AttributeTest
     public Events() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         AttributeTest array_test = new ArrayAttribute(new Event(), "events");
 
@@ -22,7 +23,7 @@ public class Events implements AttributeTest
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.5");
 
-        return array_test.run(context, nr, arg_data);
+        return array_test.run(context, nr, data);
     }
 
     public Set<String> getKnownAttributes()

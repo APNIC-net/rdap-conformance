@@ -14,6 +14,8 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.valuetest.BooleanValue;
+import net.apnic.rdap.conformance.valuetest.MaxSigLife;
 
 public class SecureDNS implements AttributeTest
 {
@@ -22,10 +24,10 @@ public class SecureDNS implements AttributeTest
     public SecureDNS() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         return Utils.runTestList(
-            context, proto, arg_data, known_attributes, true,
+            context, proto, data, known_attributes, true,
             Arrays.asList(
                 new ScalarAttribute("zoneSigned", new BooleanValue()),
                 new ScalarAttribute("delegationSigned", new BooleanValue()),

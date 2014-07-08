@@ -16,10 +16,10 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.attributetest.Events;
 import net.apnic.rdap.conformance.attributetest.Links;
-import net.apnic.rdap.conformance.attributetest.Flags;
-import net.apnic.rdap.conformance.attributetest.Algorithm;
-import net.apnic.rdap.conformance.attributetest.Protocol;
-import net.apnic.rdap.conformance.attributetest.PublicKey;
+import net.apnic.rdap.conformance.valuetest.Flags;
+import net.apnic.rdap.conformance.valuetest.Algorithm;
+import net.apnic.rdap.conformance.valuetest.Protocol;
+import net.apnic.rdap.conformance.valuetest.PublicKey;
 
 public class KeyData implements AttributeTest
 {
@@ -28,7 +28,7 @@ public class KeyData implements AttributeTest
     public KeyData() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         boolean ret = true;
         List<AttributeTest> tests =
@@ -43,7 +43,7 @@ public class KeyData implements AttributeTest
 
         known_attributes = new HashSet<String>();
         for (AttributeTest test : tests) {
-            boolean ret_inner = test.run(context, proto, arg_data);
+            boolean ret_inner = test.run(context, proto, data);
             if (!ret_inner) {
                 ret = false;
             }
@@ -51,7 +51,7 @@ public class KeyData implements AttributeTest
         }
 
         AttributeTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, arg_data);
+        boolean ret2 = ua.run(context, proto, data);
 
         return (ret && ret2);
     }

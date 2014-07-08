@@ -18,7 +18,7 @@ public class RdapConformance implements AttributeTest
     public RdapConformance() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         Result nr = new Result(proto);
         /* All attributes are optional, strictly speaking (json-response 3.2),
@@ -28,11 +28,6 @@ public class RdapConformance implements AttributeTest
         nr.addNode("rdapConformance");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.1");
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         Result nr1 = new Result(nr);
         nr1.setInfo("present");

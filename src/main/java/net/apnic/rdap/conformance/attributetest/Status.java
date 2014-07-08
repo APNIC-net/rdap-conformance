@@ -37,7 +37,7 @@ public class Status implements AttributeTest
     public Status() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         List<Result> results = context.getResults();
 
@@ -46,11 +46,6 @@ public class Status implements AttributeTest
         nr.addNode("status");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.6");
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         Result nr1 = new Result(nr);
         nr1.setInfo("present");

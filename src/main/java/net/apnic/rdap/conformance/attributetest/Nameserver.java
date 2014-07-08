@@ -15,6 +15,8 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.SearchTest;
+import net.apnic.rdap.conformance.valuetest.IPv4Address;
+import net.apnic.rdap.conformance.valuetest.IPv6Address;
 
 public class Nameserver implements SearchTest
 {
@@ -35,17 +37,12 @@ public class Nameserver implements SearchTest
     }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("6.2");
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         SearchTest domain_names = new DomainNames();
         if (key != null) {
@@ -63,7 +60,7 @@ public class Nameserver implements SearchTest
 
         boolean ret = true;
         for (AttributeTest test : tests) {
-            boolean res = test.run(context, proto, arg_data);
+            boolean res = test.run(context, proto, data);
             if (!res) {
                 ret = false;
             }
@@ -91,7 +88,7 @@ public class Nameserver implements SearchTest
         boolean ret2 = true;
         if (check_unknown) {
             AttributeTest ua = new UnknownAttributes(known_attributes);
-            ret2 = ua.run(context, proto, arg_data);
+            ret2 = ua.run(context, proto, data);
         }
 
         return (ret && ret2);

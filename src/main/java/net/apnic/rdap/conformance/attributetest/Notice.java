@@ -11,6 +11,7 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
+import net.apnic.rdap.conformance.valuetest.StringTest;
 
 public class Notice implements AttributeTest
 {
@@ -19,7 +20,7 @@ public class Notice implements AttributeTest
     public Notice() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         List<Result> results = context.getResults();
 
@@ -27,7 +28,7 @@ public class Notice implements AttributeTest
         nr.setCode("content");
 
         return Utils.runTestList(
-            context, nr, arg_data, known_attributes, true,
+            context, nr, data, known_attributes, true,
             Arrays.asList(
                 new ScalarAttribute("title"),
                 new ArrayAttribute(new StringTest(), "description"),

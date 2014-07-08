@@ -58,7 +58,7 @@ public class DomainNames implements SearchTest
     }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
@@ -66,11 +66,6 @@ public class DomainNames implements SearchTest
         nr.setReference("4");
 
         boolean res = true;
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
-
         String ldh_name = Utils.getStringAttribute(context,
                                                    nr, "ldhName",
                                                    Status.Failure,

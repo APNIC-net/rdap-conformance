@@ -1,4 +1,4 @@
-package net.apnic.rdap.conformance.attributetest;
+package net.apnic.rdap.conformance.valuetest;
 
 import java.util.HashSet;
 import java.util.List;
@@ -10,12 +10,12 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class PublicKey implements AttributeTest
+public class BooleanValue implements ValueTest
 {
-    public PublicKey() { }
+    public BooleanValue() { }
 
     public boolean run(Context context, Result proto,
                        Object arg_data)
@@ -23,27 +23,21 @@ public class PublicKey implements AttributeTest
         Result nr = new Result(proto);
 
         boolean res = true;
-        String value = Utils.castToString(arg_data);
+        Boolean value = null;
+        try {
+            value = (Boolean) arg_data;
+        } catch (ClassCastException ce) {
+        }
+
         if (value == null) {
             nr.setStatus(Status.Failure);
-            nr.setInfo("not string");
+            nr.setInfo("not boolean");
             res = false;
         } else {
             nr.setStatus(Status.Success);
-            nr.setInfo("is string");
+            nr.setInfo("is boolean");
         }
         context.addResult(nr);
-
-        Result cvr = new Result(proto);
-        if (!value.matches("^[0-9A-Fa-f ]+$")) {
-            cvr.setStatus(Status.Failure);
-            cvr.setInfo("invalid");
-            res = false;
-        } else {
-            cvr.setStatus(Status.Success);
-            cvr.setInfo("valid");
-        }
-        context.addResult(cvr);
 
         return res;
     }

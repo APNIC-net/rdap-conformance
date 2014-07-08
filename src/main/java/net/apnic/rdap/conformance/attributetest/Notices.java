@@ -2,6 +2,7 @@ package net.apnic.rdap.conformance.attributetest;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Map;
 
 import com.google.common.collect.Sets;
 
@@ -23,7 +24,7 @@ public class Notices implements AttributeTest
     }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         String mkey = (key != null) ? key : "notices";
         AttributeTest array_test = new ArrayAttribute(new Notice(), mkey);
@@ -33,7 +34,7 @@ public class Notices implements AttributeTest
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.3");
 
-        return array_test.run(context, nr, arg_data);
+        return array_test.run(context, nr, data);
     }
 
     public Set<String> getKnownAttributes()

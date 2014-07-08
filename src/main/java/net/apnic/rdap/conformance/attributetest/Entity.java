@@ -67,7 +67,7 @@ public class Entity implements SearchTest
     }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         known_attributes = Sets.newHashSet("handle", "roles", "vcardArray");
 
@@ -75,11 +75,6 @@ public class Entity implements SearchTest
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("6.1");
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         String response_handle =
             Utils.getStringAttribute(context, nr, "handle",
@@ -250,7 +245,7 @@ public class Entity implements SearchTest
         }
 
         boolean ret = Utils.runTestList(
-            context, proto, arg_data, known_attributes, check_unknown,
+            context, proto, data, known_attributes, check_unknown,
             Arrays.asList(
                 new AsEventActor(),
                 new StandardObject()

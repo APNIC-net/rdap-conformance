@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 
 import com.google.common.collect.Sets;
 
@@ -21,10 +22,10 @@ public class StandardResponse implements net.apnic.rdap.conformance.AttributeTes
     public StandardResponse() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         return Utils.runTestList(
-            context, proto, arg_data, known_attributes, false,
+            context, proto, data, known_attributes, false,
             Arrays.asList(
                 new RdapConformance(),
                 new Notices(),

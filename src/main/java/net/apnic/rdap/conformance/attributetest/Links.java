@@ -17,7 +17,7 @@ public class Links implements AttributeTest
     public Links() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         AttributeTest array_test = new ArrayAttribute(new Link(), "links");
 
@@ -26,7 +26,7 @@ public class Links implements AttributeTest
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.2");
 
-        return array_test.run(context, nr, arg_data);
+        return array_test.run(context, nr, data);
     }
 
     public Set<String> getKnownAttributes()

@@ -1,4 +1,4 @@
-package net.apnic.rdap.conformance.attributetest;
+package net.apnic.rdap.conformance.valuetest;
 
 import java.util.HashSet;
 import java.util.List;
@@ -11,11 +11,11 @@ import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.ValueTest;
 
 import org.apache.http.conn.util.InetAddressUtils;
 
-public class IPv4Address implements AttributeTest
+public class IPv4Address implements ValueTest
 {
     public IPv4Address() {}
 

@@ -39,17 +39,12 @@ public class Event implements AttributeTest
     public Event() { }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Map<String, Object> data)
     {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
         nr.setCode("content");
-
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
-        if (data == null) {
-            return false;
-        }
 
         boolean evtres = true;
         String event_action =
@@ -117,7 +112,7 @@ public class Event implements AttributeTest
         }
 
         AttributeTest lst = new Links();
-        boolean lstres = lst.run(context, proto, arg_data);
+        boolean lstres = lst.run(context, proto, data);
 
         return (evtres && evdres && eacres && lstres);
     }

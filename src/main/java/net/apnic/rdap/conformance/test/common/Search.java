@@ -40,7 +40,7 @@ import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.Notices;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
 import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
-import net.apnic.rdap.conformance.attributetest.BooleanValue;
+import net.apnic.rdap.conformance.valuetest.BooleanValue;
 import net.apnic.rdap.conformance.Utils;
 
 public class Search implements net.apnic.rdap.conformance.Test
