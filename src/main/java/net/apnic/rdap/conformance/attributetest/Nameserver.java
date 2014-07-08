@@ -60,7 +60,7 @@ public class Nameserver implements SearchTest
 
         boolean ret = true;
         for (AttributeTest test : tests) {
-            boolean res = test.run(context, proto, data);
+            boolean res = test.run(context, nr, data);
             if (!res) {
                 ret = false;
             }
@@ -68,7 +68,7 @@ public class Nameserver implements SearchTest
         }
 
         Map<String, Object> ip_addresses =
-            Utils.getMapAttribute(context, proto, "ipAddresses",
+            Utils.getMapAttribute(context, nr, "ipAddresses",
                                   Status.Notification, data);
         if (ip_addresses != null) {
             Result nr2 = new Result(nr);
@@ -88,7 +88,7 @@ public class Nameserver implements SearchTest
         boolean ret2 = true;
         if (check_unknown) {
             AttributeTest ua = new UnknownAttributes(known_attributes);
-            ret2 = ua.run(context, proto, data);
+            ret2 = ua.run(context, nr, data);
         }
 
         return (ret && ret2);
