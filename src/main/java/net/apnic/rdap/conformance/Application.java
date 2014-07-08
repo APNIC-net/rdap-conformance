@@ -1,6 +1,5 @@
 package net.apnic.rdap.conformance;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -11,17 +10,9 @@ import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.commons.lang.SerializationUtils;
 
-import net.apnic.rdap.conformance.Specification;
-import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.Test;
-import net.apnic.rdap.conformance.test.domain.BadRequest;
-import net.apnic.rdap.conformance.test.domain.Standard;
-import net.apnic.rdap.conformance.test.common.RawURIRequest;
-import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.specification.ObjectClass;
 import net.apnic.rdap.conformance.specification.ObjectClassSearch;
 
@@ -29,7 +20,7 @@ class Application
 {
     private static String getJarName()
     {
-        String jar_name = "rdap-conformance.jar";
+        String jar_name = null;
         try {
             jar_name =
                 new java.io.File(Context.class.getProtectionDomain()
@@ -37,7 +28,9 @@ class Application
                         .getLocation()
                         .getPath())
                         .getName();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            jar_name = "rdap-conformance.jar";
+        }
         return jar_name;
     }
 

@@ -1,10 +1,8 @@
 package net.apnic.rdap.conformance.attributetest;
 
 import java.util.List;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
-import java.util.ArrayList;
 
 import com.google.common.collect.Sets;
 
@@ -14,8 +12,6 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
-
-import net.apnic.rdap.conformance.attributetest.Event;
 
 public class ArrayAttribute implements AttributeTest
 {

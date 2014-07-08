@@ -3,19 +3,12 @@ package net.apnic.rdap.conformance.attributetest;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-
-import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
-import net.apnic.rdap.conformance.attributetest.Events;
-import net.apnic.rdap.conformance.attributetest.Links;
 import net.apnic.rdap.conformance.valuetest.Flags;
 import net.apnic.rdap.conformance.valuetest.Algorithm;
 import net.apnic.rdap.conformance.valuetest.Protocol;

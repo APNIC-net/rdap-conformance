@@ -7,12 +7,8 @@ import java.util.ArrayList;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.HttpResponse;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 import com.google.common.util.concurrent.RateLimiter;
-
-import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Specification;
 
 public class Context
 {

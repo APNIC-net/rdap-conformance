@@ -7,22 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.http.HttpStatus;
-
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
-import net.apnic.rdap.conformance.ResponseTest;
-import net.apnic.rdap.conformance.responsetest.StatusCode;
-import net.apnic.rdap.conformance.responsetest.ContentType;
-import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
-import net.apnic.rdap.conformance.attributetest.RdapConformance;
-import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.valuetest.StringTest;
-import net.apnic.rdap.conformance.attributetest.Notices;
 
-public class ErrorResponse implements net.apnic.rdap.conformance.AttributeTest
+public class ErrorResponse implements AttributeTest
 {
     Set<String> known_attributes = null;
     private int status_code;

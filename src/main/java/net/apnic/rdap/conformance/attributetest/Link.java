@@ -1,16 +1,9 @@
 package net.apnic.rdap.conformance.attributetest;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.Sets;
-
-import java.math.BigInteger;
-import java.math.BigDecimal;
-import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
@@ -18,27 +11,14 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 
-import java.lang.IllegalArgumentException;
 import java.util.Locale;
-import java.util.Arrays;
 import java.util.IllformedLocaleException;
-import java.util.Set;
 import com.google.common.net.MediaType;
+import com.google.common.collect.Sets;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.HttpRequest;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.Header;
-import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.http.client.config.RequestConfig;
-
-import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.AttributeTest;
-import net.apnic.rdap.conformance.attributetest.Link;
 
 public class Link implements AttributeTest
 {
@@ -253,9 +233,8 @@ public class Link implements AttributeTest
                         hler.setInfo("empty");
                     } else {
                         try {
-                            Locale.Builder hlt =
-                                new Locale.Builder()
-                                          .setLanguageTag(hreflang);
+                            new Locale.Builder()
+                                      .setLanguageTag(hreflang);
                         } catch (IllformedLocaleException e) {
                             hler.setStatus(Status.Failure);
                             hler.setInfo("invalid: " + e.toString());
@@ -266,8 +245,8 @@ public class Link implements AttributeTest
             }
         }
 
-        String title = Utils.getStringAttribute(context, nr, "title",
-                                                Status.Notification, data);
+        Utils.getStringAttribute(context, nr, "title",
+                                 Status.Notification, data);
 
         String media = Utils.getStringAttribute(context, nr, "media",
                                                 Status.Notification, data);

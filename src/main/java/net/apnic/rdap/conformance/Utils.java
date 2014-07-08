@@ -8,26 +8,17 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
-import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.ContentType;
 import net.apnic.rdap.conformance.responsetest.AccessControl;
 import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.HttpStatus;
-import org.apache.http.Header;
-import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.http.client.config.RequestConfig;
 
 public class Utils
@@ -127,10 +118,12 @@ public class Utils
         if (b == null) {
             return null;
         }
-        String sb = null;
+        String sb;
         try {
             sb = (String) b;
-        } catch (ClassCastException ce) {}
+        } catch (ClassCastException ce) {
+            sb = null;
+        }
         return sb;
     }
 
@@ -220,10 +213,12 @@ public class Utils
             return null;
         }
 
-        Map<String, Object> map_data = null;
+        Map<String, Object> map_data;
         try {
             map_data = (Map<String, Object>) obj;
-        } catch (ClassCastException e) { }
+        } catch (ClassCastException e) {
+            map_data = null;
+        }
         Result snr = new Result(proto);
         snr.addNode(key);
         if (map_data == null) {
@@ -249,10 +244,12 @@ public class Utils
             return null;
         }
 
-        List<Object> list_data = null;
+        List<Object> list_data;
         try {
             list_data = (List<Object>) obj;
-        } catch (ClassCastException e) { }
+        } catch (ClassCastException e) {
+            list_data = null;
+        }
         Result snr = new Result(proto);
         snr.addNode(key);
         if (list_data == null) {
