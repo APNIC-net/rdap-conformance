@@ -16,7 +16,7 @@ import net.apnic.rdap.conformance.Utils;
 
 public class VariantName implements AttributeTest
 {
-    Set<String> known_attributes = null;
+    Set<String> known_attributes = new HashSet<String>();
 
     public VariantName() {}
 
@@ -29,24 +29,12 @@ public class VariantName implements AttributeTest
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("6.3");
 
-        boolean ret = true;
-        List<AttributeTest> tests =
-            new ArrayList<AttributeTest>(Arrays.asList(
+        return Utils.runTestList(
+            context, nr, data, known_attributes, true,
+            Arrays.<AttributeTest>asList(
                 new DomainNames()
-            ));
-
-        known_attributes = new HashSet<String>();
-        for (AttributeTest test : tests) {
-            boolean ret_inner = test.run(context, proto, data);
-            if (!ret_inner) {
-                ret = false;
-            }
-            known_attributes.addAll(test.getKnownAttributes());
-        }
-
-        AttributeTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, data);
-        return (ret && ret2);
+            )
+        );
     }
 
     public Set<String> getKnownAttributes()

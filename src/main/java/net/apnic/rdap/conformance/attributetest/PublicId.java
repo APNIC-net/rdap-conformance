@@ -1,6 +1,7 @@
 package net.apnic.rdap.conformance.attributetest;
 
 import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,28 +16,24 @@ import net.apnic.rdap.conformance.Utils;
 
 public class PublicId implements AttributeTest
 {
+    private Set<String> known_attributes = new HashSet<String>();
+
     public PublicId() {}
 
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        List<Result> results = context.getResults();
-
-        Result nr = new Result(proto);
-
-        AttributeTest sat = new ScalarAttribute("type");
-        boolean satres = sat.run(context, proto, data);
-        AttributeTest iat = new ScalarAttribute("identifier");
-        boolean iatres = iat.run(context, proto, data);
-
-        AttributeTest ua = new UnknownAttributes(getKnownAttributes());
-        boolean ret2 = ua.run(context, proto, data);
-
-        return (satres && iatres && ret2);
+        return Utils.runTestList(
+            context, proto, data, known_attributes, true,
+            Arrays.<AttributeTest>asList(
+                new ScalarAttribute("type"),
+                new ScalarAttribute("identifier")
+            )
+        );
     }
 
     public Set<String> getKnownAttributes()
     {
-        return Sets.newHashSet("type", "identifier");
+        return known_attributes;
     }
 }

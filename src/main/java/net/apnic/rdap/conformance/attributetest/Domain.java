@@ -24,7 +24,7 @@ import net.apnic.rdap.conformance.valuetest.Variant;
 public class Domain implements SearchTest
 {
     boolean check_unknown = false;
-    Set<String> known_attributes = null;
+    Set<String> known_attributes = new HashSet<String>();
     String key = null;
     String pattern = null;
 
@@ -48,8 +48,6 @@ public class Domain implements SearchTest
         if (key != null) {
             domain_names.setSearchDetails(key, pattern);
         }
-
-        known_attributes = new HashSet<String>();
 
         return Utils.runTestList(
             context, proto, data, known_attributes, check_unknown,

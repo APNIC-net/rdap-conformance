@@ -23,37 +23,24 @@ import net.apnic.rdap.conformance.valuetest.PublicKey;
 
 public class KeyData implements AttributeTest
 {
-    private Set<String> known_attributes = null;
+    private Set<String> known_attributes = new HashSet<String>();
 
     public KeyData() {}
 
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        boolean ret = true;
-        List<AttributeTest> tests =
-            new ArrayList<AttributeTest>(Arrays.asList(
+        return Utils.runTestList(
+            context, proto, data, known_attributes, true,
+            Arrays.asList(
                 new ScalarAttribute("flags", new Flags()),
                 new ScalarAttribute("protocol", new Protocol()),
                 new ScalarAttribute("publicKey", new PublicKey()),
                 new ScalarAttribute("algorithm", new Algorithm()),
                 new Events(),
                 new Links()
-            ));
-
-        known_attributes = new HashSet<String>();
-        for (AttributeTest test : tests) {
-            boolean ret_inner = test.run(context, proto, data);
-            if (!ret_inner) {
-                ret = false;
-            }
-            known_attributes.addAll(test.getKnownAttributes());
-        }
-
-        AttributeTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, data);
-
-        return (ret && ret2);
+            )
+        );
     }
 
     public Set<String> getKnownAttributes()
