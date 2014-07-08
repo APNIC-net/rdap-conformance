@@ -28,19 +28,14 @@ public class Country implements AttributeTest
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        List<Result> results = context.getResults();
-
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("country");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("4");
 
-        Result nr1 = new Result(nr);
-        nr1.setInfo("present");
-
         String country_value =
-            Utils.getStringAttribute(context, nr1, "country",
+            Utils.getStringAttribute(context, nr, "country",
                                      Result.Status.Notification,
                                      data);
         if (country_value == null) {
@@ -48,18 +43,12 @@ public class Country implements AttributeTest
         }
 
         Result nr3 = new Result(nr);
-        if (!country_codes.contains(country_value)) {
-            nr3.setStatus(Result.Status.Failure);
-            nr3.setInfo("invalid: " + country_value);
-            results.add(nr3);
-            return false;
-        } else {
-            nr3.setStatus(Result.Status.Success);
-            nr3.setInfo("valid");
-            results.add(nr3);
-        }
+        boolean res = nr3.setDetails(country_codes.contains(country_value),
+                                     "valid",
+                                     "invalid: " + country_value);
+        context.addResult(nr3);
 
-        return true;
+        return res;
     }
 
     public Set<String> getKnownAttributes()

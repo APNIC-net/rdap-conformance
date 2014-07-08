@@ -79,14 +79,7 @@ public class DomainNames implements SearchTest
 
         Result dn = new Result(nr);
         dn.addNode("ldhName");
-        if (ldhres) {
-            dn.setInfo("valid");
-            dn.setStatus(Status.Success);
-        } else {
-            dn.setInfo("invalid");
-            dn.setStatus(Status.Failure);
-            res = false;
-        }
+        res = dn.setDetails(ldhres, "valid", "invalid");
         context.addResult(dn);
 
         if (!a_label_found && (pattern != null)) {
@@ -96,15 +89,11 @@ public class DomainNames implements SearchTest
             ldh_pattern = ".*" + ldh_pattern + ".*";
             Pattern p = Pattern.compile(ldh_pattern,
                                         Pattern.CASE_INSENSITIVE);
-            if (!p.matcher(ldh_name).matches()) {
-                rp.setStatus(Status.Warning);
-                rp.setInfo("response domain name does not " +
-                           "match search pattern");
-            } else {
-                rp.setStatus(Status.Success);
-                rp.setInfo("response domain name matches " +
-                           "search pattern");
-            }
+            rp.setDetails(p.matcher(ldh_name).matches(),
+                          Status.Success,
+                          "response domain name matches search pattern",
+                          Status.Warning,
+                          "response domain name does not match search pattern");
             context.addResult(rp);
         }
 
@@ -133,17 +122,12 @@ public class DomainNames implements SearchTest
          * This is not (currently) compliant: see section 4 of the
          * draft, as well as RFC 5890 [2.3.2.1], which requires that
          * at least one U-label be present. */
-        if (is_ascii) {
-            hu.setInfo("no non-ascii characters present");
-            hu.setStatus(Status.Failure);
-            res = false;
-        } else {
-            hu.setInfo("non-ascii characters present");
-            hu.setStatus(Status.Success);
-        }
+        hu.setDetails((!is_ascii),
+                      "non-ascii characters present",
+                      "no non-ascii characters present");
         context.addResult(hu);
-        if (!res) {
-            return res;
+        if (is_ascii) {
+            return false;
         }
 
         Idna idna = null;
