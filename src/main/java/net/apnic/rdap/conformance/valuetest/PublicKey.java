@@ -1,12 +1,5 @@
 package net.apnic.rdap.conformance.valuetest;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.google.common.collect.Sets;
-
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
@@ -20,36 +13,22 @@ public class PublicKey implements ValueTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        Result nr = new Result(proto);
-
-        boolean res = true;
         String value = Utils.castToString(arg_data);
-        if (value == null) {
-            nr.setStatus(Status.Failure);
-            nr.setInfo("not string");
-            res = false;
-        } else {
-            nr.setStatus(Status.Success);
-            nr.setInfo("is string");
-        }
+
+        Result nr = new Result(proto);
+        boolean res = nr.setDetails((value != null),
+                                    "is string",
+                                    "not string");
         context.addResult(nr);
-
-        Result cvr = new Result(proto);
-        if (!value.matches("^[0-9A-Fa-f ]+$")) {
-            cvr.setStatus(Status.Failure);
-            cvr.setInfo("invalid");
-            res = false;
-        } else {
-            cvr.setStatus(Status.Success);
-            cvr.setInfo("valid");
+        if (!res) {
+            return false;
         }
-        context.addResult(cvr);
 
+        Result nr2 = new Result(proto);
+        res = nr2.setDetails(value.matches("^[0-9A-Fa-f ]+$"),
+                             "valid",
+                             "invalid");
+        context.addResult(nr2);
         return res;
-    }
-
-    public Set<String> getKnownAttributes()
-    {
-        return Sets.newHashSet();
     }
 }

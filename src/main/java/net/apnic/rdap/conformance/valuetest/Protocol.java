@@ -1,9 +1,5 @@
 package net.apnic.rdap.conformance.valuetest;
 
-import java.util.Set;
-
-import com.google.common.collect.Sets;
-
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
@@ -28,34 +24,16 @@ public class Protocol implements ValueTest
         } catch (ClassCastException ce) {
         }
 
-        if (value == null) {
-            nr.setStatus(Status.Failure);
-            nr.setInfo("not integer");
-            res = false;
-        } else {
-            nr.setStatus(Status.Success);
-            nr.setInfo("is integer");
-        }
+        nr.setDetails((value != null), "is integer", "not integer");
         context.addResult(nr);
 
         if (value != null) {
             Result cvr = new Result(proto);
-            if (value != 3) {
-                cvr.setStatus(Status.Failure);
-                cvr.setInfo("invalid");
-                res = false;
-            } else {
-                cvr.setStatus(Status.Success);
-                cvr.setInfo("valid");
-            }
+            res = cvr.setDetails((value == 3), "valid", "invalid");
             context.addResult(cvr);
+            return res;
+        } else {
+            return false;
         }
-
-        return res;
-    }
-
-    public Set<String> getKnownAttributes()
-    {
-        return Sets.newHashSet();
     }
 }
