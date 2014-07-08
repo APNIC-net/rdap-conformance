@@ -240,6 +240,35 @@ public class Utils
         return map_data;
     }
 
+    public static List<Object> getListAttribute(Context context,
+                                                Result proto,
+                                                String key,
+                                                Status missing_status,
+                                                Map<String, Object> data)
+    {
+        Object obj = getAttribute(context, proto, key, missing_status, data);
+        if (obj == null) {
+            return null;
+        }
+
+        List<Object> list_data = null;
+        try {
+            list_data = (List<Object>) obj;
+        } catch (ClassCastException e) { }
+        Result snr = new Result(proto);
+        snr.addNode(key);
+        if (list_data == null) {
+            snr.setStatus(Status.Failure);
+            snr.setInfo("not array");
+        } else {
+            snr.setStatus(Status.Success);
+            snr.setInfo("is array");
+        }
+        context.addResult(snr);
+
+        return list_data;
+    }
+
     public static boolean runTestList(Context context,
                                       Result proto,
                                       Map<String, Object> data,

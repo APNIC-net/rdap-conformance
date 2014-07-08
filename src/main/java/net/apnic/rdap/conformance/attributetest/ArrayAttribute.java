@@ -44,38 +44,17 @@ public class ArrayAttribute implements AttributeTest
                        Map<String, Object> data)
     {
         Result nr = new Result(proto);
+        nr.setCode("content");
+
+        List<Object> elements =
+            Utils.getListAttribute(context, nr, key,
+                                   Status.Notification,
+                                   data);
+        if (elements == null) {
+            return false;
+        }
+
         nr.addNode(key);
-
-        Result nr1 = new Result(nr);
-        nr1.setCode("content");
-        nr1.setInfo("present");
-
-        Object value = data.get(key);
-        if (value == null) {
-            nr1.setStatus(Status.Notification);
-            nr1.setInfo("not present");
-            context.addResult(nr1);
-            return false;
-        } else {
-            nr1.setStatus(Status.Success);
-            context.addResult(nr1);
-        }
-
-        Result nr2 = new Result(nr);
-        nr2.setInfo("is array");
-
-        List<Object> elements;
-        try {
-            elements = (List<Object>) value;
-        } catch (ClassCastException e) {
-            nr2.setStatus(Status.Failure);
-            nr2.setInfo("is not array");
-            context.addResult(nr2);
-            return false;
-        }
-
-        nr2.setStatus(Status.Success);
-        context.addResult(nr2);
 
         boolean success = true;
         int i = 0;
