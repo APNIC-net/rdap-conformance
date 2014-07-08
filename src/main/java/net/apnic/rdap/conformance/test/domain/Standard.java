@@ -61,25 +61,18 @@ public class Standard implements ObjectTest
             return false;
         }
 
-        List<AttributeTest> tests =
-            new ArrayList<AttributeTest>(Arrays.asList(
-                new Domain(false),
-                new StandardResponse()
-            ));
-
-        Set<String> known_attributes = new HashSet<String>();
-
-        boolean ret = true;
-        for (AttributeTest test : tests) {
-            boolean res = test.run(context, proto, root);
-            if (!res) {
-                ret = false;
-            }
-            known_attributes.addAll(test.getKnownAttributes());
+        Map<String, Object> data = Utils.castToMap(context, proto, root);
+        if (data == null) {
+            return false;
         }
 
-        AttributeTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, root);
-        return (ret && ret2);
+        Set<String> known_attributes = new HashSet<String>();
+        return Utils.runTestList(
+            context, proto, data, known_attributes, true,
+            Arrays.asList(
+                new Domain(false),
+                new StandardResponse()
+            )
+        );
     }
 }

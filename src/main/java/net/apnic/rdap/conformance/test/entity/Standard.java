@@ -49,26 +49,19 @@ public class Standard implements net.apnic.rdap.conformance.Test
             return false;
         }
 
-        List<AttributeTest> tests =
-            new ArrayList<AttributeTest>(Arrays.asList(
+        Map<String, Object> data = Utils.castToMap(context, proto, root);
+        if (data == null) {
+            return false;
+        }
+
+        Set<String> known_attributes = new HashSet<String>();
+        return Utils.runTestList(
+            context, proto, root, known_attributes, true,
+            Arrays.asList(
                 new Entity(entity, false),
                 new RdapConformance(),
                 new Notices()
-            ));
-
-        Set<String> known_attributes = new HashSet<String>();
-
-        boolean ret = true;
-        for (AttributeTest test : tests) {
-            boolean res = test.run(context, proto, root);
-            if (!res) {
-                ret = false;
-            }
-            known_attributes.addAll(test.getKnownAttributes());
-        }
-
-        AttributeTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, root);
-        return (ret && ret2);
+            )
+        );
     }
 }

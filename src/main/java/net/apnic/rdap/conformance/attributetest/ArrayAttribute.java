@@ -83,7 +83,7 @@ public class ArrayAttribute implements AttributeTest
             Result proto2 = new Result(nr);
             proto2.addNode(Integer.toString(i++));
             if (element_value_test != null) {
-                boolean element_success = 
+                boolean element_success =
                     element_value_test.run(context, proto2, e);
                 if (!element_success) {
                     success = false;
@@ -93,7 +93,7 @@ public class ArrayAttribute implements AttributeTest
                 if (subdata == null) {
                     success = false;
                 } else {
-                    boolean attribute_success = 
+                    boolean attribute_success =
                         element_attribute_test.run(context, proto2, subdata);
                     if (!attribute_success) {
                         success = false;

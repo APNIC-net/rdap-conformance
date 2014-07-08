@@ -99,26 +99,20 @@ public class Search implements net.apnic.rdap.conformance.Test
             return false;
         }
 
-        List<AttributeTest> tests =
-            new ArrayList<AttributeTest>(Arrays.asList(
+        Map<String, Object> data = Utils.castToMap(context, proto, root);
+        if (data == null) {
+            return false;
+        }
+
+        HashSet<String> known_attributes = new HashSet<String>();
+        return Utils.runTestList(
+            context, proto, root, known_attributes, true,
+            Arrays.asList(
                 new ArrayAttribute(search_test, search_results_key),
                 new ScalarAttribute("resultsTruncated",
                                     new BooleanValue()),
                 new StandardResponse()
-            ));
-
-        boolean res = true;
-        HashSet<String> known_attributes = new HashSet<String>();
-        for (AttributeTest test : tests) {
-            boolean res_inner = test.run(context, proto, root);
-            if (!res_inner) {
-                res = false;
-            }
-            known_attributes.addAll(test.getKnownAttributes());
-        }
-
-        AttributeTest ua = new UnknownAttributes(known_attributes);
-        boolean ret2 = ua.run(context, proto, root);
-        return (res && ret2);
+            )
+        );
     }
 }
