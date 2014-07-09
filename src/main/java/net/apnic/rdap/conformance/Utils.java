@@ -127,6 +127,23 @@ public class Utils
         return sb;
     }
 
+    public static Integer castToInteger(Object n)
+    {
+        if (n == null) {
+            return null;
+        }
+        Integer value = null;
+        try {
+            Double dvalue = (Double) arg_data;
+            if ((dvalue != null) && (dvalue == Math.rint(dvalue))) {
+                value = Integer.valueOf((int) Math.round(dvalue));
+            }
+        } catch (ClassCastException ce) {
+            value = null;
+        }
+        return value;
+    }
+
     public static Map<String, Object> castToMap(Context context,
                                                 Result proto,
                                                 Object obj)

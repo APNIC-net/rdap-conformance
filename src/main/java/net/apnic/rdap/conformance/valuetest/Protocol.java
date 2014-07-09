@@ -11,18 +11,9 @@ public class Protocol implements ValueTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
+        Integer value = Utils.castToInteger(arg_data);
+
         Result nr = new Result(proto);
-
-        Integer value = null;
-        try {
-            Double dvalue = (Double) arg_data;
-            if ((dvalue != null) && (dvalue == Math.rint(dvalue))) {
-                value = Integer.valueOf((int) Math.round(dvalue));
-            }
-        } catch (ClassCastException ce) {
-            value = null;
-        }
-
         nr.setDetails((value != null), "is integer", "not integer");
         context.addResult(nr);
 

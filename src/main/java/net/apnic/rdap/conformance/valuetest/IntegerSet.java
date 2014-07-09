@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
+import net.apnic.rdap.conformance.Utils;
 
 public class IntegerSet implements ValueTest
 {
@@ -20,15 +21,7 @@ public class IntegerSet implements ValueTest
     public boolean run(Context context, Result proto,
                        Object arg_data)
     {
-        Integer value = null;
-        try {
-            Double dvalue = (Double) arg_data;
-            if ((dvalue != null) && (dvalue == Math.rint(dvalue))) {
-                value = Integer.valueOf((int) Math.round(dvalue));
-            }
-        } catch (ClassCastException ce) {
-            value = null;
-        }
+        Integer value = Utils.castToInteger(arg_data);
 
         Result nr = new Result(proto);
         nr.setDetails((value != null), "is integer", "not integer");
