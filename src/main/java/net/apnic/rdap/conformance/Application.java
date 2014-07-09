@@ -16,47 +16,50 @@ import org.apache.commons.lang.SerializationUtils;
 import net.apnic.rdap.conformance.specification.ObjectClass;
 import net.apnic.rdap.conformance.specification.ObjectClassSearch;
 
-class Application
-{
-    private static String getJarName()
-    {
-        String jar_name = null;
+final class Application {
+    private static final int EX_USAGE = 64;
+    private static final int EX_NOINPUT = 66;
+    private static final int EX_SOFTWARE = 70;
+
+    private Application() { }
+
+    private static String getJarName() {
+        String jarName = null;
         try {
-            jar_name =
+            jarName =
                 new java.io.File(Context.class.getProtectionDomain()
                         .getCodeSource()
                         .getLocation()
                         .getPath())
                         .getName();
         } catch (Exception e) {
-            jar_name = "rdap-conformance.jar";
+            jarName = "rdap-conformance.jar";
         }
-        return jar_name;
+        return jarName;
     }
 
-    private static void runSearchTests(List<Test> tests,
-                                       ObjectClass oc,
-                                       SearchTest st,
-                                       String prefix,
-                                       String test_name,
-                                       String search_key)
-        throws Exception
-    {
+    private static void runSearchTests(final List<Test> tests,
+                                       final ObjectClass oc,
+                                       final SearchTest st,
+                                       final String prefix,
+                                       final String testName,
+                                       final String searchKey)
+            throws Exception {
         ObjectClassSearch ocs = oc.getObjectClassSearch();
         if ((ocs != null) && (ocs.isSupported())) {
             Map<String, List<String>> values = ocs.getValues();
             for (Map.Entry<String, List<String>> entry : values.entrySet()) {
                 String key = entry.getKey();
-                List<String> key_values = entry.getValue();
-                for (String key_value : key_values) {
+                List<String> keyValues = entry.getValue();
+                for (String keyValue : keyValues) {
                     tests.add(
                         new net.apnic.rdap.conformance.test.common.Search(
                             (SearchTest) SerializationUtils.clone(st),
                             prefix,
                             key,
-                            key_value,
-                            test_name,
-                            search_key
+                            keyValue,
+                            testName,
+                            searchKey
                         )
                     );
                 }
@@ -64,13 +67,12 @@ class Application
         }
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(final String[] args) throws Exception {
         if (args.length != 1) {
-            System.out.println("Usage: java -jar " +
-                               getJarName() +
-                               " <configuration-path>");
-            System.exit(10);
+            System.out.println("Usage: java -jar "
+                               + getJarName()
+                               + " <configuration-path>");
+            System.exit(EX_USAGE);
         }
 
         String path = args[0];
@@ -78,60 +80,66 @@ class Application
         try {
             s = Specification.fromPath(path);
         } catch (Exception e) {
-            System.err.println("Unable to load specification " +
-                               "path (" + path + "): " +
-                               e.toString());
-            System.exit(1);
+            System.err.println("Unable to load specification "
+                               + "path (" + path + "): "
+                               + e.toString());
+            System.exit(EX_NOINPUT);
         }
         if (s == null) {
             System.err.println("Specification (" + path + ") is empty.");
-            System.exit(1);
+            System.exit(EX_NOINPUT);
         }
 
-        final TrustManager[] trust_all_certs =
-            new TrustManager[] { new X509TrustManager() {
-                @Override
-                public void checkClientTrusted(final X509Certificate[] chain,
-                                               final String authType ) { }
-                @Override
-                public void checkServerTrusted(final X509Certificate[] chain,
-                                               final String authType ) { }
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
+        final TrustManager[] trustAllCerts =
+            new TrustManager[] {
+                new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(
+                        final X509Certificate[] chain,
+                        final String authType
+                    ) { }
+                    @Override
+                    public void checkServerTrusted(
+                        final X509Certificate[] chain,
+                        final String authType
+                    ) { }
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
                 }
-            } };
+            };
 
-        SSLContext ssl_context = null;
+        SSLContext sslContext = null;
         try {
-            ssl_context = SSLContext.getInstance( "SSL" );
-            ssl_context.init(null, trust_all_certs,
+            sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts,
                              new java.security.SecureRandom());
         } catch (Exception e) {
             System.err.println(e.toString());
-            System.exit(1);
+            System.exit(EX_SOFTWARE);
         }
 
         HttpClient hc = HttpClientBuilder.create()
-                                         .setSslcontext(ssl_context)
+                                         .setSslcontext(sslContext)
                                          .build();
         Context c = new Context();
         c.setHttpClient(hc);
         c.setSpecification(s);
 
-        List<String> object_types = new ArrayList<String>(
+        List<String> objectTypes = new ArrayList<String>(
             Arrays.asList("ip", "nameserver", "autnum",
                           "entity", "domain")
         );
 
         List<Test> tests = new ArrayList();
 
-        for (String object_type : object_types) {
-            ObjectClass oc = s.getObjectClass(object_type);
+        for (String objectType : objectTypes) {
+            ObjectClass oc = s.getObjectClass(objectType);
             if ((oc != null)
-                    && (!s.getObjectClass(object_type).isSupported())) {
+                    && (!s.getObjectClass(objectType).isSupported())) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "/" + object_type)
+                            "/" + objectType)
                          );
             }
         }
@@ -183,20 +191,20 @@ class Application
                   ));
         c.setContentType(null);
 
-        ObjectClass oc_ip = s.getObjectClass("ip");
-        if ((oc_ip != null) && (oc_ip.isSupported())) {
+        ObjectClass ocIp = s.getObjectClass("ip");
+        if ((ocIp != null) && (ocIp.isSupported())) {
             tests.add(new net.apnic.rdap.conformance.test.ip.BadRequest());
-            List<String> exists = oc_ip.getExists();
+            List<String> exists = ocIp.getExists();
             for (String e : exists) {
                 tests.add(new net.apnic.rdap.conformance.test.ip.Standard(e));
             }
-            List<String> not_exists = oc_ip.getNotExists();
-            for (String e : not_exists) {
+            List<String> notExists = ocIp.getNotExists();
+            for (String e : notExists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                             "/ip/" + e
                          ));
             }
-            List<String> redirects = oc_ip.getRedirects();
+            List<String> redirects = ocIp.getRedirects();
             for (String e : redirects) {
                 tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
                             new net.apnic.rdap.conformance.test.ip.Standard(),
@@ -222,27 +230,31 @@ class Application
                       ));
         }
 
-        ObjectClass oc_an = s.getObjectClass("autnum");
-        if ((oc_an != null) && (oc_an.isSupported())) {
+        ObjectClass ocAn = s.getObjectClass("autnum");
+        if ((ocAn != null) && (ocAn.isSupported())) {
             tests.add(new net.apnic.rdap.conformance.test.autnum.BadRequest());
-            List<String> exists = oc_an.getExists();
+            List<String> exists = ocAn.getExists();
             for (String e : exists) {
                 tests.add(
                     new net.apnic.rdap.conformance.test.autnum.Standard(e)
                 );
             }
-            List<String> not_exists = oc_an.getNotExists();
-            for (String e : not_exists) {
+            List<String> notExists = ocAn.getNotExists();
+            for (String e : notExists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                             "/autnum/" + e
                          ));
             }
-            List<String> redirects = oc_an.getRedirects();
+            ObjectTest std =
+                new net.apnic.rdap.conformance.test.autnum.Standard();
+            List<String> redirects = ocAn.getRedirects();
             for (String e : redirects) {
-                tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
-                            new net.apnic.rdap.conformance.test.autnum.Standard(),
-                            "/autnum/" + e, "autnum.redirect"
-                          ));
+                tests.add(
+                    new net.apnic.rdap.conformance.test.common.Redirect(
+                        std,
+                        "/autnum/" + e, "autnum.redirect"
+                    )
+                );
             }
             /* Extra query parameter. */
             tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
@@ -253,53 +265,63 @@ class Application
                       ));
         }
 
-        ObjectClass oc_ns = s.getObjectClass("nameserver");
-        if ((oc_ns != null) && (oc_ns.isSupported())) {
+        ObjectClass ocNs = s.getObjectClass("nameserver");
+        if ((ocNs != null) && (ocNs.isSupported())) {
             tests.add(
                 new net.apnic.rdap.conformance.test.nameserver.BadRequest()
             );
-            List<String> exists = oc_ns.getExists();
+            List<String> exists = ocNs.getExists();
             for (String e : exists) {
                 tests.add(
                     new net.apnic.rdap.conformance.test.nameserver.Standard(e)
                 );
             }
-            List<String> not_exists = oc_ns.getNotExists();
-            for (String e : not_exists) {
+            List<String> notExists = ocNs.getNotExists();
+            for (String e : notExists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                             "/nameserver/" + e
                          ));
             }
-            List<String> redirects = oc_ns.getRedirects();
+            ObjectTest std =
+                new net.apnic.rdap.conformance.test.nameserver.Standard();
+            List<String> redirects = ocNs.getRedirects();
             for (String e : redirects) {
-                tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
-                            new net.apnic.rdap.conformance.test.nameserver.Standard(),
-                            "/nameserver/" + e, "nameserver.redirect"
-                          ));
+                tests.add(
+                    new net.apnic.rdap.conformance.test.common.Redirect(
+                        std,
+                        "/nameserver/" + e, "nameserver.redirect"
+                    )
+                );
             }
             /* Extra query parameter. */
-            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                              HttpStatus.SC_BAD_REQUEST,
-                              "/nameserver/example.com?asdf=zxcv",
-                              "nameserver.extra-query-parameter",
-                              true
-                      ));
-            runSearchTests(tests, oc_ns,
-                           new net.apnic.rdap.conformance.attributetest.Nameserver(true),
-                           "nameservers", "nameserver.search",
-                           "nameserverSearchResults");
+            tests.add(
+                new net.apnic.rdap.conformance.test.common.BasicRequest(
+                        HttpStatus.SC_BAD_REQUEST,
+                        "/nameserver/example.com?asdf=zxcv",
+                        "nameserver.extra-query-parameter",
+                        true
+                )
+            );
+            runSearchTests(
+                tests,
+                ocNs,
+                new net.apnic.rdap.conformance.attributetest.Nameserver(true),
+                "nameservers",
+                "nameserver.search",
+                "nameserverSearchResults"
+            );
         }
 
-        ObjectClass oc_en = s.getObjectClass("entity");
-        if ((oc_en != null) && (oc_en.isSupported())) {
-            List<String> exists = oc_en.getExists();
+        ObjectClass ocEn = s.getObjectClass("entity");
+        if ((ocEn != null) && (ocEn.isSupported())) {
+            List<String> exists = ocEn.getExists();
             for (String e : exists) {
                 tests.add(
                     new net.apnic.rdap.conformance.test.entity.Standard(e)
                 );
             }
-            List<String> not_exists = oc_en.getNotExists();
-            for (String e : not_exists) {
+            List<String> notExists = ocEn.getNotExists();
+            for (String e : notExists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                            "/entity/" + e
                           ));
@@ -319,32 +341,41 @@ class Application
                               "entity.extra-query-parameter",
                               true
                       ));
-            runSearchTests(tests, oc_en,
-                           new net.apnic.rdap.conformance.attributetest.Entity(),
-                           "entities", "entity.search", "entitySearchResults");
+            runSearchTests(
+                tests,
+                ocEn,
+                new net.apnic.rdap.conformance.attributetest.Entity(),
+                "entities",
+                "entity.search",
+                "entitySearchResults"
+            );
         }
 
-        ObjectClass oc_dom = s.getObjectClass("domain");
-        if ((oc_dom != null) && (oc_dom.isSupported())) {
+        ObjectClass ocDom = s.getObjectClass("domain");
+        if ((ocDom != null) && (ocDom.isSupported())) {
             tests.add(new net.apnic.rdap.conformance.test.domain.BadRequest());
-            List<String> exists = oc_dom.getExists();
+            List<String> exists = ocDom.getExists();
             for (String e : exists) {
                 tests.add(new
                     net.apnic.rdap.conformance.test.domain.Standard(e)
                 );
             }
-            List<String> not_exists = oc_dom.getNotExists();
-            for (String e : not_exists) {
-                tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "/domain/" + e
-                         ));
+            List<String> notExists = ocDom.getNotExists();
+            for (String e : notExists) {
+                tests.add(
+                    new net.apnic.rdap.conformance.test.common.NotFound(
+                        "/domain/" + e
+                    )
+                );
             }
-            List<String> redirects = oc_dom.getRedirects();
+            List<String> redirects = ocDom.getRedirects();
             for (String e : redirects) {
-                tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
-                            new net.apnic.rdap.conformance.test.domain.Standard(),
-                            "/domain/" + e, "domain.redirect"
-                          ));
+                tests.add(
+                    new net.apnic.rdap.conformance.test.common.Redirect(
+                        new net.apnic.rdap.conformance.test.domain.Standard(),
+                        "/domain/" + e, "domain.redirect"
+                    )
+                );
             }
             /* Number registries should not return 400 on forward
              * domains. */
@@ -368,9 +399,14 @@ class Application
                               "domain.extra-query-parameter",
                               true
                       ));
-            runSearchTests(tests, oc_dom,
-                           new net.apnic.rdap.conformance.attributetest.Domain(true),
-                           "domains", "domain.search", "domainSearchResults");
+            runSearchTests(
+                tests,
+                ocDom,
+                new net.apnic.rdap.conformance.attributetest.Domain(true),
+                "domains",
+                "domain.search",
+                "domainSearchResults"
+            );
         }
 
         for (Test t : tests) {
