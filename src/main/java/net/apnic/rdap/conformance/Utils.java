@@ -134,7 +134,7 @@ public class Utils
         }
         Integer value = null;
         try {
-            Double dvalue = (Double) arg_data;
+            Double dvalue = (Double) n;
             if ((dvalue != null) && (dvalue == Math.rint(dvalue))) {
                 value = Integer.valueOf((int) Math.round(dvalue));
             }
