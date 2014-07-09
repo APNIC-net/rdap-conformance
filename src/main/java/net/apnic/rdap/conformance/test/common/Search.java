@@ -1,49 +1,23 @@
 package net.apnic.rdap.conformance.test.common;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.net.URLEncoder;
-import org.apache.http.client.HttpClient;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpRequest;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.HttpStatus;
-import org.apache.http.Header;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.common.collect.Sets;
-
-import net.apnic.rdap.conformance.Specification;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 
+import net.apnic.rdap.conformance.Test;
 import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.ObjectTest;
-import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.SearchTest;
-import net.apnic.rdap.conformance.responsetest.StatusCode;
-import net.apnic.rdap.conformance.responsetest.NotStatusCode;
-import net.apnic.rdap.conformance.responsetest.ContentType;
-import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
-import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
-import net.apnic.rdap.conformance.attributetest.Notices;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
-import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 import net.apnic.rdap.conformance.valuetest.BooleanValue;
 import net.apnic.rdap.conformance.Utils;
 
-public class Search implements net.apnic.rdap.conformance.Test
+public class Search implements Test
 {
     private String url_path;
     private String prefix;
@@ -65,7 +39,7 @@ public class Search implements net.apnic.rdap.conformance.Test
         pattern = arg_pattern;
         try {
             url_path  = "/" + prefix + "?" + key + "=" +
-                        java.net.URLEncoder.encode(
+                        URLEncoder.encode(
                             pattern, "UTF-8"
                         );
         } catch (Exception e) {

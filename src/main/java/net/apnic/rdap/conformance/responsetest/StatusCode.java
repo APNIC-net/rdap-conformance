@@ -1,7 +1,6 @@
 package net.apnic.rdap.conformance.responsetest;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -37,12 +36,11 @@ public class StatusCode implements ResponseTest
 
         Result nr = new Result(proto);
         nr.setCode("status-code");
-        if (nr.getDocument().equals("")) {
-            if (!has_multiple &&
-                    (expected_codes.contains(HttpStatus.SC_BAD_REQUEST))) {
-                nr.setDocument("draft-ietf-weirds-using-http-08");
-                nr.setReference("5.4");
-            }
+        if (nr.getDocument().equals("")
+                && !has_multiple
+                && expected_codes.contains(HttpStatus.SC_BAD_REQUEST)) {
+            nr.setDocument("draft-ietf-weirds-using-http-08");
+            nr.setReference("5.4");
         }
 
         int code = hr.getStatusLine().getStatusCode();

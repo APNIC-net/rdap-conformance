@@ -26,6 +26,7 @@ public class Algorithm implements ValueTest
                 value = Integer.valueOf((int) Math.round(dvalue));
             }
         } catch (ClassCastException ce) {
+            value = null;
         }
 
         Result nr = new Result(proto);

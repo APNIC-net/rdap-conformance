@@ -13,10 +13,11 @@ public class BooleanValue implements ValueTest
     {
         Result nr = new Result(proto);
 
-        Boolean value = null;
+        Boolean value;
         try {
             value = (Boolean) arg_data;
         } catch (ClassCastException ce) {
+            value = null;
         }
 
         Boolean res = nr.setDetails((value != null), "is boolean",

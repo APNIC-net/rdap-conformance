@@ -1,13 +1,9 @@
 package net.apnic.rdap.conformance.test.ip;
 
 import java.math.BigInteger;
-import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
 import java.util.List;
@@ -19,12 +15,9 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
-import net.apnic.rdap.conformance.AttributeTest;
-import net.apnic.rdap.conformance.attributetest.Status;
 import net.apnic.rdap.conformance.attributetest.Country;
 import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
-import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 
 public class Standard implements ObjectTest
 {
@@ -346,7 +339,7 @@ public class Standard implements ObjectTest
             "startAddress", "endAddress", "ipVersion"
         );
 
-        return Utils.runTestList(
+        return (Utils.runTestList(
             context, proto, root, known_attributes, true,
             Arrays.asList(
                 new ScalarAttribute("name"),
@@ -356,6 +349,6 @@ public class Standard implements ObjectTest
                 new ScalarAttribute("parentHandle"),
                 new StandardResponse()
             )
-        );
+        ) && ret);
     }
 }

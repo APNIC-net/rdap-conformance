@@ -204,11 +204,10 @@ public class Link implements AttributeTest
             hlr.setStatus(Status.Success);
             hlr.setInfo("present");
             List<String> hreflangs = new ArrayList<String>();
-            try {
-                String hreflang = (String) data.get("hreflang");
-                hreflangs.add(hreflang);
-            } catch (ClassCastException e) {}
-            if (hreflangs.size() == 0) {
+            String hreflangt = Utils.castToString(data.get("hreflang"));
+            if (hreflangt != null) {
+                hreflangs.add(hreflangt);
+            } else {
                 try {
                     hreflangs = (List<String>) data.get("hreflang");
                     is_list = true;

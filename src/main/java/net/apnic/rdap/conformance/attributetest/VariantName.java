@@ -1,13 +1,9 @@
 package net.apnic.rdap.conformance.attributetest;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Arrays;
-import java.util.ArrayList;
-
-import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;

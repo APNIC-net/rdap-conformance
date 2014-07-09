@@ -1,26 +1,18 @@
 package net.apnic.rdap.conformance.test.nameserver;
 
-import java.math.BigInteger;
-import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.List;
-
-import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
-import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.attributetest.Nameserver;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.Notices;
-import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 
 public class Standard implements ObjectTest
 {

@@ -1,7 +1,6 @@
 package net.apnic.rdap.conformance.valuetest;
 
 import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;

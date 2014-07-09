@@ -1,6 +1,5 @@
 package net.apnic.rdap.conformance.attributetest;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
 
@@ -9,8 +8,6 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
-import net.apnic.rdap.conformance.attributetest.Notice;
-import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
 
 public class Notices implements AttributeTest
 {

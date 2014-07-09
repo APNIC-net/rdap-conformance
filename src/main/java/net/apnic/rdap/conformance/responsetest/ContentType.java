@@ -1,9 +1,7 @@
 package net.apnic.rdap.conformance.responsetest;
 
 import java.util.List;
-import java.util.ArrayList;
 
-import org.apache.http.HttpStatus;
 import org.apache.http.HttpResponse;
 import org.apache.http.Header;
 

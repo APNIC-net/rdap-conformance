@@ -1,7 +1,6 @@
 package net.apnic.rdap.conformance.valuetest;
 
 import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 
@@ -14,7 +13,6 @@ public class Protocol implements ValueTest
     {
         Result nr = new Result(proto);
 
-        boolean res = true;
         Integer value = null;
         try {
             Double dvalue = (Double) arg_data;
@@ -22,6 +20,7 @@ public class Protocol implements ValueTest
                 value = Integer.valueOf((int) Math.round(dvalue));
             }
         } catch (ClassCastException ce) {
+            value = null;
         }
 
         nr.setDetails((value != null), "is integer", "not integer");
@@ -29,7 +28,7 @@ public class Protocol implements ValueTest
 
         if (value != null) {
             Result cvr = new Result(proto);
-            res = cvr.setDetails((value == 3), "valid", "invalid");
+            boolean res = cvr.setDetails((value == 3), "valid", "invalid");
             context.addResult(cvr);
             return res;
         } else {

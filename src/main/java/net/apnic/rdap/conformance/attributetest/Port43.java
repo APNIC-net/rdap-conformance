@@ -1,5 +1,8 @@
 package net.apnic.rdap.conformance.attributetest;
 
+import java.net.Socket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -7,25 +10,11 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
-import java.math.BigInteger;
-import java.math.BigDecimal;
-import com.google.common.collect.Sets;
-
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
-
-import java.net.Socket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.util.HashSet;
-import java.util.Set;
-
-import net.apnic.rdap.conformance.Result;
-import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.AttributeTest;
 
 public class Port43 implements AttributeTest
 {

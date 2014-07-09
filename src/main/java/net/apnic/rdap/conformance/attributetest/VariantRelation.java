@@ -1,6 +1,5 @@
 package net.apnic.rdap.conformance.attributetest;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,7 +9,6 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
-import net.apnic.rdap.conformance.Utils;
 
 public class VariantRelation implements AttributeTest
 {
@@ -70,7 +68,7 @@ public class VariantRelation implements AttributeTest
             Result r2 = new Result(nr);
             r2.addNode(Integer.toString(i++));
             r2.setReference("11.2.4");
-            if (!relation_entries.contains((String) re)) {
+            if (!relations.contains((String) re)) {
                 r2.setStatus(Result.Status.Failure);
                 r2.setInfo("invalid: " + ((String) re));
                 success = false;

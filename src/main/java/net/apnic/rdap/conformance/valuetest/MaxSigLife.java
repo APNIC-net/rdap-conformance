@@ -3,7 +3,6 @@ package net.apnic.rdap.conformance.valuetest;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
-import net.apnic.rdap.conformance.Utils;
 
 public class MaxSigLife implements ValueTest
 {
@@ -19,6 +18,7 @@ public class MaxSigLife implements ValueTest
                 value = Integer.valueOf((int) Math.round(dvalue));
             }
         } catch (ClassCastException ce) {
+            value = null;
         }
 
         Result nr = new Result(proto);

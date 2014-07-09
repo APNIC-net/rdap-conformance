@@ -1,15 +1,7 @@
 package net.apnic.rdap.conformance.specification;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class ObjectClass
 {

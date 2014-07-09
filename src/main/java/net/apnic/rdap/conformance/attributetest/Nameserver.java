@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;

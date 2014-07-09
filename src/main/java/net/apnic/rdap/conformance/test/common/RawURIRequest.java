@@ -1,17 +1,15 @@
 package net.apnic.rdap.conformance.test.common;
 
-import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Test;
+import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import java.net.Socket;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Map;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 import org.apache.http.impl.io.DefaultHttpResponseParser;
 import org.apache.http.impl.io.SessionInputBufferImpl;
 import org.apache.http.impl.io.HttpTransportMetricsImpl;
@@ -19,7 +17,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpEntity;
 import com.google.gson.Gson;
 
-public class RawURIRequest implements net.apnic.rdap.conformance.Test
+public class RawURIRequest implements Test
 {
     String raw_uri = null;
     Result proto = null;

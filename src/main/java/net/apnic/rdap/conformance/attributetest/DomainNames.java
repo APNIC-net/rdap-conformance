@@ -19,7 +19,6 @@ import com.vgrs.xcode.util.XcodeException;
 
 public class DomainNames implements SearchTest
 {
-    private String key = null;
     private String pattern = null;
 
     public DomainNames() {}

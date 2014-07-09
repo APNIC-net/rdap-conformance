@@ -3,8 +3,6 @@ package net.apnic.rdap.conformance.test.autnum;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
 import java.util.List;
@@ -15,12 +13,9 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
-import net.apnic.rdap.conformance.AttributeTest;
-import net.apnic.rdap.conformance.attributetest.Status;
 import net.apnic.rdap.conformance.attributetest.Country;
 import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
-import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 
 public class Standard implements ObjectTest
 {

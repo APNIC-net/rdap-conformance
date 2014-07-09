@@ -5,13 +5,13 @@ import net.apnic.rdap.conformance.Test;
 import net.apnic.rdap.conformance.test.common.BasicRequest;
 import org.apache.http.HttpStatus;
 
-public class BadRequest implements net.apnic.rdap.conformance.Test
+public class BadRequest implements Test
 {
     Test cbr = null;
 
     public BadRequest()
     {
-        cbr = new net.apnic.rdap.conformance.test.common.BasicRequest(
+        cbr = new BasicRequest(
             HttpStatus.SC_BAD_REQUEST,
             "/nameserver/...",
             "nameserver.bad-request",
