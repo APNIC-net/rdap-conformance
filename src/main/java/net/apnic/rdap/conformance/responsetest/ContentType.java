@@ -10,9 +10,19 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
+/**
+ * <p>ContentType class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class ContentType implements ResponseTest {
+    /**
+     * <p>Constructor for ContentType.</p>
+     */
     public ContentType() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final HttpResponse hr) {
         List<Result> results = context.getResults();

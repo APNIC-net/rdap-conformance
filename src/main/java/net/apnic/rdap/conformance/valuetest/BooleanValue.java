@@ -4,9 +4,19 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 
+/**
+ * <p>BooleanValue class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class BooleanValue implements ValueTest {
+    /**
+     * <p>Constructor for BooleanValue.</p>
+     */
     public BooleanValue() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object argData) {
         Result nr = new Result(proto);

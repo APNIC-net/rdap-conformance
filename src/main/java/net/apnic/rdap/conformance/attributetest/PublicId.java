@@ -10,11 +10,21 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>PublicId class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class PublicId implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();
 
+    /**
+     * <p>Constructor for PublicId.</p>
+     */
     public PublicId() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         return Utils.runTestList(
@@ -26,6 +36,11 @@ public final class PublicId implements AttributeTest {
         );
     }
 
+    /**
+     * <p>Getter for the field <code>knownAttributes</code>.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return knownAttributes;
     }

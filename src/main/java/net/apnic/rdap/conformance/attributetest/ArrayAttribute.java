@@ -13,12 +13,24 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>ArrayAttribute class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class ArrayAttribute implements AttributeTest {
     private Set<String> knownAttributes = null;
     private ValueTest elementValueTest = null;
     private AttributeTest elementAttributeTest = null;
     private String key = null;
 
+    /**
+     * <p>Constructor for ArrayAttribute.</p>
+     *
+     * @param argElementTest a {@link net.apnic.rdap.conformance.ValueTest} object.
+     * @param argKey a {@link java.lang.String} object.
+     */
     public ArrayAttribute(final ValueTest argElementTest,
                           final String argKey) {
         elementValueTest = argElementTest;
@@ -26,6 +38,12 @@ public final class ArrayAttribute implements AttributeTest {
         knownAttributes = Sets.newHashSet(argKey);
     }
 
+    /**
+     * <p>Constructor for ArrayAttribute.</p>
+     *
+     * @param argElementTest a {@link net.apnic.rdap.conformance.AttributeTest} object.
+     * @param argKey a {@link java.lang.String} object.
+     */
     public ArrayAttribute(final AttributeTest argElementTest,
                           final String argKey) {
         elementAttributeTest = argElementTest;
@@ -33,6 +51,7 @@ public final class ArrayAttribute implements AttributeTest {
         knownAttributes = Sets.newHashSet(argKey);
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
@@ -77,6 +96,11 @@ public final class ArrayAttribute implements AttributeTest {
         return success;
     }
 
+    /**
+     * <p>Getter for the field <code>knownAttributes</code>.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return knownAttributes;
     }

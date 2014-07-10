@@ -20,6 +20,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.config.RequestConfig;
 
+/**
+ * <p>Link class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Link implements AttributeTest {
     private static final Set<String> LINK_RELATIONS =
         Sets.newHashSet("about",
@@ -111,6 +117,9 @@ public final class Link implements AttributeTest {
 
     private static final int TIMEOUT_MS = 5000;
 
+    /**
+     * <p>Constructor for Link.</p>
+     */
     public Link() { }
 
     private boolean urlIsFetchable(final Context context,
@@ -155,6 +164,7 @@ public final class Link implements AttributeTest {
         return success;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         List<Result> results = context.getResults();
@@ -285,6 +295,11 @@ public final class Link implements AttributeTest {
         return (success && ret2);
     }
 
+    /**
+     * <p>getKnownAttributes.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return Sets.newHashSet("type", "title", "media",
                                "href", "hreflang", "rel", "value");

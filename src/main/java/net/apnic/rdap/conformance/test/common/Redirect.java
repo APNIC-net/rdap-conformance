@@ -18,11 +18,23 @@ import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>Redirect class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Redirect implements Test {
     private String urlPath;
     private String testName;
     private ObjectTest resultTest;
 
+    /**
+     * <p>Constructor for Redirect.</p>
+     *
+     * @param argUrlPath a {@link java.lang.String} object.
+     * @param argTestName a {@link java.lang.String} object.
+     */
     public Redirect(final String argUrlPath,
                     final String argTestName) {
         urlPath    = argUrlPath;
@@ -33,6 +45,13 @@ public final class Redirect implements Test {
         }
     }
 
+    /**
+     * <p>Constructor for Redirect.</p>
+     *
+     * @param argResultTest a {@link net.apnic.rdap.conformance.ObjectTest} object.
+     * @param argUrlPath a {@link java.lang.String} object.
+     * @param argTestName a {@link java.lang.String} object.
+     */
     public Redirect(final ObjectTest argResultTest,
                     final String argUrlPath,
                     final String argTestName) {
@@ -45,6 +64,7 @@ public final class Redirect implements Test {
         }
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context) {
         List<Result> results = context.getResults();
 

@@ -16,13 +16,23 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>Port43 class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Port43 implements AttributeTest {
     private static Set<String> hostsChecked = new HashSet<String>();
     private static final int TIMEOUT_MS = 1000;
     private static final int WHOIS_PORT = 43;
 
+    /**
+     * <p>Constructor for Port43.</p>
+     */
     public Port43() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         List<Result> results = context.getResults();
@@ -63,6 +73,11 @@ public final class Port43 implements AttributeTest {
         return found;
     }
 
+    /**
+     * <p>getKnownAttributes.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return Sets.newHashSet("port43");
     }

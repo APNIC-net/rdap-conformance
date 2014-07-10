@@ -15,6 +15,12 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.AttributeTest;
 
+/**
+ * <p>Event class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Event implements AttributeTest {
     private boolean allowActor = true;
 
@@ -29,12 +35,21 @@ public final class Event implements AttributeTest {
                         "locked",
                         "unlocked");
 
+    /**
+     * <p>Constructor for Event.</p>
+     *
+     * @param argAllowActor a boolean.
+     */
     public Event(final boolean argAllowActor) {
         allowActor = argAllowActor;
     }
 
+    /**
+     * <p>Constructor for Event.</p>
+     */
     public Event() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         List<Result> results = context.getResults();
@@ -113,6 +128,11 @@ public final class Event implements AttributeTest {
         return (evtres && evdres && eacres && lstres);
     }
 
+    /**
+     * <p>getKnownAttributes.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return Sets.newHashSet("eventActor", "eventDate",
                                "eventAction");

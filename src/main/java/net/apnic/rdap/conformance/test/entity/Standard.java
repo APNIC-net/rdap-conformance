@@ -14,13 +14,25 @@ import net.apnic.rdap.conformance.attributetest.Entity;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.Notices;
 
+/**
+ * <p>Standard class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Standard implements Test {
     private String entity = "";
 
+    /**
+     * <p>Constructor for Standard.</p>
+     *
+     * @param argEntity a {@link java.lang.String} object.
+     */
     public Standard(final String argEntity) {
         entity = argEntity;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context) {
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + "/entity/" + entity;

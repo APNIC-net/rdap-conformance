@@ -5,9 +5,19 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>HexString class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class HexString implements ValueTest {
+    /**
+     * <p>Constructor for HexString.</p>
+     */
     public HexString() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object argData) {
         String value = Utils.castToString(argData);

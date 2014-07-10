@@ -67,6 +67,12 @@ final class Application {
         }
     }
 
+    /**
+     * <p>main.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     * @throws java.lang.Exception if any.
+     */
     public static void main(final String[] args) throws Exception {
         if (args.length != 1) {
             System.out.println("Usage: java -jar "

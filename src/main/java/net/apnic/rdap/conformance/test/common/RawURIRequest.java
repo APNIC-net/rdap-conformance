@@ -17,6 +17,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpEntity;
 import com.google.gson.Gson;
 
+/**
+ * <p>RawURIRequest class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class RawURIRequest implements Test {
     private static final int HTTP_PORT = 80;
     private static final int BUFFER_SIZE = 4096;
@@ -24,6 +30,13 @@ public final class RawURIRequest implements Test {
     private Result proto = null;
     private boolean expectedSuccess = false;
 
+    /**
+     * <p>Constructor for RawURIRequest.</p>
+     *
+     * @param rawUri a {@link java.lang.String} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param expectedSuccess a boolean.
+     */
     public RawURIRequest(final String rawUri,
                          final Result proto,
                          final boolean expectedSuccess) {
@@ -32,6 +45,7 @@ public final class RawURIRequest implements Test {
         this.expectedSuccess = expectedSuccess;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context) {
         boolean success = false;
         String error = null;

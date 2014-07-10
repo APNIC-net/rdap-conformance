@@ -6,6 +6,12 @@ import java.util.List;
 
 import com.google.common.base.Joiner;
 
+/**
+ * <p>Result class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Result {
     public enum Status { Success, Notification, Warning, Failure };
 
@@ -19,8 +25,16 @@ public final class Result {
     private List<String> node = new ArrayList<String>();
     private boolean statusSet = false;
 
+    /**
+     * <p>Constructor for Result.</p>
+     */
     public Result() { }
 
+    /**
+     * <p>Constructor for Result.</p>
+     *
+     * @param r a {@link net.apnic.rdap.conformance.Result} object.
+     */
     public Result(final Result r) {
         setStatus(r.getStatus());
         setPath(r.getPath());
@@ -36,6 +50,17 @@ public final class Result {
         setNode(newNode);
     }
 
+    /**
+     * <p>Constructor for Result.</p>
+     *
+     * @param argStatus a {@link net.apnic.rdap.conformance.Result.Status} object.
+     * @param argPath a {@link java.lang.String} object.
+     * @param argTestName a {@link java.lang.String} object.
+     * @param argCode a {@link java.lang.String} object.
+     * @param argInfo a {@link java.lang.String} object.
+     * @param argDocument a {@link java.lang.String} object.
+     * @param argReference a {@link java.lang.String} object.
+     */
     public Result(final Status argStatus,
                   final String argPath,
                   final String argTestName,
@@ -52,84 +77,188 @@ public final class Result {
         reference = argReference;
     }
 
+    /**
+     * <p>Getter for the field <code>status</code>.</p>
+     *
+     * @return a {@link net.apnic.rdap.conformance.Result.Status} object.
+     */
     public Status getStatus() {
         return status;
     }
 
+    /**
+     * <p>Setter for the field <code>status</code>.</p>
+     *
+     * @param s a {@link net.apnic.rdap.conformance.Result.Status} object.
+     */
     public void setStatus(final Status s) {
         statusSet = true;
         status = s;
     }
 
+    /**
+     * <p>Getter for the field <code>statusSet</code>.</p>
+     *
+     * @return a boolean.
+     */
     public boolean getStatusSet() {
         return statusSet;
     }
 
+    /**
+     * <p>Getter for the field <code>path</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * <p>Setter for the field <code>path</code>.</p>
+     *
+     * @param p a {@link java.lang.String} object.
+     */
     public void setPath(final String p) {
         path = p;
     }
 
+    /**
+     * <p>Getter for the field <code>testName</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getTestName() {
         return testName;
     }
 
+    /**
+     * <p>Setter for the field <code>testName</code>.</p>
+     *
+     * @param t a {@link java.lang.String} object.
+     */
     public void setTestName(final String t) {
         testName = t;
     }
 
+    /**
+     * <p>Getter for the field <code>code</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * <p>Setter for the field <code>code</code>.</p>
+     *
+     * @param c a {@link java.lang.String} object.
+     */
     public void setCode(final String c) {
         code = c;
     }
 
+    /**
+     * <p>Getter for the field <code>info</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getInfo() {
         return info;
     }
 
+    /**
+     * <p>Setter for the field <code>info</code>.</p>
+     *
+     * @param i a {@link java.lang.String} object.
+     */
     public void setInfo(final String i) {
         info = i;
     }
 
+    /**
+     * <p>Getter for the field <code>document</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getDocument() {
         return document;
     }
 
+    /**
+     * <p>Setter for the field <code>document</code>.</p>
+     *
+     * @param d a {@link java.lang.String} object.
+     */
     public void setDocument(final String d) {
         document = d;
     }
 
+    /**
+     * <p>Getter for the field <code>reference</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getReference() {
         return reference;
     }
 
+    /**
+     * <p>Setter for the field <code>reference</code>.</p>
+     *
+     * @param r a {@link java.lang.String} object.
+     */
     public void setReference(final String r) {
         reference = r;
     }
 
+    /**
+     * <p>Getter for the field <code>node</code>.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<String> getNode() {
         return node;
     }
 
+    /**
+     * <p>Setter for the field <code>node</code>.</p>
+     *
+     * @param n a {@link java.util.List} object.
+     */
     public void setNode(final List<String> n) {
         node = n;
     }
 
+    /**
+     * <p>addNode.</p>
+     *
+     * @param s a {@link java.lang.String} object.
+     */
     public void addNode(final String s) {
         node.add(s);
     }
 
+    /**
+     * <p>setStatusAndInfo.</p>
+     *
+     * @param s a {@link net.apnic.rdap.conformance.Result.Status} object.
+     * @param i a {@link java.lang.String} object.
+     */
     public void setStatusAndInfo(final Status s, final String i) {
         setStatus(s);
         setInfo(i);
     }
 
+    /**
+     * <p>setDetails.</p>
+     *
+     * @param success a boolean.
+     * @param successInfo a {@link java.lang.String} object.
+     * @param failureInfo a {@link java.lang.String} object.
+     * @return a boolean.
+     */
     public boolean setDetails(final boolean success,
                               final String successInfo,
                               final String failureInfo) {
@@ -138,6 +267,16 @@ public final class Result {
                           Status.Failure, failureInfo);
     }
 
+    /**
+     * <p>setDetails.</p>
+     *
+     * @param success a boolean.
+     * @param successStatus a {@link net.apnic.rdap.conformance.Result.Status} object.
+     * @param successInfo a {@link java.lang.String} object.
+     * @param failureStatus a {@link net.apnic.rdap.conformance.Result.Status} object.
+     * @param failureInfo a {@link java.lang.String} object.
+     * @return a boolean.
+     */
     public boolean setDetails(final boolean success,
                               final Status successStatus,
                               final String successInfo,
@@ -166,6 +305,11 @@ public final class Result {
         }
     }
 
+    /**
+     * <p>toJson.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String toJson() {
         String s =
                "{ \"status\": \"" + getStatusAsString() + "\", "
@@ -184,6 +328,11 @@ public final class Result {
         return s;
     }
 
+    /**
+     * <p>toString.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String toString() {
         StringBuilder epath = new StringBuilder();
         int slen = path.length();

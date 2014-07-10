@@ -11,15 +11,30 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
+/**
+ * <p>UnknownAttributes class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class UnknownAttributes implements AttributeTest {
     private Set<String> knownAttributes = null;
 
+    /**
+     * <p>Constructor for UnknownAttributes.</p>
+     */
     public UnknownAttributes() { }
 
+    /**
+     * <p>Constructor for UnknownAttributes.</p>
+     *
+     * @param argKnownAttributes a {@link java.util.Set} object.
+     */
     public UnknownAttributes(final Set<String> argKnownAttributes) {
         knownAttributes = argKnownAttributes;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
@@ -48,6 +63,11 @@ public final class UnknownAttributes implements AttributeTest {
         return success;
     }
 
+    /**
+     * <p>Getter for the field <code>knownAttributes</code>.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return new HashSet<String>();
     }

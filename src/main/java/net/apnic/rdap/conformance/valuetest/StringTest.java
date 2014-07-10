@@ -5,9 +5,19 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 
+/**
+ * <p>StringTest class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class StringTest implements ValueTest {
+    /**
+     * <p>Constructor for StringTest.</p>
+     */
     public StringTest() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object argData) {
         Result nr = new Result(proto);

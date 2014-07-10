@@ -13,21 +13,37 @@ import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
 import net.apnic.rdap.conformance.attributetest.Domain;
 
+/**
+ * <p>Standard class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Standard implements ObjectTest {
     private String domain = null;
     private String url = null;
 
+    /**
+     * <p>Constructor for Standard.</p>
+     */
     public Standard() { }
 
+    /**
+     * <p>Constructor for Standard.</p>
+     *
+     * @param domain a {@link java.lang.String} object.
+     */
     public Standard(final String domain) {
         this.domain = domain;
     }
 
+    /** {@inheritDoc} */
     public void setUrl(final String url) {
         domain = null;
         this.url = url;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context) {
         String path =
             (url != null)

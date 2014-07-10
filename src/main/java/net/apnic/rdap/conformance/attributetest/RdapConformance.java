@@ -11,9 +11,19 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
+/**
+ * <p>RdapConformance class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class RdapConformance implements AttributeTest {
+    /**
+     * <p>Constructor for RdapConformance.</p>
+     */
     public RdapConformance() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
@@ -70,6 +80,11 @@ public final class RdapConformance implements AttributeTest {
         return true;
     }
 
+    /**
+     * <p>getKnownAttributes.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return Sets.newHashSet("rdapConformance");
     }

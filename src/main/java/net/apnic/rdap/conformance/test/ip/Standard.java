@@ -19,16 +19,31 @@ import net.apnic.rdap.conformance.attributetest.Country;
 import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
 
-public class Standard implements ObjectTest {
+/**
+ * <p>Standard class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
+public final class Standard implements ObjectTest {
     private String ip = null;
     private String url = null;
 
+    /**
+     * <p>Constructor for Standard.</p>
+     */
     public Standard() { }
 
+    /**
+     * <p>Constructor for Standard.</p>
+     *
+     * @param ip a {@link java.lang.String} object.
+     */
     public Standard(final String ip) {
         this.ip = ip;
     }
 
+    /** {@inheritDoc} */
     public void setUrl(final String url) {
         ip = null;
         this.url = url;
@@ -207,6 +222,7 @@ public class Standard implements ObjectTest {
         }
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context) {
         boolean ret = true;
 

@@ -13,14 +13,26 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.valuetest.StringTest;
 
+/**
+ * <p>ErrorResponse class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class ErrorResponse implements AttributeTest {
     private Set<String> knownAttributes = null;
     private int statusCode;
 
+    /**
+     * <p>Constructor for ErrorResponse.</p>
+     *
+     * @param argStatusCode a int.
+     */
     public ErrorResponse(final int argStatusCode) {
         statusCode = argStatusCode;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result p = new Result(proto);
@@ -84,6 +96,11 @@ public final class ErrorResponse implements AttributeTest {
         return (ret && ret2);
     }
 
+    /**
+     * <p>Getter for the field <code>knownAttributes</code>.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return knownAttributes;
     }

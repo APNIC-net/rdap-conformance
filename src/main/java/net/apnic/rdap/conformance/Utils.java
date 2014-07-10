@@ -21,11 +21,25 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 
+/**
+ * <p>Utils class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Utils {
     private static final int TIMEOUT_MS = 5000;
 
     private Utils() { }
 
+    /**
+     * <p>httpGetRequest.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param path a {@link java.lang.String} object.
+     * @param followRedirects a boolean.
+     * @return a {@link org.apache.http.client.methods.HttpRequestBase} object.
+     */
     public static HttpRequestBase httpGetRequest(
                 final Context context,
                 final String path,
@@ -43,6 +57,14 @@ public final class Utils {
         return request;
     }
 
+    /**
+     * <p>standardRequest.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param path a {@link java.lang.String} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @return a {@link java.util.Map} object.
+     */
     public static Map standardRequest(final Context context,
                                       final String path,
                                       final Result proto) {
@@ -115,6 +137,12 @@ public final class Utils {
         return root;
     }
 
+    /**
+     * <p>castToString.</p>
+     *
+     * @param b a {@link java.lang.Object} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String castToString(final Object b) {
         if (b == null) {
             return null;
@@ -128,6 +156,12 @@ public final class Utils {
         return sb;
     }
 
+    /**
+     * <p>castToInteger.</p>
+     *
+     * @param n a {@link java.lang.Object} object.
+     * @return a {@link java.lang.Integer} object.
+     */
     public static Integer castToInteger(final Object n) {
         if (n == null) {
             return null;
@@ -144,6 +178,14 @@ public final class Utils {
         return value;
     }
 
+    /**
+     * <p>castToMap.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param obj a {@link java.lang.Object} object.
+     * @return a {@link java.util.Map} object.
+     */
     public static Map<String, Object> castToMap(final Context context,
                                                 final Result proto,
                                                 final Object obj) {
@@ -159,6 +201,16 @@ public final class Utils {
         return data;
     }
 
+    /**
+     * <p>getAttribute.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param key a {@link java.lang.String} object.
+     * @param missingStatus a {@link net.apnic.rdap.conformance.Result.Status} object.
+     * @param data a {@link java.util.Map} object.
+     * @return a {@link java.lang.Object} object.
+     */
     public static Object getAttribute(final Context context,
                                       final Result proto,
                                       final String key,
@@ -186,6 +238,16 @@ public final class Utils {
         return obj;
     }
 
+    /**
+     * <p>getStringAttribute.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param key a {@link java.lang.String} object.
+     * @param missingStatus a {@link net.apnic.rdap.conformance.Result.Status} object.
+     * @param data a {@link java.util.Map} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String getStringAttribute(final Context context,
                                             final Result proto,
                                             final String key,
@@ -216,6 +278,16 @@ public final class Utils {
         return str;
     }
 
+    /**
+     * <p>getMapAttribute.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param key a {@link java.lang.String} object.
+     * @param missingStatus a {@link net.apnic.rdap.conformance.Result.Status} object.
+     * @param data a {@link java.util.Map} object.
+     * @return a {@link java.util.Map} object.
+     */
     public static Map<String, Object> getMapAttribute(
                 final Context context,
                 final Result proto,
@@ -247,6 +319,16 @@ public final class Utils {
         return mapData;
     }
 
+    /**
+     * <p>getListAttribute.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param key a {@link java.lang.String} object.
+     * @param missingStatus a {@link net.apnic.rdap.conformance.Result.Status} object.
+     * @param data a {@link java.util.Map} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<Object> getListAttribute(
                 final Context context,
                 final Result proto,
@@ -278,6 +360,17 @@ public final class Utils {
         return listData;
     }
 
+    /**
+     * <p>runTestList.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param data a {@link java.util.Map} object.
+     * @param knownAttributes a {@link java.util.Set} object.
+     * @param checkUnknown a boolean.
+     * @param tests a {@link java.util.List} object.
+     * @return a boolean.
+     */
     public static boolean runTestList(
                 final Context context,
                 final Result proto,

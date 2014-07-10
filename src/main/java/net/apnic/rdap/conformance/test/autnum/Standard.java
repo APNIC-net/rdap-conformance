@@ -17,16 +17,31 @@ import net.apnic.rdap.conformance.attributetest.Country;
 import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
 
+/**
+ * <p>Standard class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Standard implements ObjectTest {
     private String autnum = null;
     private String url = null;
 
+    /**
+     * <p>Constructor for Standard.</p>
+     */
     public Standard() { }
 
+    /**
+     * <p>Constructor for Standard.</p>
+     *
+     * @param autnum a {@link java.lang.String} object.
+     */
     public Standard(final String autnum) {
         this.autnum = autnum;
     }
 
+    /** {@inheritDoc} */
     public void setUrl(final String url) {
         autnum = null;
         this.url = url;
@@ -70,6 +85,7 @@ public final class Standard implements ObjectTest {
         return asn;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context) {
         List<Result> results = context.getResults();
 

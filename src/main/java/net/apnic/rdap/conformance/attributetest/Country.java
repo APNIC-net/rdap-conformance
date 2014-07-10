@@ -12,6 +12,12 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.AttributeTest;
 
+/**
+ * <p>Country class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Country implements AttributeTest {
     private static final Set<String> COUNTRY_CODES = new HashSet<String>();
     static {
@@ -21,8 +27,12 @@ public final class Country implements AttributeTest {
         }
     }
 
+    /**
+     * <p>Constructor for Country.</p>
+     */
     public Country() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
@@ -48,6 +58,11 @@ public final class Country implements AttributeTest {
         return res;
     }
 
+    /**
+     * <p>getKnownAttributes.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return Sets.newHashSet("country");
     }

@@ -9,9 +9,19 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
+/**
+ * <p>AsEventActor class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class AsEventActor implements AttributeTest {
+    /**
+     * <p>Constructor for AsEventActor.</p>
+     */
     public AsEventActor() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> argData) {
         Result nr = new Result(proto);
@@ -24,6 +34,11 @@ public final class AsEventActor implements AttributeTest {
         return arrayTest.run(context, nr, argData);
     }
 
+    /**
+     * <p>getKnownAttributes.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return Sets.newHashSet("asEventActor");
     }

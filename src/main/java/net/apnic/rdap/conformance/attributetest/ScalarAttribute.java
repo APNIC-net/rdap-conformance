@@ -12,27 +12,51 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>ScalarAttribute class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class ScalarAttribute implements AttributeTest {
     private String attributeName = null;
     private ValueTest valueTest = null;
     private AttributeTest attributeTest = null;
 
+    /**
+     * <p>Constructor for ScalarAttribute.</p>
+     *
+     * @param argAttributeName a {@link java.lang.String} object.
+     */
     public ScalarAttribute(final String argAttributeName) {
         attributeName = argAttributeName;
     }
 
+    /**
+     * <p>Constructor for ScalarAttribute.</p>
+     *
+     * @param argAttributeName a {@link java.lang.String} object.
+     * @param argAttributeTest a {@link net.apnic.rdap.conformance.AttributeTest} object.
+     */
     public ScalarAttribute(final String argAttributeName,
                            final AttributeTest argAttributeTest) {
         attributeName = argAttributeName;
         attributeTest = argAttributeTest;
     }
 
+    /**
+     * <p>Constructor for ScalarAttribute.</p>
+     *
+     * @param argAttributeName a {@link java.lang.String} object.
+     * @param argValueTest a {@link net.apnic.rdap.conformance.ValueTest} object.
+     */
     public ScalarAttribute(final String argAttributeName,
                            final ValueTest argValueTest) {
         attributeName = argAttributeName;
         valueTest = argValueTest;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
@@ -58,6 +82,11 @@ public final class ScalarAttribute implements AttributeTest {
         return res;
     }
 
+    /**
+     * <p>getKnownAttributes.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return Sets.newHashSet(attributeName);
     }

@@ -14,21 +14,37 @@ import net.apnic.rdap.conformance.attributetest.Nameserver;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.Notices;
 
+/**
+ * <p>Standard class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Standard implements ObjectTest {
     private String nameserver = null;
     private String url = null;
 
+    /**
+     * <p>Constructor for Standard.</p>
+     */
     public Standard() { }
 
-    public Standard(String nameserver) {
+    /**
+     * <p>Constructor for Standard.</p>
+     *
+     * @param nameserver a {@link java.lang.String} object.
+     */
+    public Standard(final String nameserver) {
         this.nameserver = nameserver;
     }
 
-    public void setUrl(String url) {
+    /** {@inheritDoc} */
+    public void setUrl(final String url) {
         nameserver = null;
         this.url = url;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context) {
         String path =
             (url != null)

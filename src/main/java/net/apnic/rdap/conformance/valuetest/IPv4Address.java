@@ -7,9 +7,19 @@ import net.apnic.rdap.conformance.ValueTest;
 
 import org.apache.http.conn.util.InetAddressUtils;
 
+/**
+ * <p>IPv4Address class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class IPv4Address implements ValueTest {
+    /**
+     * <p>Constructor for IPv4Address.</p>
+     */
     public IPv4Address() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object argData) {
         Result nr = new Result(proto);

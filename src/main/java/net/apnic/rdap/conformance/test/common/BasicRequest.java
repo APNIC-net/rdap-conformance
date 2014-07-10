@@ -25,6 +25,12 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.attributetest.ErrorResponse;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>BasicRequest class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class BasicRequest implements net.apnic.rdap.conformance.Test {
     private static final int HTTP_ERROR_CODE_LOWER_BOUND = 400;
 
@@ -33,6 +39,14 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
     private String urlPath;
     private boolean invertStatusTest;
 
+    /**
+     * <p>Constructor for BasicRequest.</p>
+     *
+     * @param argExpectedStatus a int.
+     * @param argUrlPath a {@link java.lang.String} object.
+     * @param argTestName a {@link java.lang.String} object.
+     * @param argInvertStatusTest a boolean.
+     */
     public BasicRequest(final int argExpectedStatus,
                         final String argUrlPath,
                         final String argTestName,
@@ -51,6 +65,7 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
         }
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context) {
         List<Result> results = context.getResults();
 

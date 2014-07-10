@@ -14,9 +14,19 @@ import net.apnic.rdap.conformance.AttributeTest;
 import java.util.IllformedLocaleException;
 import java.util.Locale;
 
+/**
+ * <p>Lang class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Lang implements AttributeTest {
+    /**
+     * <p>Constructor for Lang.</p>
+     */
     public Lang() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
@@ -51,6 +61,11 @@ public final class Lang implements AttributeTest {
         return res;
     }
 
+    /**
+     * <p>getKnownAttributes.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return Sets.newHashSet("lang");
     }

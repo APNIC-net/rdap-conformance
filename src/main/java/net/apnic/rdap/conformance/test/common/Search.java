@@ -17,6 +17,12 @@ import net.apnic.rdap.conformance.attributetest.StandardResponse;
 import net.apnic.rdap.conformance.valuetest.BooleanValue;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>Search class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public class Search implements Test {
     private String urlPath;
     private String prefix;
@@ -26,6 +32,16 @@ public class Search implements Test {
     private String searchResultsKey;
     private SearchTest searchTest;
 
+    /**
+     * <p>Constructor for Search.</p>
+     *
+     * @param argSearchTest a {@link net.apnic.rdap.conformance.SearchTest} object.
+     * @param argPrefix a {@link java.lang.String} object.
+     * @param argKey a {@link java.lang.String} object.
+     * @param argPattern a {@link java.lang.String} object.
+     * @param argTestName a {@link java.lang.String} object.
+     * @param argSearchResultsKey a {@link java.lang.String} object.
+     */
     public Search(final SearchTest argSearchTest,
                   final String argPrefix,
                   final String argKey,
@@ -51,6 +67,7 @@ public class Search implements Test {
         }
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context) {
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + urlPath;

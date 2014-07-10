@@ -20,6 +20,12 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>Entity class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Entity implements SearchTest {
     private boolean checkUnknown = false;
     private boolean searchContext = false;
@@ -40,14 +46,24 @@ public final class Entity implements SearchTest {
                         "notifications",
                         "noc");
 
+    /**
+     * <p>Constructor for Entity.</p>
+     */
     public Entity() { }
 
+    /**
+     * <p>Constructor for Entity.</p>
+     *
+     * @param argHandle a {@link java.lang.String} object.
+     * @param argCheckUnknown a boolean.
+     */
     public Entity(final String argHandle, final boolean argCheckUnknown) {
         handle = argHandle;
         checkUnknown = argCheckUnknown;
         searchContext = false;
     }
 
+    /** {@inheritDoc} */
     public void setSearchDetails(final String key, final String pattern) {
         fn = null;
         handle = null;
@@ -62,6 +78,7 @@ public final class Entity implements SearchTest {
         }
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         knownAttributes = Sets.newHashSet("handle", "roles", "vcardArray");
@@ -250,6 +267,11 @@ public final class Entity implements SearchTest {
         return (ret && vret);
     }
 
+    /**
+     * <p>Getter for the field <code>knownAttributes</code>.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return knownAttributes;
     }

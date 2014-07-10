@@ -16,21 +16,34 @@ import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.valuetest.IPv4Address;
 import net.apnic.rdap.conformance.valuetest.IPv6Address;
 
+/**
+ * <p>Nameserver class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Nameserver implements SearchTest {
     private String key = null;
     private String pattern = null;
     private boolean checkUnknown = false;
     private Set<String> knownAttributes = null;
 
+    /**
+     * <p>Constructor for Nameserver.</p>
+     *
+     * @param argCheckUnknown a boolean.
+     */
     public Nameserver(final boolean argCheckUnknown) {
         checkUnknown = argCheckUnknown;
     }
 
+    /** {@inheritDoc} */
     public void setSearchDetails(final String argKey, final String argPattern) {
         key = argKey;
         pattern = argPattern;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
@@ -88,6 +101,11 @@ public final class Nameserver implements SearchTest {
         return (ret && ret2);
     }
 
+    /**
+     * <p>Getter for the field <code>knownAttributes</code>.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return knownAttributes;
     }

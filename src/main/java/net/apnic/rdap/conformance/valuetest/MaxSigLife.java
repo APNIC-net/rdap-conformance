@@ -5,9 +5,19 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>MaxSigLife class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class MaxSigLife implements ValueTest {
+    /**
+     * <p>Constructor for MaxSigLife.</p>
+     */
     public MaxSigLife() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object argData) {
         Integer value = Utils.castToInteger(argData);

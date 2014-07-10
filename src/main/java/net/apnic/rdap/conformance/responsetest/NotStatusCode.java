@@ -9,13 +9,25 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
+/**
+ * <p>NotStatusCode class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class NotStatusCode implements ResponseTest {
     private int notExpectedCode;
 
+    /**
+     * <p>Constructor for NotStatusCode.</p>
+     *
+     * @param argNotExpectedCode a int.
+     */
     public NotStatusCode(final int argNotExpectedCode) {
         notExpectedCode = argNotExpectedCode;
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final HttpResponse hr) {
         List<Result> results = context.getResults();

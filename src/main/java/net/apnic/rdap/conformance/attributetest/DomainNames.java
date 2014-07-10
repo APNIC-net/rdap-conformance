@@ -17,12 +17,22 @@ import com.vgrs.xcode.idna.Idna;
 import com.vgrs.xcode.idna.Punycode;
 import com.vgrs.xcode.util.XcodeException;
 
+/**
+ * <p>DomainNames class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class DomainNames implements SearchTest {
     private static final int DOMAIN_LABEL_MAX_LENGTH = 63;
     private String pattern = null;
 
+    /**
+     * <p>Constructor for DomainNames.</p>
+     */
     public DomainNames() { }
 
+    /** {@inheritDoc} */
     public void setSearchDetails(final String argKey,
                                  final String argPattern) {
         pattern = argPattern;
@@ -51,6 +61,7 @@ public final class DomainNames implements SearchTest {
         return (ldhres ? (aLabelFound ? 2 : 1) : 0);
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
@@ -203,6 +214,11 @@ public final class DomainNames implements SearchTest {
         return res;
     }
 
+    /**
+     * <p>getKnownAttributes.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return Sets.newHashSet("ldhName", "unicodeName");
     }

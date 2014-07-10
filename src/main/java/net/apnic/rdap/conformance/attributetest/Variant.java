@@ -14,9 +14,19 @@ import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
 import net.apnic.rdap.conformance.attributetest.VariantName;
 
+/**
+ * <p>Variant class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Variant implements ValueTest {
+    /**
+     * <p>Constructor for Variant.</p>
+     */
     public Variant() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object argData) {
         Result nr = new Result(proto);

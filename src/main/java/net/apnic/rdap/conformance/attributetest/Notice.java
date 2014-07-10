@@ -11,11 +11,21 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.valuetest.StringTest;
 
+/**
+ * <p>Notice class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Notice implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();
 
+    /**
+     * <p>Constructor for Notice.</p>
+     */
     public Notice() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
@@ -31,6 +41,11 @@ public final class Notice implements AttributeTest {
         );
     }
 
+    /**
+     * <p>Getter for the field <code>knownAttributes</code>.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<String> getKnownAttributes() {
         return knownAttributes;
     }

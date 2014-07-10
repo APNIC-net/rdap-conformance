@@ -13,17 +13,34 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
+/**
+ * <p>StatusCode class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class StatusCode implements ResponseTest {
     private Set<Integer> expectedCodes = new HashSet<Integer>();
 
+    /**
+     * <p>Constructor for StatusCode.</p>
+     *
+     * @param argExpectedCode a int.
+     */
     public StatusCode(final int argExpectedCode) {
         expectedCodes.add(argExpectedCode);
     }
 
+    /**
+     * <p>Constructor for StatusCode.</p>
+     *
+     * @param argExpectedCodes a {@link java.util.Set} object.
+     */
     public StatusCode(final Set<Integer> argExpectedCodes) {
         expectedCodes.addAll(argExpectedCodes);
     }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final HttpResponse hr) {
         boolean hasMultiple = expectedCodes.size() > 1;

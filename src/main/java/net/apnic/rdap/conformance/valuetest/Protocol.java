@@ -5,9 +5,19 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
+/**
+ * <p>Protocol class.</p>
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
 public final class Protocol implements ValueTest {
+    /**
+     * <p>Constructor for Protocol.</p>
+     */
     public Protocol() { }
 
+    /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object argData) {
         Integer value = Utils.castToInteger(argData);
