@@ -9,13 +9,11 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class AsEventActor implements AttributeTest
-{
+public final class AsEventActor implements AttributeTest {
     public AsEventActor() {}
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> argData)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> argData) {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
@@ -26,8 +24,7 @@ public class AsEventActor implements AttributeTest
         return arrayTest.run(context, nr, argData);
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("asEventActor");
     }
 }

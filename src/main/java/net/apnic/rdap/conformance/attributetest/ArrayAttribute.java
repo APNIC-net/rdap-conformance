@@ -13,32 +13,28 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class ArrayAttribute implements AttributeTest
-{
-    Set<String> knownAttributes = null;
-    ValueTest elementValueTest = null;
-    AttributeTest elementAttributeTest = null;
-    String key = null;
+public final class ArrayAttribute implements AttributeTest {
+    private Set<String> knownAttributes = null;
+    private ValueTest elementValueTest = null;
+    private AttributeTest elementAttributeTest = null;
+    private String key = null;
 
-    public ArrayAttribute(ValueTest argElementTest,
-                          String argKey)
-    {
+    public ArrayAttribute(final ValueTest argElementTest,
+                          final String argKey) {
         elementValueTest = argElementTest;
         key = argKey;
         knownAttributes = Sets.newHashSet(argKey);
     }
 
-    public ArrayAttribute(AttributeTest argElementTest,
-                          String argKey)
-    {
+    public ArrayAttribute(final AttributeTest argElementTest,
+                          final String argKey) {
         elementAttributeTest = argElementTest;
         key = argKey;
         knownAttributes = Sets.newHashSet(argKey);
     }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
 
@@ -64,7 +60,8 @@ public class ArrayAttribute implements AttributeTest
                     success = false;
                 }
             } else {
-                Map<String, Object> subdata = Utils.castToMap(context, proto2, e);
+                Map<String, Object> subdata =
+                    Utils.castToMap(context, proto2, e);
                 if (subdata == null) {
                     success = false;
                 } else {
@@ -80,8 +77,7 @@ public class ArrayAttribute implements AttributeTest
         return success;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }

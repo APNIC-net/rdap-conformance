@@ -5,35 +5,30 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
-import ezvcard.*;
-
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.valuetest.Variant;
 
-public class Domain implements SearchTest
-{
-    boolean checkUnknown = false;
-    Set<String> knownAttributes = new HashSet<String>();
-    String key = null;
-    String pattern = null;
+public final class Domain implements SearchTest {
+    private boolean checkUnknown = false;
+    private Set<String> knownAttributes = new HashSet<String>();
+    private String key = null;
+    private String pattern = null;
 
-    public Domain(boolean argCheckUnknown)
-    {
+    public Domain(final boolean argCheckUnknown) {
         checkUnknown = argCheckUnknown;
     }
 
-    public void setSearchDetails(String argKey, String argPattern)
-    {
+    public void setSearchDetails(final String argKey,
+                                 final String argPattern) {
         key = argKey;
         pattern = argPattern;
     }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         SearchTest domainNames = new DomainNames();
         if (key != null) {
             domainNames.setSearchDetails(key, pattern);
@@ -52,8 +47,7 @@ public class Domain implements SearchTest
         );
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }

@@ -9,7 +9,10 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
-import ezvcard.*;
+import ezvcard.VCard;
+import ezvcard.Ezvcard;
+import ezvcard.Ezvcard.ParserChainJsonString;
+import ezvcard.ValidationWarnings;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
@@ -162,7 +165,7 @@ public class Entity implements SearchTest
             List<List<String>> warnings = null;
             String error = null;
             try {
-                Ezvcard.ParserChainJsonString pcjs =
+                ParserChainJsonString pcjs =
                     Ezvcard.parseJson(json);
                 warnings = new ArrayList<List<String>>();
                 pcjs.warnings(warnings);

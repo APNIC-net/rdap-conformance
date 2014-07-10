@@ -12,21 +12,19 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class Country implements AttributeTest
-{
-    private static final Set<String> countryCodes = new HashSet<String>();
+public final class Country implements AttributeTest {
+    private static final Set<String> COUNTRY_CODES = new HashSet<String>();
     static {
         String[] arrayCountryCodes = Locale.getISOCountries();
         for (String countryCode : arrayCountryCodes) {
-            countryCodes.add(countryCode);
+            COUNTRY_CODES.add(countryCode);
         }
     }
 
-    public Country() {}
+    public Country() { }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("country");
@@ -42,7 +40,7 @@ public class Country implements AttributeTest
         }
 
         Result nr3 = new Result(nr);
-        boolean res = nr3.setDetails(countryCodes.contains(countryValue),
+        boolean res = nr3.setDetails(COUNTRY_CODES.contains(countryValue),
                                      "valid",
                                      "invalid: " + countryValue);
         context.addResult(nr3);
@@ -50,8 +48,7 @@ public class Country implements AttributeTest
         return res;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("country");
     }
 }

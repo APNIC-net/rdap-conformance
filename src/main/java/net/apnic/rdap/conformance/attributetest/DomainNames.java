@@ -17,19 +17,18 @@ import com.vgrs.xcode.idna.Idna;
 import com.vgrs.xcode.idna.Punycode;
 import com.vgrs.xcode.util.XcodeException;
 
-public class DomainNames implements SearchTest
-{
+public final class DomainNames implements SearchTest {
+    private static final int DOMAIN_LABEL_MAX_LENGTH = 63;
     private String pattern = null;
 
     public DomainNames() {}
 
-    public void setSearchDetails(String argKey, String argPattern)
-    {
+    public void setSearchDetails(final String argKey,
+                                 final String argPattern) {
         pattern = argPattern;
     }
 
-    private int isValidLdhName(String ldhName)
-    {
+    private int isValidLdhName(final String ldhName) {
         String[] labels = ldhName.split("\\.");
         Pattern ldhPattern = Pattern.compile(
             "[\\p{Alnum}][\\p{Alnum}-]*[\\p{Alnum}]?"
@@ -41,7 +40,7 @@ public class DomainNames implements SearchTest
             if (!labelres) {
                 ldhres = false;
             }
-            if (label.length() > 63) {
+            if (label.length() > DOMAIN_LABEL_MAX_LENGTH) {
                 ldhres = false;
             }
             if (label.startsWith("xn--")) {
@@ -52,9 +51,8 @@ public class DomainNames implements SearchTest
         return (ldhres ? (aLabelFound ? 2 : 1) : 0);
     }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
@@ -129,8 +127,8 @@ public class DomainNames implements SearchTest
         try {
             idna = new Idna(new Punycode(), true, true);
         } catch (XcodeException xe) {
-            System.err.println("Unable to initialise/use IDNA processor " +
-                               xe.toString());
+            System.err.println("Unable to initialise/use IDNA processor "
+                               + xe.toString());
             return res;
         }
 
@@ -188,16 +186,16 @@ public class DomainNames implements SearchTest
                 Normalizer.normalize(unPattern,
                                      Normalizer.Form.NFKC);
             Pattern p = Pattern.compile(unPattern,
-                                        Pattern.CASE_INSENSITIVE |
-                                        Pattern.UNICODE_CASE);
+                                        Pattern.CASE_INSENSITIVE
+                                      | Pattern.UNICODE_CASE);
             if (!p.matcher(unicodeName).matches()) {
                 rp.setStatus(Status.Warning);
-                rp.setInfo("response domain name does not " +
-                           "match search pattern");
+                rp.setInfo("response domain name does not "
+                           + "match search pattern");
             } else {
                 rp.setStatus(Status.Success);
-                rp.setInfo("response domain name matches " +
-                           "search pattern");
+                rp.setInfo("response domain name matches "
+                           + "search pattern");
             }
             context.addResult(rp);
         }
@@ -205,8 +203,7 @@ public class DomainNames implements SearchTest
         return res;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("ldhName", "unicodeName");
     }
 }

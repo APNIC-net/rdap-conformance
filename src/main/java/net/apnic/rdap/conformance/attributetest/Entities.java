@@ -7,15 +7,13 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 
-public class Entities implements AttributeTest
-{
-    Set<String> knownAttributes;
+public final class Entities implements AttributeTest {
+    private Set<String> knownAttributes;
 
     public Entities() {}
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         AttributeTest arrayTest =
             new ArrayAttribute(new Entity(null, true), "entities");
 
@@ -33,8 +31,7 @@ public class Entities implements AttributeTest
         return arrayTest.run(context, nr, data);
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }
