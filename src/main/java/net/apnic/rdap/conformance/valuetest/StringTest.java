@@ -5,11 +5,11 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 
-public class StringTest implements ValueTest {
+public final class StringTest implements ValueTest {
     public StringTest() { }
 
-    public boolean run(Context context, Result proto,
-                       Object argData) {
+    public boolean run(final Context context, final Result proto,
+                       final Object argData) {
         Result nr = new Result(proto);
         boolean res = nr.setDetails((Utils.castToString(argData) != null),
                                     "is string", "not string");

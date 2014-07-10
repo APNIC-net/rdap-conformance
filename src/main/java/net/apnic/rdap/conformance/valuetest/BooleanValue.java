@@ -4,11 +4,11 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 
-public class BooleanValue implements ValueTest {
+public final class BooleanValue implements ValueTest {
     public BooleanValue() { }
 
-    public boolean run(Context context, Result proto,
-                       Object argData) {
+    public boolean run(final Context context, final Result proto,
+                       final Object argData) {
         Result nr = new Result(proto);
 
         Boolean value;

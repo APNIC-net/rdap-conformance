@@ -2,22 +2,20 @@ package net.apnic.rdap.conformance.valuetest;
 
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class IntegerSet implements ValueTest {
-    Set<Integer> members = null;
+public final class IntegerSet implements ValueTest {
+    private Set<Integer> members = null;
 
-    public IntegerSet(Set<Integer> members) {
+    public IntegerSet(final Set<Integer> members) {
         this.members = members;
     }
 
-    public boolean run(Context context, Result proto,
-                       Object argData) {
+    public boolean run(final Context context, final Result proto,
+                       final Object argData) {
         Integer value = Utils.castToInteger(argData);
 
         Result nr = new Result(proto);

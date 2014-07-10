@@ -7,11 +7,11 @@ import net.apnic.rdap.conformance.ValueTest;
 
 import org.apache.http.conn.util.InetAddressUtils;
 
-public class IPv6Address implements ValueTest {
+public final class IPv6Address implements ValueTest {
     public IPv6Address() { }
 
-    public boolean run(Context context, Result proto,
-                       Object argData) {
+    public boolean run(final Context context, final Result proto,
+                       final Object argData) {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");

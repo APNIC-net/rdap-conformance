@@ -5,11 +5,11 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class KeyTag implements ValueTest {
+public final class KeyTag implements ValueTest {
     public KeyTag() { }
 
-    public boolean run(Context context, Result proto,
-                       Object argData) {
+    public boolean run(final Context context, final Result proto,
+                       final Object argData) {
         Integer value = Utils.castToInteger(argData);
 
         Result nr = new Result(proto);
