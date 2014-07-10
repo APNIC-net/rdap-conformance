@@ -10,13 +10,11 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
-public class ContentType implements ResponseTest
-{
-    public ContentType() {}
+public class ContentType implements ResponseTest {
+    public ContentType() { }
 
     public boolean run(Context context, Result proto,
-                       HttpResponse hr)
-    {
+                       HttpResponse hr) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);

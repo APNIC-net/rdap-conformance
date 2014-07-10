@@ -16,8 +16,7 @@ public class PublicId implements AttributeTest {
     public PublicId() { }
 
     public boolean run(final Context context, final Result proto,
-                       final Map<String, Object> data)
-    {
+                       final Map<String, Object> data) {
         return Utils.runTestList(
             context, proto, data, knownAttributes, true,
             Arrays.<AttributeTest>asList(
@@ -27,8 +26,7 @@ public class PublicId implements AttributeTest {
         );
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }

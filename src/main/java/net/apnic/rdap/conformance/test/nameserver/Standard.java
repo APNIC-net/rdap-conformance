@@ -14,26 +14,22 @@ import net.apnic.rdap.conformance.attributetest.Nameserver;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.Notices;
 
-public class Standard implements ObjectTest
-{
+public class Standard implements ObjectTest {
     String nameserver = null;
     String url = null;
 
-    public Standard() {}
+    public Standard() { }
 
-    public Standard(String nameserver)
-    {
+    public Standard(String nameserver) {
         this.nameserver = nameserver;
     }
 
-    public void setUrl(String url)
-    {
+    public void setUrl(String url) {
         nameserver = null;
         this.url = url;
     }
 
-    public boolean run(Context context)
-    {
+    public boolean run(Context context) {
         String path =
             (url != null)
                 ? url

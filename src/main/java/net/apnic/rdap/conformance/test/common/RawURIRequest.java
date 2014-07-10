@@ -17,23 +17,20 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpEntity;
 import com.google.gson.Gson;
 
-public class RawURIRequest implements Test
-{
+public class RawURIRequest implements Test {
     String rawUri = null;
     Result proto = null;
     boolean expectedSuccess = false;
 
     public RawURIRequest(String rawUri,
                          Result proto,
-                         boolean expectedSuccess)
-    {
+                         boolean expectedSuccess) {
         this.rawUri          = rawUri;
         this.proto           = proto;
         this.expectedSuccess = expectedSuccess;
     }
 
-    public boolean run(Context context)
-    {
+    public boolean run(Context context) {
         boolean success = false;
         String error = null;
         try {

@@ -3,38 +3,32 @@ package net.apnic.rdap.conformance.specification;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectClass
-{
+public class ObjectClass {
     private boolean supported = false;
     private List<String> exists = new ArrayList<String>();
     private List<String> notExists = new ArrayList<String>();
     private List<String> redirects = new ArrayList<String>();
     private ObjectClassSearch search = new ObjectClassSearch();
 
-    private ObjectClass() {}
+    private ObjectClass() { }
 
-    public boolean isSupported()
-    {
+    public boolean isSupported() {
         return supported;
     }
 
-    public List<String> getExists()
-    {
+    public List<String> getExists() {
         return exists;
     }
 
-    public List<String> getNotExists()
-    {
+    public List<String> getNotExists() {
         return notExists;
     }
 
-    public List<String> getRedirects()
-    {
+    public List<String> getRedirects() {
         return redirects;
     }
 
-    public ObjectClassSearch getObjectClassSearch()
-    {
+    public ObjectClassSearch getObjectClassSearch() {
         return search;
     }
 }

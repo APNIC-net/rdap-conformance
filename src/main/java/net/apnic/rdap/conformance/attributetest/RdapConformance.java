@@ -11,13 +11,11 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class RdapConformance implements AttributeTest
-{
-    public RdapConformance() {}
+public class RdapConformance implements AttributeTest {
+    public RdapConformance() { }
 
     public boolean run(final Context context, final Result proto,
-                       final Map<String, Object> data)
-    {
+                       final Map<String, Object> data) {
         Result nr = new Result(proto);
         /* All attributes are optional, strictly speaking (json-response 3.2),
          * but for the attributes which aren't sensitive and will always be
@@ -72,8 +70,7 @@ public class RdapConformance implements AttributeTest
         return true;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("rdapConformance");
     }
 }

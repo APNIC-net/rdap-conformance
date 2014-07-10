@@ -13,26 +13,22 @@ import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
 import net.apnic.rdap.conformance.attributetest.Domain;
 
-public class Standard implements ObjectTest
-{
+public class Standard implements ObjectTest {
     String domain = null;
     String url = null;
 
-    public Standard() {}
+    public Standard() { }
 
-    public Standard(String domain)
-    {
+    public Standard(String domain) {
         this.domain = domain;
     }
 
-    public void setUrl(String url)
-    {
+    public void setUrl(String url) {
         domain = null;
         this.url = url;
     }
 
-    public boolean run(Context context)
-    {
+    public boolean run(Context context) {
         String path =
             (url != null)
                 ? url

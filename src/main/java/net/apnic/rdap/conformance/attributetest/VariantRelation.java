@@ -10,8 +10,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class VariantRelation implements AttributeTest
-{
+public class VariantRelation implements AttributeTest {
     private static final Set<String> relations =
         Sets.newHashSet("registered",
                         "unregistered",
@@ -19,11 +18,10 @@ public class VariantRelation implements AttributeTest
                         "open registration",
                         "conjoined");
 
-    public VariantRelation() {}
+    public VariantRelation() { }
 
     public boolean run(final Context context, final Result proto,
-                       final Map<String, Object> data)
-    {
+                       final Map<String, Object> data) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
@@ -82,8 +80,7 @@ public class VariantRelation implements AttributeTest
         return success;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("relation");
     }
 }

@@ -17,8 +17,7 @@ import net.apnic.rdap.conformance.attributetest.StandardResponse;
 import net.apnic.rdap.conformance.valuetest.BooleanValue;
 import net.apnic.rdap.conformance.Utils;
 
-public class Search implements Test
-{
+public class Search implements Test {
     private String urlPath;
     private String prefix;
     private String key;
@@ -32,8 +31,7 @@ public class Search implements Test
                   String argKey,
                   String argPattern,
                   String argTestName,
-                  String argSearchResultsKey)
-    {
+                  String argSearchResultsKey) {
         prefix = argPrefix;
         key = argKey;
         pattern = argPattern;
@@ -55,8 +53,7 @@ public class Search implements Test
         }
     }
 
-    public boolean run(Context context)
-    {
+    public boolean run(Context context) {
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + urlPath;
 

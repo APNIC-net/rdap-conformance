@@ -12,15 +12,13 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.valuetest.BooleanValue;
 import net.apnic.rdap.conformance.valuetest.MaxSigLife;
 
-public class SecureDNS implements AttributeTest
-{
+public class SecureDNS implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();
 
-    public SecureDNS() {}
+    public SecureDNS() { }
 
     public boolean run(final Context context, final Result proto,
-                       final Map<String, Object> data)
-    {
+                       final Map<String, Object> data) {
         return Utils.runTestList(
             context, proto, data, knownAttributes, true,
             Arrays.asList(
@@ -33,8 +31,7 @@ public class SecureDNS implements AttributeTest
         );
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }

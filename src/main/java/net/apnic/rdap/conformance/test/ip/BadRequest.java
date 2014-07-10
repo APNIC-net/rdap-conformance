@@ -5,12 +5,10 @@ import net.apnic.rdap.conformance.Test;
 import net.apnic.rdap.conformance.test.common.BasicRequest;
 import org.apache.http.HttpStatus;
 
-public class BadRequest implements Test
-{
+public class BadRequest implements Test {
     Test cbr = null;
 
-    public BadRequest()
-    {
+    public BadRequest() {
         cbr = new BasicRequest(
             HttpStatus.SC_BAD_REQUEST,
             "/ip/...",
@@ -19,8 +17,7 @@ public class BadRequest implements Test
         );
     }
 
-    public boolean run(Context context)
-    {
+    public boolean run(Context context) {
         return cbr.run(context);
     }
 }

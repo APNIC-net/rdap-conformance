@@ -10,8 +10,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class Status implements AttributeTest
-{
+public class Status implements AttributeTest {
     private static final Set<String> statuses =
         Sets.newHashSet("validated",
                         "renew prohibited",
@@ -32,11 +31,10 @@ public class Status implements AttributeTest
                         "pending update",
                         "pending delete");
 
-    public Status() {}
+    public Status() { }
 
     public boolean run(final Context context, final Result proto,
-                       final Map<String, Object> data)
-    {
+                       final Map<String, Object> data) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
@@ -95,8 +93,7 @@ public class Status implements AttributeTest
         return success;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("status");
     }
 }

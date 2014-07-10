@@ -9,18 +9,15 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
-public class NotStatusCode implements ResponseTest
-{
+public class NotStatusCode implements ResponseTest {
     int not_expected_code;
 
-    public NotStatusCode(int arg_not_expected_code)
-    {
+    public NotStatusCode(int arg_not_expected_code) {
         not_expected_code = arg_not_expected_code;
     }
 
     public boolean run(Context context, Result proto,
-                       HttpResponse hr)
-    {
+                       HttpResponse hr) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);

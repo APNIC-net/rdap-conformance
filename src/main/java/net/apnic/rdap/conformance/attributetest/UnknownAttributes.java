@@ -11,20 +11,17 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class UnknownAttributes implements AttributeTest
-{
+public class UnknownAttributes implements AttributeTest {
     Set<String> knownAttributes = null;
 
-    public UnknownAttributes() {}
+    public UnknownAttributes() { }
 
-    public UnknownAttributes(Set<String> argKnownAttributes)
-    {
+    public UnknownAttributes(Set<String> argKnownAttributes) {
         knownAttributes = argKnownAttributes;
     }
 
     public boolean run(final Context context, final Result proto,
-                       final Map<String, Object> data)
-    {
+                       final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-06");
@@ -51,8 +48,7 @@ public class UnknownAttributes implements AttributeTest
         return success;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return new HashSet<String>();
     }
 }

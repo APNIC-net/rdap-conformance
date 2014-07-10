@@ -5,13 +5,11 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class Protocol implements ValueTest
-{
+public class Protocol implements ValueTest {
     public Protocol() { }
 
     public boolean run(Context context, Result proto,
-                       Object argData)
-    {
+                       Object argData) {
         Integer value = Utils.castToInteger(argData);
 
         Result nr = new Result(proto);

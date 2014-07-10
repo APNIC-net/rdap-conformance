@@ -24,8 +24,7 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.attributetest.ErrorResponse;
 import net.apnic.rdap.conformance.Utils;
 
-public class BasicRequest implements net.apnic.rdap.conformance.Test
-{
+public class BasicRequest implements net.apnic.rdap.conformance.Test {
     private int expectedStatus;
     private String testName;
     private String urlPath;
@@ -34,8 +33,7 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
     public BasicRequest(int argExpectedStatus,
                         String argUrlPath,
                         String argTestName,
-                        boolean argInvertStatusTest)
-    {
+                        boolean argInvertStatusTest) {
         expectedStatus = argExpectedStatus;
         testName = argTestName;
         urlPath  = argUrlPath;
@@ -50,8 +48,7 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
         }
     }
 
-    public boolean run(Context context)
-    {
+    public boolean run(Context context) {
         List<Result> results = context.getResults();
 
         String bu = context.getSpecification().getBaseUrl();

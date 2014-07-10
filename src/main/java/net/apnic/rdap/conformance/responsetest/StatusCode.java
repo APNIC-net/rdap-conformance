@@ -13,23 +13,19 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
-public class StatusCode implements ResponseTest
-{
+public class StatusCode implements ResponseTest {
     Set<Integer> expectedCodes = new HashSet<Integer>();
 
-    public StatusCode(int argExpectedCode)
-    {
+    public StatusCode(int argExpectedCode) {
         expectedCodes.add(argExpectedCode);
     }
 
-    public StatusCode(Set<Integer> argExpectedCodes)
-    {
+    public StatusCode(Set<Integer> argExpectedCodes) {
         expectedCodes.addAll(argExpectedCodes);
     }
 
     public boolean run(Context context, Result proto,
-                       HttpResponse hr)
-    {
+                       HttpResponse hr) {
         boolean hasMultiple = expectedCodes.size() > 1;
 
         List<Result> results = context.getResults();

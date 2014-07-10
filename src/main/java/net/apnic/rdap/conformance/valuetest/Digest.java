@@ -5,13 +5,11 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class Digest implements ValueTest
-{
+public class Digest implements ValueTest {
     public Digest() { }
 
     public boolean run(Context context, Result proto,
-                       Object argData)
-    {
+                       Object argData) {
         return new HexString().run(context, proto, argData);
     }
 }

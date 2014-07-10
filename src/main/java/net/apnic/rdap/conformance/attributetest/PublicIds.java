@@ -9,13 +9,11 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class PublicIds implements AttributeTest
-{
-    public PublicIds() {}
+public class PublicIds implements AttributeTest {
+    public PublicIds() { }
 
     public boolean run(final Context context, final Result proto,
-                       final Map<String, Object> data)
-    {
+                       final Map<String, Object> data) {
         AttributeTest arrayTest =
             new ArrayAttribute(new PublicId(), "publicIds");
 
@@ -27,8 +25,7 @@ public class PublicIds implements AttributeTest
         return arrayTest.run(context, nr, data);
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("publicIds");
     }
 }

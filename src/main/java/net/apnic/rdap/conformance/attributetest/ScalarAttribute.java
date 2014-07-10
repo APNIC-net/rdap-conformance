@@ -12,34 +12,29 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class ScalarAttribute implements AttributeTest
-{
+public class ScalarAttribute implements AttributeTest {
     private String attributeName = null;
     private ValueTest valueTest = null;
     private AttributeTest attributeTest = null;
 
-    public ScalarAttribute(String argAttributeName)
-    {
+    public ScalarAttribute(String argAttributeName) {
         attributeName = argAttributeName;
     }
 
     public ScalarAttribute(String argAttributeName,
-                           AttributeTest argAttributeTest)
-    {
+                           AttributeTest argAttributeTest) {
         attributeName = argAttributeName;
         attributeTest = argAttributeTest;
     }
 
     public ScalarAttribute(String argAttributeName,
-                           ValueTest argValueTest)
-    {
+                           ValueTest argValueTest) {
         attributeName = argAttributeName;
         valueTest = argValueTest;
     }
 
     public boolean run(final Context context, final Result proto,
-                       final Map<String, Object> data)
-    {
+                       final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setInfo("present");
@@ -63,8 +58,7 @@ public class ScalarAttribute implements AttributeTest
         return res;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet(attributeName);
     }
 }

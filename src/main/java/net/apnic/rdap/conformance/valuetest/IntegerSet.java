@@ -9,18 +9,15 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class IntegerSet implements ValueTest
-{
+public class IntegerSet implements ValueTest {
     Set<Integer> members = null;
 
-    public IntegerSet(Set<Integer> members)
-    {
+    public IntegerSet(Set<Integer> members) {
         this.members = members;
     }
 
     public boolean run(Context context, Result proto,
-                       Object argData)
-    {
+                       Object argData) {
         Integer value = Utils.castToInteger(argData);
 
         Result nr = new Result(proto);
