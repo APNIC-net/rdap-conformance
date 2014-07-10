@@ -14,14 +14,14 @@ import net.apnic.rdap.conformance.attributetest.Entity;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.Notices;
 
-public class Standard implements Test {
-    String entity = "";
+public final class Standard implements Test {
+    private String entity = "";
 
-    public Standard(String argEntity) {
+    public Standard(final String argEntity) {
         entity = argEntity;
     }
 
-    public boolean run(Context context) {
+    public boolean run(final Context context) {
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + "/entity/" + entity;
 

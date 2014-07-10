@@ -12,23 +12,23 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.ValueTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class ScalarAttribute implements AttributeTest {
+public final class ScalarAttribute implements AttributeTest {
     private String attributeName = null;
     private ValueTest valueTest = null;
     private AttributeTest attributeTest = null;
 
-    public ScalarAttribute(String argAttributeName) {
+    public ScalarAttribute(final String argAttributeName) {
         attributeName = argAttributeName;
     }
 
-    public ScalarAttribute(String argAttributeName,
-                           AttributeTest argAttributeTest) {
+    public ScalarAttribute(final String argAttributeName,
+                           final AttributeTest argAttributeTest) {
         attributeName = argAttributeName;
         attributeTest = argAttributeTest;
     }
 
-    public ScalarAttribute(String argAttributeName,
-                           ValueTest argValueTest) {
+    public ScalarAttribute(final String argAttributeName,
+                           final ValueTest argValueTest) {
         attributeName = argAttributeName;
         valueTest = argValueTest;
     }

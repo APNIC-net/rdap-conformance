@@ -6,7 +6,7 @@ import net.apnic.rdap.conformance.test.common.BasicRequest;
 import org.apache.http.HttpStatus;
 
 public class BadRequest implements Test {
-    Test cbr = null;
+    private Test cbr = null;
 
     public BadRequest() {
         cbr = new BasicRequest(
@@ -17,7 +17,7 @@ public class BadRequest implements Test {
         );
     }
 
-    public boolean run(Context context) {
+    public boolean run(final Context context) {
         return cbr.run(context);
     }
 }

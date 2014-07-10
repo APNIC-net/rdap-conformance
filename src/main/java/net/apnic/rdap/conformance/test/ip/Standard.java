@@ -20,22 +20,24 @@ import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
 
 public class Standard implements ObjectTest {
-    String ip = null;
-    String url = null;
+    private String ip = null;
+    private String url = null;
 
     public Standard() { }
 
-    public Standard(String ip) {
+    public Standard(final String ip) {
         this.ip = ip;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         ip = null;
         this.url = url;
     }
 
-    private String processIpAddress(Context context, Result proto,
-                                    Map root, String key) {
+    private String processIpAddress(final Context context,
+                                    final Result proto,
+                                    final Map root,
+                                    final String key) {
         Result ipres = new Result(proto);
         ipres.addNode(key);
         String address = (String) root.get(key);
@@ -66,7 +68,7 @@ public class Standard implements ObjectTest {
         return address;
     }
 
-    private long bytesToLong(byte[] bytes) {
+    private long bytesToLong(final byte[] bytes) {
         long value = 0;
         for (int i = 0; i < bytes.length; i++) {
             value = (value << 8) + (bytes[i] & 0xff);
@@ -74,7 +76,7 @@ public class Standard implements ObjectTest {
         return value;
     }
 
-    private BigInteger bytesToBigInteger(byte[] bytes) {
+    private BigInteger bytesToBigInteger(final byte[] bytes) {
         BigInteger value = BigInteger.valueOf(0);
         for (int i = 0; i < bytes.length; i++) {
             value = value.shiftLeft(8);
@@ -83,7 +85,7 @@ public class Standard implements ObjectTest {
         return value;
     }
 
-    private long addressStringToLong(String addr) {
+    private long addressStringToLong(final String addr) {
         InetAddress obj = null;
         try {
             obj = InetAddress.getByName(addr);
@@ -93,7 +95,7 @@ public class Standard implements ObjectTest {
         return bytesToLong(obj.getAddress());
     }
 
-    private BigInteger addressStringToBigInteger(String addr) {
+    private BigInteger addressStringToBigInteger(final String addr) {
         InetAddress obj = null;
         try {
             obj = InetAddress.getByName(addr);
@@ -103,10 +105,11 @@ public class Standard implements ObjectTest {
         return bytesToBigInteger(obj.getAddress());
     }
 
-    private boolean confirmLessThanOrEqualTo(Context context, Result proto,
-                                             String startAddress,
-                                             String endAddress,
-                                             int version) {
+    private boolean confirmLessThanOrEqualTo(final Context context,
+                                             final Result proto,
+                                             final String startAddress,
+                                             final String endAddress,
+                                             final int version) {
         boolean ret = true;
         if (version == 4) {
             long start = addressStringToLong(startAddress);
@@ -118,8 +121,8 @@ public class Standard implements ObjectTest {
         } else if (version == 6) {
             BigInteger start = addressStringToBigInteger(startAddress);
             BigInteger end   = addressStringToBigInteger(endAddress);
-            if ((start.compareTo(BigInteger.valueOf(-1)) == 0) ||
-                  (end.compareTo(BigInteger.valueOf(-1)) == 0)) {
+            if ((start.compareTo(BigInteger.valueOf(-1)) == 0)
+                || (end.compareTo(BigInteger.valueOf(-1)) == 0)) {
                 return false;
             }
             ret = (start.compareTo(end) <= 0);
@@ -140,9 +143,9 @@ public class Standard implements ObjectTest {
         return ret;
     }
 
-    private boolean confirmParentHandleMatchesParent(Context context,
-                                                     Result proto,
-                                                     Map root) {
+    private boolean confirmParentHandleMatchesParent(final Context context,
+                                                     final Result proto,
+                                                     final Map root) {
         Result pres = new Result(proto);
         pres.addNode("parentHandle");
         String parentHandle = Utils.castToString(root.get("parentHandle"));
@@ -204,7 +207,7 @@ public class Standard implements ObjectTest {
         }
     }
 
-    public boolean run(Context context) {
+    public boolean run(final Context context) {
         boolean ret = true;
 
         String path =
@@ -292,8 +295,8 @@ public class Standard implements ObjectTest {
             context.addResult(vres);
             Result vres2 = new Result(vres);
             int checkVersion = ipversion.equals("v4") ? 4
-                              : ipversion.equals("v6") ? 6
-                                                       : 0;
+                             : ipversion.equals("v6") ? 6
+                                                      : 0;
             if (checkVersion == 0) {
                 vres2.setStatus(Result.Status.Failure);
                 vres2.setInfo("invalid: " + ipversion);

@@ -11,7 +11,7 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class RdapConformance implements AttributeTest {
+public final class RdapConformance implements AttributeTest {
     public RdapConformance() { }
 
     public boolean run(final Context context, final Result proto,

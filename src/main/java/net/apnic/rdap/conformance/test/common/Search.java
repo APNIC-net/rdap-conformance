@@ -26,20 +26,18 @@ public class Search implements Test {
     private String searchResultsKey;
     private SearchTest searchTest;
 
-    public Search(SearchTest argSearchTest,
-                  String argPrefix,
-                  String argKey,
-                  String argPattern,
-                  String argTestName,
-                  String argSearchResultsKey) {
+    public Search(final SearchTest argSearchTest,
+                  final String argPrefix,
+                  final String argKey,
+                  final String argPattern,
+                  final String argTestName,
+                  final String argSearchResultsKey) {
         prefix = argPrefix;
         key = argKey;
         pattern = argPattern;
         try {
-            urlPath  = "/" + prefix + "?" + key + "=" +
-                        URLEncoder.encode(
-                            pattern, "UTF-8"
-                        );
+            urlPath  = "/" + prefix + "?" + key + "="
+                        + URLEncoder.encode(pattern, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,7 +51,7 @@ public class Search implements Test {
         }
     }
 
-    public boolean run(Context context) {
+    public boolean run(final Context context) {
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + urlPath;
 

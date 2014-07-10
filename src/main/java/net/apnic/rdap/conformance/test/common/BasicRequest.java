@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.Header;
+import org.apache.http.HttpStatus;
 
 import com.google.gson.Gson;
 
@@ -24,16 +25,18 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.attributetest.ErrorResponse;
 import net.apnic.rdap.conformance.Utils;
 
-public class BasicRequest implements net.apnic.rdap.conformance.Test {
+public final class BasicRequest implements net.apnic.rdap.conformance.Test {
+    private static final int HTTP_ERROR_CODE_LOWER_BOUND = 400;
+
     private int expectedStatus;
     private String testName;
     private String urlPath;
-    boolean invertStatusTest;
+    private boolean invertStatusTest;
 
-    public BasicRequest(int argExpectedStatus,
-                        String argUrlPath,
-                        String argTestName,
-                        boolean argInvertStatusTest) {
+    public BasicRequest(final int argExpectedStatus,
+                        final String argUrlPath,
+                        final String argTestName,
+                        final boolean argInvertStatusTest) {
         expectedStatus = argExpectedStatus;
         testName = argTestName;
         urlPath  = argUrlPath;
@@ -41,14 +44,14 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test {
 
         if (testName == null) {
             testName = "common." +
-                        (argInvertStatusTest ? "not-" : "") +
-                        ((expectedStatus == 404)
+                        (argInvertStatusTest ? "not-" : "")
+                        + ((expectedStatus == HttpStatus.SC_NOT_FOUND)
                             ? "not-found"
                             : expectedStatus);
         }
     }
 
-    public boolean run(Context context) {
+    public boolean run(final Context context) {
         List<Result> results = context.getResults();
 
         String bu = context.getSpecification().getBaseUrl();
@@ -127,7 +130,8 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test {
             return ctres;
         }
 
-        if ((expectedStatus >= 400) && (!invertStatusTest)) {
+        if ((expectedStatus >= HTTP_ERROR_CODE_LOWER_BOUND)
+                && (!invertStatusTest)) {
             AttributeTest ert = new ErrorResponse(expectedStatus);
             request.releaseConnection();
             return ert.run(context, proto, root);

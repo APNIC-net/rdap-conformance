@@ -11,12 +11,12 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class UnknownAttributes implements AttributeTest {
-    Set<String> knownAttributes = null;
+public final class UnknownAttributes implements AttributeTest {
+    private Set<String> knownAttributes = null;
 
     public UnknownAttributes() { }
 
-    public UnknownAttributes(Set<String> argKnownAttributes) {
+    public UnknownAttributes(final Set<String> argKnownAttributes) {
         knownAttributes = argKnownAttributes;
     }
 
@@ -37,9 +37,9 @@ public class UnknownAttributes implements AttributeTest {
                 Result ua = new Result(nr);
                 ua.setStatus(Status.Failure);
                 ua.addNode(unknownAttribute);
-                ua.setInfo("attribute is not permitted here or is " +
-                           "non-standard and does not " +
-                           "contain an underscore");
+                ua.setInfo("attribute is not permitted here or is "
+                           + "non-standard and does not "
+                           + "contain an underscore");
                 context.addResult(ua);
                 success = false;
             }

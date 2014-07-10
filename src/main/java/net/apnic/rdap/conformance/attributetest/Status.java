@@ -10,8 +10,8 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class Status implements AttributeTest {
-    private static final Set<String> statuses =
+public final class Status implements AttributeTest {
+    private static final Set<String> STATUSES =
         Sets.newHashSet("validated",
                         "renew prohibited",
                         "update prohibited",
@@ -79,7 +79,7 @@ public class Status implements AttributeTest {
             Result r2 = new Result(nr);
             r2.addNode(Integer.toString(i++));
             r2.setReference("10.2.1");
-            if (!statuses.contains((String) s)) {
+            if (!STATUSES.contains((String) s)) {
                 r2.setStatus(Result.Status.Failure);
                 r2.setInfo("invalid: " + ((String) s));
                 success = false;

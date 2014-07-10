@@ -10,8 +10,8 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class VariantRelation implements AttributeTest {
-    private static final Set<String> relations =
+public final class VariantRelation implements AttributeTest {
+    private static final Set<String> RELATIONS =
         Sets.newHashSet("registered",
                         "unregistered",
                         "registration restricted",
@@ -66,7 +66,7 @@ public class VariantRelation implements AttributeTest {
             Result r2 = new Result(nr);
             r2.addNode(Integer.toString(i++));
             r2.setReference("11.2.4");
-            if (!relations.contains((String) re)) {
+            if (!RELATIONS.contains((String) re)) {
                 r2.setStatus(Result.Status.Failure);
                 r2.setInfo("invalid: " + ((String) re));
                 success = false;

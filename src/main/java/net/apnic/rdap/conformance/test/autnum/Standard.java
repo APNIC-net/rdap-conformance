@@ -17,23 +17,25 @@ import net.apnic.rdap.conformance.attributetest.Country;
 import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
 
-public class Standard implements ObjectTest {
-    String autnum = null;
-    String url = null;
+public final class Standard implements ObjectTest {
+    private String autnum = null;
+    private String url = null;
 
     public Standard() { }
 
-    public Standard(String autnum) {
+    public Standard(final String autnum) {
         this.autnum = autnum;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         autnum = null;
         this.url = url;
     }
 
-    private BigInteger processAutnum(Context context, Result proto,
-                                     Map root, String key) {
+    private BigInteger processAutnum(final Context context,
+                                     final Result proto,
+                                     final Map root,
+                                     final String key) {
         Result asnres = new Result(proto);
         Object asnObj = root.get(key);
         if (asnObj == null) {
@@ -68,7 +70,7 @@ public class Standard implements ObjectTest {
         return asn;
     }
 
-    public boolean run(Context context) {
+    public boolean run(final Context context) {
         List<Result> results = context.getResults();
 
         String path =

@@ -10,7 +10,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class PublicId implements AttributeTest {
+public final class PublicId implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();
 
     public PublicId() { }

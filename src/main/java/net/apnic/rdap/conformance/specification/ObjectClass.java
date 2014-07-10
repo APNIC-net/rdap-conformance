@@ -3,7 +3,7 @@ package net.apnic.rdap.conformance.specification;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectClass {
+public final class ObjectClass {
     private boolean supported = false;
     private List<String> exists = new ArrayList<String>();
     private List<String> notExists = new ArrayList<String>();

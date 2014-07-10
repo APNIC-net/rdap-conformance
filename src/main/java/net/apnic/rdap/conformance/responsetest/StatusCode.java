@@ -13,19 +13,19 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
-public class StatusCode implements ResponseTest {
-    Set<Integer> expectedCodes = new HashSet<Integer>();
+public final class StatusCode implements ResponseTest {
+    private Set<Integer> expectedCodes = new HashSet<Integer>();
 
-    public StatusCode(int argExpectedCode) {
+    public StatusCode(final int argExpectedCode) {
         expectedCodes.add(argExpectedCode);
     }
 
-    public StatusCode(Set<Integer> argExpectedCodes) {
+    public StatusCode(final Set<Integer> argExpectedCodes) {
         expectedCodes.addAll(argExpectedCodes);
     }
 
-    public boolean run(Context context, Result proto,
-                       HttpResponse hr) {
+    public boolean run(final Context context, final Result proto,
+                       final HttpResponse hr) {
         boolean hasMultiple = expectedCodes.size() > 1;
 
         List<Result> results = context.getResults();
@@ -43,15 +43,15 @@ public class StatusCode implements ResponseTest {
 
         if (expectedCodes.contains(code)) {
             nr.setStatus(Status.Success);
-            nr.setInfo("got " + (hasMultiple ? "an " : "") +
-                       "expected code (" +
-                       expectedCodes.iterator().next() + ")");
+            nr.setInfo("got " + (hasMultiple ? "an " : "")
+                       + "expected code ("
+                       + expectedCodes.iterator().next() + ")");
             results.add(nr);
             return true;
         } else {
             nr.setStatus(Status.Failure);
-            nr.setInfo("got " + code + " instead of " +
-                       (hasMultiple
+            nr.setInfo("got " + code + " instead of "
+                       + (hasMultiple
                            ? ("one of " + Joiner.on(", ").join(expectedCodes))
                            : expectedCodes.iterator().next()));
             results.add(nr);

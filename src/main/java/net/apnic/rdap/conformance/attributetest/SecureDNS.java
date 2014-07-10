@@ -12,7 +12,7 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.valuetest.BooleanValue;
 import net.apnic.rdap.conformance.valuetest.MaxSigLife;
 
-public class SecureDNS implements AttributeTest {
+public final class SecureDNS implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();
 
     public SecureDNS() { }

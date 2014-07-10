@@ -9,15 +9,15 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
-public class NotStatusCode implements ResponseTest {
-    int not_expected_code;
+public final class NotStatusCode implements ResponseTest {
+    private int notExpectedCode;
 
-    public NotStatusCode(int arg_not_expected_code) {
-        not_expected_code = arg_not_expected_code;
+    public NotStatusCode(final int argNotExpectedCode) {
+        notExpectedCode = argNotExpectedCode;
     }
 
-    public boolean run(Context context, Result proto,
-                       HttpResponse hr) {
+    public boolean run(final Context context, final Result proto,
+                       final HttpResponse hr) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
@@ -25,15 +25,15 @@ public class NotStatusCode implements ResponseTest {
 
         int code = hr.getStatusLine().getStatusCode();
 
-        if (code != not_expected_code) {
+        if (code != notExpectedCode) {
             nr.setStatus(Status.Success);
             nr.setInfo("got " + code + " instead of unexpected code ("
-                       + not_expected_code + ")");
+                       + notExpectedCode + ")");
             results.add(nr);
             return true;
         } else {
             nr.setStatus(Status.Failure);
-            nr.setInfo("got unexpected code (" + not_expected_code + ")");
+            nr.setInfo("got unexpected code (" + notExpectedCode + ")");
             results.add(nr);
             return false;
         }

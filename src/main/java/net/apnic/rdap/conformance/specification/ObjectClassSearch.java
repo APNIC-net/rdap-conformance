@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-public class ObjectClassSearch {
+public final class ObjectClassSearch {
     private boolean supported = false;
     private Map<String, List<String>> values =
         new HashMap<String, List<String>>();

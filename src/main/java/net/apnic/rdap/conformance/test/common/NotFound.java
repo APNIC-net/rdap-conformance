@@ -4,10 +4,10 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Test;
 import org.apache.http.HttpStatus;
 
-public class NotFound implements Test {
-    Test cbr = null;
+public final class NotFound implements Test {
+    private Test cbr = null;
 
-    public NotFound(String path) {
+    public NotFound(final String path) {
         cbr = new BasicRequest(
             HttpStatus.SC_NOT_FOUND,
             path,
@@ -16,7 +16,7 @@ public class NotFound implements Test {
         );
     }
 
-    public boolean run(Context context) {
+    public boolean run(final Context context) {
         return cbr.run(context);
     }
 }

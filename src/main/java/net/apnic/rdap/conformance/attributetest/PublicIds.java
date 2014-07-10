@@ -9,7 +9,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class PublicIds implements AttributeTest {
+public final class PublicIds implements AttributeTest {
     public PublicIds() { }
 
     public boolean run(final Context context, final Result proto,

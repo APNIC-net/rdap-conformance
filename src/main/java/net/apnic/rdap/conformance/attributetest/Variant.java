@@ -14,11 +14,11 @@ import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
 import net.apnic.rdap.conformance.attributetest.VariantName;
 
-public class Variant implements ValueTest {
+public final class Variant implements ValueTest {
     public Variant() { }
 
     public boolean run(final Context context, final Result proto,
-                       Object argData) {
+                       final Object argData) {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");

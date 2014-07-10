@@ -10,11 +10,11 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
-public class ContentType implements ResponseTest {
+public final class ContentType implements ResponseTest {
     public ContentType() { }
 
-    public boolean run(Context context, Result proto,
-                       HttpResponse hr) {
+    public boolean run(final Context context, final Result proto,
+                       final HttpResponse hr) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
@@ -39,8 +39,8 @@ public class ContentType implements ResponseTest {
             return true;
         } else {
             nr.setStatus(Status.Failure);
-            nr.setInfo("got '" + ct + "' instead of " +
-                       "'application/rdap+json'");
+            nr.setInfo("got '" + ct + "' instead of "
+                       + "'application/rdap+json'");
             results.add(nr);
             return false;
         }

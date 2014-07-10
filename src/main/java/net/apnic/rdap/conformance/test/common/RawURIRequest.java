@@ -17,20 +17,22 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpEntity;
 import com.google.gson.Gson;
 
-public class RawURIRequest implements Test {
-    String rawUri = null;
-    Result proto = null;
-    boolean expectedSuccess = false;
+public final class RawURIRequest implements Test {
+    private static final int HTTP_PORT = 80;
+    private static final int BUFFER_SIZE = 4096;
+    private String rawUri = null;
+    private Result proto = null;
+    private boolean expectedSuccess = false;
 
-    public RawURIRequest(String rawUri,
-                         Result proto,
-                         boolean expectedSuccess) {
+    public RawURIRequest(final String rawUri,
+                         final Result proto,
+                         final boolean expectedSuccess) {
         this.rawUri          = rawUri;
         this.proto           = proto;
         this.expectedSuccess = expectedSuccess;
     }
 
-    public boolean run(Context context) {
+    public boolean run(final Context context) {
         boolean success = false;
         String error = null;
         try {
@@ -42,17 +44,17 @@ public class RawURIRequest implements Test {
             String host = uri.getHost();
 
             context.acquireRequestPermit();
-            Socket socket = new Socket(host, 80);
+            Socket socket = new Socket(host, HTTP_PORT);
             OutputStream os = socket.getOutputStream();
-            String request = "GET " + rawUri + " HTTP/1.1\n" +
-                             "Host: " + host + "\n" +
-                             "Accept: application/rdap+json\n\n";
+            String request = "GET " + rawUri + " HTTP/1.1\n"
+                             + "Host: " + host + "\n"
+                             + "Accept: application/rdap+json\n\n";
             os.write(request.getBytes("UTF-8"));
             InputStream is  = socket.getInputStream();
             SessionInputBufferImpl sibl =
                 new SessionInputBufferImpl(
                     new HttpTransportMetricsImpl(),
-                    4096
+                    BUFFER_SIZE
                 );
             sibl.bind(is);
             DefaultHttpResponseParser dhrp =

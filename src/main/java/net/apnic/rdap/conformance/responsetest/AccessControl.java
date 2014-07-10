@@ -10,11 +10,11 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.ResponseTest;
 
-public class AccessControl implements ResponseTest {
+public final class AccessControl implements ResponseTest {
     public AccessControl() { }
 
-    public boolean run(Context context, Result proto,
-                       HttpResponse hr) {
+    public boolean run(final Context context, final Result proto,
+                       final HttpResponse hr) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
