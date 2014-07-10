@@ -5,6 +5,10 @@ import java.io.Serializable;
 /**
  * <p>SearchTest interface.</p>
  *
+ * A SearchTest is an AttributeTest that allows for the search details
+ * that produced the response to be provided to it, so that it can
+ * confirm e.g. that the correct object has been returned.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

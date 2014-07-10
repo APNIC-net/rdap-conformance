@@ -13,6 +13,10 @@ import com.google.common.util.concurrent.RateLimiter;
 /**
  * <p>Context class.</p>
  *
+ * Stores configuration details, the application's HTTP client object,
+ * the master result list and other miscellaneous application-wide
+ * things.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

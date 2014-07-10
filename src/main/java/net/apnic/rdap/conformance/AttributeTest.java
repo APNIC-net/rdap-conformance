@@ -6,6 +6,14 @@ import java.util.Map;
 /**
  * <p>AttributeTest interface.</p>
  *
+ * An AttributeTest tests a specific attribute in an arbitrary map
+ * (from String to Object).
+ *
+ * getKnownAttributes allows for AttributeTests to be composed for a
+ * particular map. Once the tests have been run, unknown attributes
+ * can be detected and reported on, since they will be those that
+ * aren't present in the union of the tests' known attributes.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

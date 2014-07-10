@@ -13,6 +13,8 @@ import net.apnic.rdap.conformance.specification.ObjectClass;
 /**
  * <p>Specification class.</p>
  *
+ * Contains the data from the validator configuration file.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

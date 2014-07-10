@@ -9,6 +9,10 @@ import com.google.common.base.Joiner;
 /**
  * <p>Result class.</p>
  *
+ * Represents a single validation test result (e.g. "got correct
+ * status code", "value for field has correct type"). A test result
+ * maps to a single line in the output of the validator.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

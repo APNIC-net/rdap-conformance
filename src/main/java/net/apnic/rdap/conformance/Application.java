@@ -16,7 +16,17 @@ import org.apache.commons.lang.SerializationUtils;
 import net.apnic.rdap.conformance.specification.ObjectClass;
 import net.apnic.rdap.conformance.specification.ObjectClassSearch;
 
-final class Application {
+/**
+ * <p>Application class.</p>
+ *
+ * The entry point for the validator. Loads the specified
+ * configuration file, runs tests accordingly and prints results to
+ * stdout.
+ *
+ * @author Tom Harrison <tomh@apnic.net>
+ * @version 0.2
+ */
+public final class Application {
     private static final int EX_USAGE = 64;
     private static final int EX_NOINPUT = 66;
     private static final int EX_SOFTWARE = 70;

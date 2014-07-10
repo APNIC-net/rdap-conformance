@@ -3,6 +3,8 @@ package net.apnic.rdap.conformance;
 /**
  * <p>ValueTest interface.</p>
  *
+ * A ValueTest tests an arbitrary object.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

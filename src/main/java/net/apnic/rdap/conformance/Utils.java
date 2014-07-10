@@ -24,6 +24,10 @@ import org.apache.http.client.config.RequestConfig;
 /**
  * <p>Utils class.</p>
  *
+ * Miscellaneous utility methods. Most relate to HTTP request
+ * execution, casting, or retrieving attributes from arbitrary
+ * objects.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */
