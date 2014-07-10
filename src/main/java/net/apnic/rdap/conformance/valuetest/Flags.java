@@ -10,7 +10,7 @@ import net.apnic.rdap.conformance.ValueTest;
 
 public class Flags implements ValueTest
 {
-    private static IntegerSet integer_set =
+    private static IntegerSet integerSet =
         new IntegerSet(Sets.newHashSet(
             0, 256, 257
         ));
@@ -18,8 +18,8 @@ public class Flags implements ValueTest
     public Flags() { }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Object argData)
     {
-        return integer_set.run(context, proto, arg_data);
+        return integerSet.run(context, proto, argData);
     }
 }

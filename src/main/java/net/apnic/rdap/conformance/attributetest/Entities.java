@@ -9,14 +9,14 @@ import net.apnic.rdap.conformance.Context;
 
 public class Entities implements AttributeTest
 {
-    Set<String> known_attributes;
+    Set<String> knownAttributes;
 
     public Entities() {}
 
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        AttributeTest array_test =
+        AttributeTest arrayTest =
             new ArrayAttribute(new Entity(null, true), "entities");
 
         Result nr = new Result(proto);
@@ -28,13 +28,13 @@ public class Entities implements AttributeTest
             nr.setReference("6.1");
         }
 
-        known_attributes = array_test.getKnownAttributes();
+        knownAttributes = arrayTest.getKnownAttributes();
 
-        return array_test.run(context, nr, data);
+        return arrayTest.run(context, nr, data);
     }
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

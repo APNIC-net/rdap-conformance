@@ -14,16 +14,16 @@ public class AsEventActor implements AttributeTest
     public AsEventActor() {}
 
     public boolean run(Context context, Result proto,
-                       Map<String, Object> arg_data)
+                       Map<String, Object> argData)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("6.1");
 
-        AttributeTest array_test =
+        AttributeTest arrayTest =
             new ArrayAttribute(new Event(false), "asEventActor");
-        return array_test.run(context, nr, arg_data);
+        return arrayTest.run(context, nr, argData);
     }
 
     public Set<String> getKnownAttributes()

@@ -26,27 +26,27 @@ import net.apnic.rdap.conformance.Utils;
 
 public class BasicRequest implements net.apnic.rdap.conformance.Test
 {
-    private int expected_status;
-    private String test_name;
-    private String url_path;
-    boolean invert_status_test;
+    private int expectedStatus;
+    private String testName;
+    private String urlPath;
+    boolean invertStatusTest;
 
-    public BasicRequest(int arg_expected_status,
-                        String arg_url_path,
-                        String arg_test_name,
-                        boolean arg_invert_status_test)
+    public BasicRequest(int argExpectedStatus,
+                        String argUrlPath,
+                        String argTestName,
+                        boolean argInvertStatusTest)
     {
-        expected_status = arg_expected_status;
-        test_name = arg_test_name;
-        url_path  = arg_url_path;
-        invert_status_test = arg_invert_status_test;
+        expectedStatus = argExpectedStatus;
+        testName = argTestName;
+        urlPath  = argUrlPath;
+        invertStatusTest = argInvertStatusTest;
 
-        if (test_name == null) {
-            test_name = "common." +
-                        (arg_invert_status_test ? "not-" : "") +
-                        ((expected_status == 404)
+        if (testName == null) {
+            testName = "common." +
+                        (argInvertStatusTest ? "not-" : "") +
+                        ((expectedStatus == 404)
                             ? "not-found"
-                            : expected_status);
+                            : expectedStatus);
         }
     }
 
@@ -55,10 +55,10 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
         List<Result> results = context.getResults();
 
         String bu = context.getSpecification().getBaseUrl();
-        String path = bu + url_path;
+        String path = bu + urlPath;
 
         Result proto = new Result(Status.Notification, path,
-                                  test_name,
+                                  testName,
                                   "", "", "", "");
         Result r = new Result(proto);
         r.setCode("response");
@@ -82,9 +82,9 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
         results.add(r);
 
         ResponseTest sc =
-            (invert_status_test)
-                ? new NotStatusCode(expected_status)
-                : new StatusCode(expected_status);
+            (invertStatusTest)
+                ? new NotStatusCode(expectedStatus)
+                : new StatusCode(expectedStatus);
         boolean scres = sc.run(context, proto, response);
         if (!scres) {
             request.releaseConnection();
@@ -130,8 +130,8 @@ public class BasicRequest implements net.apnic.rdap.conformance.Test
             return ctres;
         }
 
-        if ((expected_status >= 400) && (!invert_status_test)) {
-            AttributeTest ert = new ErrorResponse(expected_status);
+        if ((expectedStatus >= 400) && (!invertStatusTest)) {
+            AttributeTest ert = new ErrorResponse(expectedStatus);
             request.releaseConnection();
             return ert.run(context, proto, root);
         } else {

@@ -1,6 +1,6 @@
 { 
-    "base_url": "http://testrdap.apnic.net",
-    "object_classes": {
+    "baseUrl": "http://testrdap.apnic.net",
+    "objectClasses": {
         "ip": {
             "supported": true,
             "exists": ["203.119.0.0/24", "2001:dc0::/32"],
@@ -9,7 +9,7 @@
         "domain": {
             "supported": true,
             "exists": ["203.in-addr.arpa", "187.2.103.in-addr.arpa"],
-            "not_exists": ["google.com"],
+            "notExists": ["google.com"],
             "search": {
                 "supported": true,
                 "values": {
@@ -23,7 +23,7 @@
         "entity": {
             "supported": true,
             "exists": ["TP137-AP"],
-            "not_exists": ["@@@@@@@@"],
+            "notExists": ["@@@@@@@@"],
             "search": {
                 "supported": true,
                 "values": {

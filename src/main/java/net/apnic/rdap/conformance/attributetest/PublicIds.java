@@ -16,7 +16,7 @@ public class PublicIds implements AttributeTest
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        AttributeTest array_test =
+        AttributeTest arrayTest =
             new ArrayAttribute(new PublicId(), "publicIds");
 
         Result nr = new Result(proto);
@@ -24,7 +24,7 @@ public class PublicIds implements AttributeTest
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.8");
 
-        return array_test.run(context, nr, data);
+        return arrayTest.run(context, nr, data);
     }
 
     public Set<String> getKnownAttributes()

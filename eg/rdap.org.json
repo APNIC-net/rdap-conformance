@@ -1,6 +1,6 @@
 { 
-    "base_url": "http://rdap.org",
-    "object_classes": {
+    "baseUrl": "http://rdap.org",
+    "objectClasses": {
         "ip": {
             "supported": true,
             "exists": ["203.119.0.0/24", "2001:dc0::/32"]
@@ -8,12 +8,12 @@
         "domain": {
             "supported": true,
             "exists": ["203.in-addr.arpa", "www.de.com"],
-            "not_exists": ["not-a-real-domain!.com"]
+            "notExists": ["not-a-real-domain!.com"]
         },
         "nameserver": {
             "supported": true,
             "exists": ["ns0.centralnic-dns.com"],
-            "not_exists": ["www.de.com"]
+            "notExists": ["www.de.com"]
         },
         "entity": {
             "supported": false

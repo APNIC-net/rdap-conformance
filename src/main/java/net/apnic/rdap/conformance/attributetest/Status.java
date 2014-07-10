@@ -62,9 +62,9 @@ public class Status implements AttributeTest
         Result nr2 = new Result(nr);
         nr2.setInfo("is an array");
 
-        List<Object> status_entries;
+        List<Object> statusEntries;
         try {
-            status_entries = (List<Object>) value;
+            statusEntries = (List<Object>) value;
         } catch (ClassCastException e) {
             nr2.setStatus(Result.Status.Failure);
             nr2.setInfo("is not an array");
@@ -77,7 +77,7 @@ public class Status implements AttributeTest
 
         boolean success = true;
         int i = 0;
-        for (Object s : status_entries) {
+        for (Object s : statusEntries) {
             Result r2 = new Result(nr);
             r2.addNode(Integer.toString(i++));
             r2.setReference("10.2.1");

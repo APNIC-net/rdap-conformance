@@ -16,9 +16,9 @@ import net.apnic.rdap.conformance.AttributeTest;
 
 public class Event implements AttributeTest
 {
-    boolean allow_actor = true;
+    boolean allowActor = true;
 
-    private static final Set<String> event_actions =
+    private static final Set<String> eventActions =
         Sets.newHashSet("registration",
                         "reregistration",
                         "last changed",
@@ -29,9 +29,9 @@ public class Event implements AttributeTest
                         "locked",
                         "unlocked");
 
-    public Event(boolean arg_allow_actor)
+    public Event(boolean argAllowActor)
     {
-        allow_actor = arg_allow_actor;
+        allowActor = argAllowActor;
     }
 
     public Event() { }
@@ -45,10 +45,10 @@ public class Event implements AttributeTest
         nr.setCode("content");
 
         boolean evtres = true;
-        String event_action =
+        String eventAction =
             Utils.getStringAttribute(context, nr, "eventAction",
                                      Status.Failure, data);
-        if (event_action == null) {
+        if (eventAction == null) {
             evtres = false;
         } else {
             Result evr = new Result(proto);
@@ -56,12 +56,12 @@ public class Event implements AttributeTest
             evr.addNode("eventAction");
             evr.setDocument("draft-ietf-weirds-json-response-06");
             evr.setReference("10.2.2");
-            if (event_actions.contains(event_action)) {
+            if (eventActions.contains(eventAction)) {
                 evr.setInfo("registered");
                 evr.setStatus(Status.Success);
                 results.add(evr);
             } else {
-                evr.setInfo("unregistered: " + event_action);
+                evr.setInfo("unregistered: " + eventAction);
                 evr.setStatus(Status.Failure);
                 results.add(evr);
                 evtres = false;
@@ -71,10 +71,10 @@ public class Event implements AttributeTest
         DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
 
         boolean evdres = true;
-        String event_date =
+        String eventDate =
             Utils.getStringAttribute(context, nr, "eventDate",
                                      Status.Failure, data);
-        if (event_date == null) {
+        if (eventDate == null) {
             evdres = false;
         } else {
             Result edvr = new Result(proto);
@@ -82,7 +82,7 @@ public class Event implements AttributeTest
             edvr.addNode("eventDate");
             edvr.setDocument("draft-ietf-weirds-json-response-06");
             edvr.setReference("10.2.2");
-            DateTime dth = parser.parseDateTime(event_date);
+            DateTime dth = parser.parseDateTime(eventDate);
             if (dth != null) {
                 edvr.setInfo("valid");
                 edvr.setStatus(Status.Success);
@@ -96,10 +96,10 @@ public class Event implements AttributeTest
         }
 
         boolean eacres = true;
-        String event_actor =
+        String eventActor =
             Utils.getStringAttribute(context, nr, "eventActor",
                                      Status.Notification, data);
-        if ((event_actor != null) && !allow_actor) {
+        if ((eventActor != null) && !allowActor) {
             Result eacr = new Result(proto);
             eacr.setCode("content");
             eacr.addNode("eventActor");

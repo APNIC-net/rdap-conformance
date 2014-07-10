@@ -10,9 +10,9 @@ public class HexString implements ValueTest
     public HexString() { }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Object argData)
     {
-        String value = Utils.castToString(arg_data);
+        String value = Utils.castToString(argData);
 
         Result nr = new Result(proto);
         boolean res = nr.setDetails((value != null),

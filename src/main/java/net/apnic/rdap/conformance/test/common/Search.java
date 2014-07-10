@@ -19,49 +19,49 @@ import net.apnic.rdap.conformance.Utils;
 
 public class Search implements Test
 {
-    private String url_path;
+    private String urlPath;
     private String prefix;
     private String key;
     private String pattern;
-    private String test_name;
-    private String search_results_key;
-    private SearchTest search_test;
+    private String testName;
+    private String searchResultsKey;
+    private SearchTest searchTest;
 
-    public Search(SearchTest arg_search_test,
-                  String arg_prefix,
-                  String arg_key,
-                  String arg_pattern,
-                  String arg_test_name,
-                  String arg_search_results_key)
+    public Search(SearchTest argSearchTest,
+                  String argPrefix,
+                  String argKey,
+                  String argPattern,
+                  String argTestName,
+                  String argSearchResultsKey)
     {
-        prefix = arg_prefix;
-        key = arg_key;
-        pattern = arg_pattern;
+        prefix = argPrefix;
+        key = argKey;
+        pattern = argPattern;
         try {
-            url_path  = "/" + prefix + "?" + key + "=" +
+            urlPath  = "/" + prefix + "?" + key + "=" +
                         URLEncoder.encode(
                             pattern, "UTF-8"
                         );
         } catch (Exception e) {
             e.printStackTrace();
         }
-        test_name = arg_test_name;
-        search_results_key = arg_search_results_key;
-        search_test = arg_search_test;
-        search_test.setSearchDetails(key, pattern);
+        testName = argTestName;
+        searchResultsKey = argSearchResultsKey;
+        searchTest = argSearchTest;
+        searchTest.setSearchDetails(key, pattern);
 
-        if (test_name == null) {
-            test_name = "common.search";
+        if (testName == null) {
+            testName = "common.search";
         }
     }
 
     public boolean run(Context context)
     {
         String bu = context.getSpecification().getBaseUrl();
-        String path = bu + url_path;
+        String path = bu + urlPath;
 
         Result proto = new Result(Status.Notification, path,
-                                  test_name,
+                                  testName,
                                   "", "", "", "");
         Result r = new Result(proto);
         r.setCode("response");
@@ -76,11 +76,11 @@ public class Search implements Test
             return false;
         }
 
-        HashSet<String> known_attributes = new HashSet<String>();
+        HashSet<String> knownAttributes = new HashSet<String>();
         return Utils.runTestList(
-            context, proto, root, known_attributes, true,
+            context, proto, root, knownAttributes, true,
             Arrays.asList(
-                new ArrayAttribute(search_test, search_results_key),
+                new ArrayAttribute(searchTest, searchResultsKey),
                 new ScalarAttribute("resultsTruncated",
                                     new BooleanValue()),
                 new StandardResponse()

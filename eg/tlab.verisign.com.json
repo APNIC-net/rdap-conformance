@@ -1,23 +1,23 @@
 { 
-    "base_url": "http://tlab.verisign.com/.well-known/rdap",
-    "object_classes": {
+    "baseUrl": "http://tlab.verisign.com/.well-known/rdap",
+    "objectClasses": {
         "ip": {
             "supported": false
         },
         "domain": {
             "supported": true,
             "exists": ["google.com", "xn--99-xldpsb3a1ai7dm.com", "רישוםב99סנט.com"],
-            "not_exists": ["203.in-addr.arpa"]
+            "notExists": ["203.in-addr.arpa"]
         },
         "nameserver": {
             "supported": true,
             "exists": ["ns2.google.com"],
-            "not_exists": ["google.com"]
+            "notExists": ["google.com"]
         },
         "entity": {
             "supported": true,
             "exists": ["REG-292"],
-            "not_exists": ["@@@@@@@@"]
+            "notExists": ["@@@@@@@@"]
         },
         "autnum": {
             "supported": false

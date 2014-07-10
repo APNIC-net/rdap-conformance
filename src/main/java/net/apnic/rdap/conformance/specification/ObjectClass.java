@@ -7,7 +7,7 @@ public class ObjectClass
 {
     private boolean supported = false;
     private List<String> exists = new ArrayList<String>();
-    private List<String> not_exists = new ArrayList<String>();
+    private List<String> notExists = new ArrayList<String>();
     private List<String> redirects = new ArrayList<String>();
     private ObjectClassSearch search = new ObjectClassSearch();
 
@@ -25,7 +25,7 @@ public class ObjectClass
 
     public List<String> getNotExists()
     {
-        return not_exists;
+        return notExists;
     }
 
     public List<String> getRedirects()

@@ -57,9 +57,9 @@ public class Standard implements ObjectTest
             return false;
         }
 
-        Set<String> known_attributes = new HashSet<String>();
+        Set<String> knownAttributes = new HashSet<String>();
         return Utils.runTestList(
-            context, proto, root, known_attributes, true,
+            context, proto, root, knownAttributes, true,
             Arrays.asList(
                 new Nameserver(false),
                 new RdapConformance(),

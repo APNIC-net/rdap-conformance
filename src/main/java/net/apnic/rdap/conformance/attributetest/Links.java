@@ -16,14 +16,14 @@ public class Links implements AttributeTest
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        AttributeTest array_test = new ArrayAttribute(new Link(), "links");
+        AttributeTest arrayTest = new ArrayAttribute(new Link(), "links");
 
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.2");
 
-        return array_test.run(context, nr, data);
+        return arrayTest.run(context, nr, data);
     }
 
     public Set<String> getKnownAttributes()

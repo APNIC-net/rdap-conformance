@@ -19,17 +19,17 @@ import com.google.gson.Gson;
 
 public class RawURIRequest implements Test
 {
-    String raw_uri = null;
+    String rawUri = null;
     Result proto = null;
-    boolean expected_success = false;
+    boolean expectedSuccess = false;
 
-    public RawURIRequest(String raw_uri,
+    public RawURIRequest(String rawUri,
                          Result proto,
-                         boolean expected_success)
+                         boolean expectedSuccess)
     {
-        this.raw_uri          = raw_uri;
-        this.proto            = proto;
-        this.expected_success = expected_success;
+        this.rawUri          = rawUri;
+        this.proto           = proto;
+        this.expectedSuccess = expectedSuccess;
     }
 
     public boolean run(Context context)
@@ -47,7 +47,7 @@ public class RawURIRequest implements Test
             context.acquireRequestPermit();
             Socket socket = new Socket(host, 80);
             OutputStream os = socket.getOutputStream();
-            String request = "GET " + raw_uri + " HTTP/1.1\n" +
+            String request = "GET " + rawUri + " HTTP/1.1\n" +
                              "Host: " + host + "\n" +
                              "Accept: application/rdap+json\n\n";
             os.write(request.getBytes("UTF-8"));
@@ -82,14 +82,14 @@ public class RawURIRequest implements Test
         }
 
         Result nr = new Result(proto);
-        nr.setPath(raw_uri);
+        nr.setPath(rawUri);
         nr.setCode("content");
         if (success) {
             nr.setStatus(Status.Success);
         } else if (!nr.getStatusSet()) {
             nr.setStatus(Status.Failure);
         }
-        String prefix = (expected_success) ? "content" : "error content";
+        String prefix = (expectedSuccess) ? "content" : "error content";
         nr.setInfo(success ? prefix + " is empty or JSON"
                            : prefix + " is not empty or JSON: " + error);
         context.addResult(nr);

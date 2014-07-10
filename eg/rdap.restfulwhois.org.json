@@ -1,26 +1,26 @@
 { 
-    "base_url": "http://rdap.restfulwhois.org/.well-known/rdap",
-    "object_classes": {
+    "baseUrl": "http://rdap.restfulwhois.org/.well-known/rdap",
+    "objectClasses": {
         "ip": {
             "supported": true,
-            "not_exists": ["100.0.0.0/24"]
+            "notExists": ["100.0.0.0/24"]
         },
         "domain": {
             "supported": true,
             "exists": ["清华大学.中国", "qq.cn"],
-            "not_exists": ["google.com"]
+            "notExists": ["google.com"]
         },
         "nameserver": {
             "supported": true,
-            "not_exists": ["google.com"]
+            "notExists": ["google.com"]
         },
         "entity": {
             "supported": true,
-            "not_exists": ["@@@@@@@@"]
+            "notExists": ["@@@@@@@@"]
         },
         "autnum": {
             "supported": true,
-            "not_exists": ["4608"]
+            "notExists": ["4608"]
         }
     }
 }

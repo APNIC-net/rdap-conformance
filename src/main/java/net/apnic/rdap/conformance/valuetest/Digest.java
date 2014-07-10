@@ -10,8 +10,8 @@ public class Digest implements ValueTest
     public Digest() { }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Object argData)
     {
-        return new HexString().run(context, proto, arg_data);
+        return new HexString().run(context, proto, argData);
     }
 }

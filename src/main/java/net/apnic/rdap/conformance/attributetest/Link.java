@@ -22,7 +22,7 @@ import org.apache.http.client.config.RequestConfig;
 
 public class Link implements AttributeTest
 {
-    private static final Set<String> link_relations =
+    private static final Set<String> linkRelations =
         Sets.newHashSet("about",
                         "alternate",
                         "appendix",
@@ -97,7 +97,7 @@ public class Link implements AttributeTest
 
     /* The first nine are defined by HTML 4.01, and the last two by
      * CSS 2. */
-    private static final Set<String> media_types =
+    private static final Set<String> mediaTypes =
         Sets.newHashSet("aural",
                         "braille",
                         "handheld",
@@ -186,7 +186,7 @@ public class Link implements AttributeTest
             success = false;
         } else {
             Result valid = new Result(nr);
-            if (link_relations.contains(rel)) {
+            if (linkRelations.contains(rel)) {
                 valid.setInfo("valid");
                 valid.setStatus(Status.Success);
             } else {
@@ -198,7 +198,7 @@ public class Link implements AttributeTest
         }
 
         if (data.get("hreflang") != null) {
-            boolean is_list = false;
+            boolean isList = false;
             Result hlr = new Result(nr);
             hlr.addNode("hreflang");
             hlr.setStatus(Status.Success);
@@ -210,7 +210,7 @@ public class Link implements AttributeTest
             } else {
                 try {
                     hreflangs = (List<String>) data.get("hreflang");
-                    is_list = true;
+                    isList = true;
                 } catch (ClassCastException e) {
                     hlr.setStatus(Status.Failure);
                     hlr.setInfo("structure is invalid");
@@ -222,7 +222,7 @@ public class Link implements AttributeTest
                 for (String hreflang : hreflangs) {
                     Result hler = new Result(nr);
                     hler.addNode("hreflang");
-                    if (is_list) {
+                    if (isList) {
                         hler.addNode(Integer.toString(i));
                     }
                     hler.setStatus(Status.Success);
@@ -254,7 +254,7 @@ public class Link implements AttributeTest
             mtr.addNode("media");
             mtr.setStatus(Status.Success);
             mtr.setInfo("registered");
-            if (!media_types.contains(media)) {
+            if (!mediaTypes.contains(media)) {
                 /* It's not impossible that the media type is one
                     * that has been registered in the meantime, which
                     * is why this is only a warning. */

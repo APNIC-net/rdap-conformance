@@ -10,77 +10,65 @@ import org.apache.http.HttpResponse;
 
 import com.google.common.util.concurrent.RateLimiter;
 
-public class Context
-{
-    private HttpClient http_client = null;
+public final class Context {
+    private HttpClient httpClient = null;
     private Specification specification = null;
     private List<Result> results = new ArrayList<Result>();
-    private String content_type = null;
+    private String contentType = null;
     private int index;
-    private RateLimiter rate_limiter = null;
+    private RateLimiter rateLimiter = null;
 
-    public Context()
-    {
+    public Context() {
         index = 0;
     }
 
-    public void acquireRequestPermit()
-    {
-        if (rate_limiter != null) {
-            rate_limiter.acquire();
+    public void acquireRequestPermit() {
+        if (rateLimiter != null) {
+            rateLimiter.acquire();
         }
     }
 
-    public HttpResponse executeRequest(HttpRequestBase http_request)
-        throws IOException
-    {
+    public HttpResponse executeRequest(final HttpRequestBase httpRequest)
+            throws IOException {
         acquireRequestPermit();
-        return http_client.execute(http_request);
+        return httpClient.execute(httpRequest);
     }
 
-    public void setHttpClient(HttpClient hc)
-    {
-        http_client = hc;
+    public void setHttpClient(final HttpClient hc) {
+        httpClient = hc;
     }
 
-    public List<Result> getResults()
-    {
+    public List<Result> getResults() {
         return results;
     }
 
-    public void addResult(Result r)
-    {
+    public void addResult(final Result r) {
         results.add(r);
         flushResults();
     }
 
-    public Specification getSpecification()
-    {
+    public Specification getSpecification() {
         return specification;
     }
 
-    public void setSpecification(Specification s)
-    {
+    public void setSpecification(final Specification s) {
         specification = s;
         double rps = s.getRequestsPerSecond();
         if (rps > 0) {
-            rate_limiter = RateLimiter.create(rps);
+            rateLimiter = RateLimiter.create(rps);
         }
     }
 
-    public String getContentType()
-    {
-        return ((content_type == null) ? "application/rdap+json"
-                                       : content_type);
+    public String getContentType() {
+        return ((contentType == null) ? "application/rdap+json"
+                                       : contentType);
     }
 
-    public void setContentType(String s)
-    {
-        content_type = s;
+    public void setContentType(final String s) {
+        contentType = s;
     }
 
-    public void flushResults()
-    {
+    public void flushResults() {
         List<Result> ml = getResults();
         int size = ml.size();
         int i;

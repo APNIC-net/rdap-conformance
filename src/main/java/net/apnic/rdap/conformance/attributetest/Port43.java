@@ -18,7 +18,7 @@ import net.apnic.rdap.conformance.Utils;
 
 public class Port43 implements AttributeTest
 {
-    private static Set<String> hosts_checked = new HashSet<String>();
+    private static Set<String> hostsChecked = new HashSet<String>();
 
     public Port43() {}
 
@@ -38,10 +38,10 @@ public class Port43 implements AttributeTest
         if (port43 == null) {
             return true;
         }
-        if (hosts_checked.contains(port43)) {
+        if (hostsChecked.contains(port43)) {
             return true;
         }
-        hosts_checked.add(port43);
+        hostsChecked.add(port43);
 
         Result nr3 = new Result(nr);
         nr3.setStatus(Status.Success);

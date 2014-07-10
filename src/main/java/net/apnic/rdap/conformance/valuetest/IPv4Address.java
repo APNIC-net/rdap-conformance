@@ -12,16 +12,16 @@ public class IPv4Address implements ValueTest
     public IPv4Address() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Object argData)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("4");
 
-        String ipv4_address = Utils.castToString(arg_data);
+        String ipv4Address = Utils.castToString(argData);
 
-        boolean res = nr.setDetails((ipv4_address != null),
+        boolean res = nr.setDetails((ipv4Address != null),
                                     "is string",
                                     "not string");
         context.addResult(nr);
@@ -30,7 +30,7 @@ public class IPv4Address implements ValueTest
         }
 
         Result nr2 = new Result(proto);
-        res = nr2.setDetails(InetAddressUtils.isIPv4Address(ipv4_address),
+        res = nr2.setDetails(InetAddressUtils.isIPv4Address(ipv4Address),
                              "valid",
                              "invalid");
         context.addResult(nr2);

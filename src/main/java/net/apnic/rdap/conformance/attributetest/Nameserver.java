@@ -20,18 +20,18 @@ public class Nameserver implements SearchTest
 {
     private String key = null;
     private String pattern = null;
-    private boolean check_unknown = false;
-    Set<String> known_attributes = null;
+    private boolean checkUnknown = false;
+    Set<String> knownAttributes = null;
 
-    public Nameserver(boolean arg_check_unknown)
+    public Nameserver(boolean argCheckUnknown)
     {
-        check_unknown = arg_check_unknown;
+        checkUnknown = argCheckUnknown;
     }
 
-    public void setSearchDetails(String arg_key, String arg_pattern)
+    public void setSearchDetails(String argKey, String argPattern)
     {
-        key = arg_key;
-        pattern = arg_pattern;
+        key = argKey;
+        pattern = argPattern;
     }
 
     public boolean run(Context context, Result proto,
@@ -42,19 +42,19 @@ public class Nameserver implements SearchTest
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("6.2");
 
-        SearchTest domain_names = new DomainNames();
+        SearchTest domainNames = new DomainNames();
         if (key != null) {
-            domain_names.setSearchDetails(key, pattern);
+            domainNames.setSearchDetails(key, pattern);
         }
 
         List<AttributeTest> tests =
             new ArrayList<AttributeTest>(Arrays.asList(
                 new ScalarAttribute("handle"),
-                domain_names,
+                domainNames,
                 new StandardObject()
             ));
 
-        known_attributes = new HashSet<String>();
+        knownAttributes = new HashSet<String>();
 
         boolean ret = true;
         for (AttributeTest test : tests) {
@@ -62,30 +62,30 @@ public class Nameserver implements SearchTest
             if (!res) {
                 ret = false;
             }
-            known_attributes.addAll(test.getKnownAttributes());
+            knownAttributes.addAll(test.getKnownAttributes());
         }
 
-        Map<String, Object> ip_addresses =
+        Map<String, Object> ipAddresses =
             Utils.getMapAttribute(context, nr, "ipAddresses",
                                   Status.Notification, data);
-        if (ip_addresses != null) {
+        if (ipAddresses != null) {
             Result nr2 = new Result(nr);
             nr2.addNode("ipAddresses");
             AttributeTest v4 = new ArrayAttribute(new IPv4Address(), "v4");
             AttributeTest v6 = new ArrayAttribute(new IPv6Address(), "v6");
-            boolean v4res = v4.run(context, nr2, ip_addresses);
-            boolean v6res = v6.run(context, nr2, ip_addresses);
+            boolean v4res = v4.run(context, nr2, ipAddresses);
+            boolean v6res = v6.run(context, nr2, ipAddresses);
             if (!v4res || !v6res) {
                 ret = false;
             }
-            known_attributes.addAll(v4.getKnownAttributes());
-            known_attributes.addAll(v6.getKnownAttributes());
+            knownAttributes.addAll(v4.getKnownAttributes());
+            knownAttributes.addAll(v6.getKnownAttributes());
         }
-        known_attributes.add("ipAddresses");
+        knownAttributes.add("ipAddresses");
 
         boolean ret2 = true;
-        if (check_unknown) {
-            AttributeTest ua = new UnknownAttributes(known_attributes);
+        if (checkUnknown) {
+            AttributeTest ua = new UnknownAttributes(knownAttributes);
             ret2 = ua.run(context, nr, data);
         }
 
@@ -94,6 +94,6 @@ public class Nameserver implements SearchTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

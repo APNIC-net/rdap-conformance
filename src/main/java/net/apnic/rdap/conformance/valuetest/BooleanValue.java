@@ -9,13 +9,13 @@ public class BooleanValue implements ValueTest
     public BooleanValue() { }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Object argData)
     {
         Result nr = new Result(proto);
 
         Boolean value;
         try {
-            value = (Boolean) arg_data;
+            value = (Boolean) argData;
         } catch (ClassCastException ce) {
             value = null;
         }

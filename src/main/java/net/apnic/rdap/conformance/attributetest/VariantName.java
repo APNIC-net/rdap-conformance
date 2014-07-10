@@ -12,7 +12,7 @@ import net.apnic.rdap.conformance.Utils;
 
 public class VariantName implements AttributeTest
 {
-    Set<String> known_attributes = new HashSet<String>();
+    Set<String> knownAttributes = new HashSet<String>();
 
     public VariantName() {}
 
@@ -26,7 +26,7 @@ public class VariantName implements AttributeTest
         nr.setReference("6.3");
 
         return Utils.runTestList(
-            context, nr, data, known_attributes, true,
+            context, nr, data, knownAttributes, true,
             Arrays.<AttributeTest>asList(
                 new DomainNames()
             )
@@ -35,6 +35,6 @@ public class VariantName implements AttributeTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

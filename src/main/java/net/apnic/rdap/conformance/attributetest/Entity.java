@@ -19,11 +19,11 @@ import net.apnic.rdap.conformance.Utils;
 
 public class Entity implements SearchTest
 {
-    boolean check_unknown = false;
-    boolean search_context = false;
+    boolean checkUnknown = false;
+    boolean searchContext = false;
     String handle = null;
     String fn = null;
-    Set<String> known_attributes = null;
+    Set<String> knownAttributes = null;
 
     private static final Set<String> roles =
         Sets.newHashSet("registrant",
@@ -40,68 +40,68 @@ public class Entity implements SearchTest
 
     public Entity() {}
 
-    public Entity(String arg_handle, boolean arg_check_unknown)
+    public Entity(String argHandle, boolean argCheckUnknown)
     {
-        handle = arg_handle;
-        check_unknown = arg_check_unknown;
-        search_context = false;
+        handle = argHandle;
+        checkUnknown = argCheckUnknown;
+        searchContext = false;
     }
 
     public void setSearchDetails(String key, String pattern)
     {
         fn = null;
         handle = null;
-        search_context = false;
+        searchContext = false;
 
         if (key.equals("handle")) {
             handle = pattern;
-            search_context = true;
+            searchContext = true;
         } else if (key.equals("fn")) {
             fn = pattern;
-            search_context = true;
+            searchContext = true;
         }
     }
 
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        known_attributes = Sets.newHashSet("handle", "roles", "vcardArray");
+        knownAttributes = Sets.newHashSet("handle", "roles", "vcardArray");
 
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("6.1");
 
-        String response_handle =
+        String responseHandle =
             Utils.getStringAttribute(context, nr, "handle",
                                      Status.Warning, data);
 
-        if ((response_handle != null) && (handle != null)) {
+        if ((responseHandle != null) && (handle != null)) {
             Result r2 = new Result(nr);
             r2.addNode("handle");
             r2.setStatus(Status.Success);
-            if (search_context) {
+            if (searchContext) {
                 r2.setInfo("response handle matches search pattern");
-                String handle_pattern = handle.replaceAll("\\*", ".*");
+                String handlePattern = handle.replaceAll("\\*", ".*");
                 /* At least some servers will add implicit ".*" to the
                  * beginning and the end of the pattern, so add those
                  * here too. This may become configurable, so that
                  * stricter servers can verify their behaviour.
                  * Searches are presumed to be case-insensitive as
                  * well. */
-                handle_pattern = ".*" + handle_pattern + ".*";
+                handlePattern = ".*" + handlePattern + ".*";
                 Pattern p =
-                    Pattern.compile(handle_pattern,
+                    Pattern.compile(handlePattern,
                                     Pattern.CASE_INSENSITIVE
                                   | Pattern.UNICODE_CASE);
-                if (!p.matcher(response_handle).matches()) {
+                if (!p.matcher(responseHandle).matches()) {
                     r2.setStatus(Status.Warning);
                     r2.setInfo("response handle does not " +
                                "match search pattern");
                 }
             } else {
                 r2.setInfo("response handle matches requested handle");
-                if (!response_handle.equals(handle)) {
+                if (!responseHandle.equals(handle)) {
                     r2.setStatus(Status.Warning);
                     r2.setInfo("response handle does not " +
                                "match requested handle");
@@ -114,28 +114,28 @@ public class Entity implements SearchTest
         hr.setStatus(Status.Success);
         hr.addNode("roles");
         hr.setInfo("present");
-        Object response_roles = data.get("roles");
-        if (response_roles == null) {
+        Object responseRoles = data.get("roles");
+        if (responseRoles == null) {
             hr.setStatus(Status.Notification);
             hr.setInfo("not present");
         }
         context.addResult(hr);
-        if (response_roles != null) {
+        if (responseRoles != null) {
             Result ilr = new Result(nr);
             ilr.setStatus(Status.Success);
             ilr.addNode("roles");
             ilr.setInfo("is an array");
-            List<String> response_roles_list = null;
+            List<String> responseRolesList = null;
             try {
-                response_roles_list = (List<String>) response_roles;
+                responseRolesList = (List<String>) responseRoles;
             } catch (ClassCastException e) {
                 ilr.setStatus(Status.Failure);
                 ilr.setInfo("is not an array");
             }
             context.addResult(ilr);
-            if (response_roles_list != null) {
+            if (responseRolesList != null) {
                 int i = 0;
-                for (String role : response_roles_list) {
+                for (String role : responseRolesList) {
                     Result rr = new Result(nr);
                     rr.addNode("roles");
                     rr.addNode(Integer.toString(i));
@@ -153,11 +153,11 @@ public class Entity implements SearchTest
         }
 
         boolean vret = true;
-        Object vcard_array =
+        Object vcardArray =
             Utils.getAttribute(context, nr, "vcardArray", null, data);
         VCard vcard = null;
-        if (vcard_array != null) {
-            String json = new Gson().toJson(vcard_array);
+        if (vcardArray != null) {
+            String json = new Gson().toJson(vcardArray);
             List<VCard> vcards = null;
             List<List<String>> warnings = null;
             String error = null;
@@ -189,22 +189,22 @@ public class Entity implements SearchTest
                 nrv.setStatus(Status.Success);
                 nrv.setInfo("vcard present");
                 if (warnings.size() > 0) {
-                    List<String> vcard_warnings = warnings.get(0);
-                    for (String s : vcard_warnings) {
+                    List<String> vcardWarnings = warnings.get(0);
+                    for (String s : vcardWarnings) {
                         System.err.println(s);
                     }
                 }
                 vcard = vcards.get(0);
                 ValidationWarnings vws =
                     vcard.validate(vcard.getVersion());
-                String validation_warnings = vws.toString();
+                String validationWarnings = vws.toString();
                 nrv2 = new Result(nrv);
-                if (validation_warnings.length() == 0) {
+                if (validationWarnings.length() == 0) {
                     nrv2.setStatus(Status.Success);
                     nrv2.setInfo("valid");
                 } else {
                     nrv2.setStatus(Status.Failure);
-                    nrv2.setInfo("invalid: " + validation_warnings);
+                    nrv2.setInfo("invalid: " + validationWarnings);
                 }
             }
             context.addResult(nrv);
@@ -213,7 +213,7 @@ public class Entity implements SearchTest
             }
         }
 
-        if ((fn != null) && search_context) {
+        if ((fn != null) && searchContext) {
             Result r2 = new Result(nr);
             r2.addNode("vcardArray");
             if ((vcard == null)
@@ -224,10 +224,10 @@ public class Entity implements SearchTest
             } else {
                 r2.setStatus(Status.Success);
                 r2.setInfo("response name matches search pattern");
-                String fn_pattern = fn.replaceAll("\\*", ".*");
-                fn_pattern = ".*" + fn_pattern + ".*";
+                String fnPattern = fn.replaceAll("\\*", ".*");
+                fnPattern = ".*" + fnPattern + ".*";
                 Pattern p =
-                    Pattern.compile(fn_pattern,
+                    Pattern.compile(fnPattern,
                                     Pattern.CASE_INSENSITIVE
                                   | Pattern.UNICODE_CASE);
                 String name = vcard.getFormattedName().getValue();
@@ -241,7 +241,7 @@ public class Entity implements SearchTest
         }
 
         boolean ret = Utils.runTestList(
-            context, proto, data, known_attributes, check_unknown,
+            context, proto, data, knownAttributes, checkUnknown,
             Arrays.asList(
                 new AsEventActor(),
                 new StandardObject()
@@ -253,6 +253,6 @@ public class Entity implements SearchTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

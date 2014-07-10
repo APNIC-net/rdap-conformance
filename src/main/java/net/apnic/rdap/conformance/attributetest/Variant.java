@@ -19,7 +19,7 @@ public class Variant implements ValueTest
     public Variant() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Object argData)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
@@ -31,14 +31,14 @@ public class Variant implements ValueTest
          * IANA'. Not sure if this means others might be allowed, so
          * leaving it as ScalarAttribute for now. */
 
-        Map<String, Object> data = Utils.castToMap(context, nr, arg_data);
+        Map<String, Object> data = Utils.castToMap(context, nr, argData);
         if (data == null) {
             return false;
         }
 
-        Set<String> known_attributes = new HashSet<String>();
+        Set<String> knownAttributes = new HashSet<String>();
         return Utils.runTestList(
-            context, nr, data, known_attributes, true,
+            context, nr, data, knownAttributes, true,
             Arrays.asList(
                 new VariantRelation(),
                 new ScalarAttribute("idnTable"),

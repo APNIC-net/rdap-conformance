@@ -20,31 +20,31 @@ import net.apnic.rdap.conformance.Utils;
 
 public class Redirect implements Test
 {
-    private String url_path;
-    private String test_name;
-    private ObjectTest result_test;
+    private String urlPath;
+    private String testName;
+    private ObjectTest resultTest;
 
-    public Redirect(String arg_url_path,
-                    String arg_test_name)
+    public Redirect(String argUrlPath,
+                    String argTestName)
     {
-        url_path    = arg_url_path;
-        test_name   = arg_test_name;
+        urlPath    = argUrlPath;
+        testName   = argTestName;
 
-        if (test_name == null) {
-            test_name = "common.redirect";
+        if (testName == null) {
+            testName = "common.redirect";
         }
     }
 
-    public Redirect(ObjectTest arg_result_test,
-                    String arg_url_path,
-                    String arg_test_name)
+    public Redirect(ObjectTest argResultTest,
+                    String argUrlPath,
+                    String argTestName)
     {
-        result_test = arg_result_test;
-        url_path    = arg_url_path;
-        test_name   = arg_test_name;
+        resultTest = argResultTest;
+        urlPath    = argUrlPath;
+        testName   = argTestName;
 
-        if (test_name == null) {
-            test_name = "common.redirect";
+        if (testName == null) {
+            testName = "common.redirect";
         }
     }
 
@@ -53,10 +53,10 @@ public class Redirect implements Test
         List<Result> results = context.getResults();
 
         String bu = context.getSpecification().getBaseUrl();
-        String path = bu + url_path;
+        String path = bu + urlPath;
 
         Result proto = new Result(Status.Notification, path,
-                                  test_name,
+                                  testName,
                                   "", "", "", "");
         Result r = new Result(proto);
         r.setCode("response");
@@ -92,11 +92,11 @@ public class Redirect implements Test
             return false;
         }
 
-        if (result_test != null) {
+        if (resultTest != null) {
             String location = response.getFirstHeader("Location")
                                       .getValue();
-            result_test.setUrl(location);
-            return result_test.run(context);
+            resultTest.setUrl(location);
+            return resultTest.run(context);
         } else {
             return true;
         }

@@ -64,14 +64,14 @@ The {configuration-path} from the synopsis points to a JSON file with
 the following structure:
 
     {
-        "base_url": "{base-url}",
-        "requests_per_second": "{requests-per-second}",
-        "object_classes": {
+        "baseUrl": "{base-url}",
+        "requestsPerSecond": "{requests-per-second}",
+        "objectClasses": {
             "{object-class}": {
-                "supported":  {boolean},
-                "exists":     [ "{path1}", "{path2}", ..., "{pathN}" ],
-                "not_exists": [ "{path1}", "{path2}", ..., "{pathN}" ],
-                "redirects":  [ "{path1}", "{path2}", ..., "{pathN}" ],
+                "supported": {boolean},
+                "exists":    [ "{path1}", "{path2}", ..., "{pathN}" ],
+                "notExists": [ "{path1}", "{path2}", ..., "{pathN}" ],
+                "redirects": [ "{path1}", "{path2}", ..., "{pathN}" ],
                 "search": {
                     "supported": {boolean},
                     "values": {
@@ -87,7 +87,7 @@ the following structure:
         }
     }
 
-requests\_per\_second is an optional configuration entry. By default,
+`requestsPerSecond` is an optional configuration entry. By default,
 there is no limit on the number of requests issued per second.
 
 Redirects are not applicable for the entity object class. Searches are
@@ -99,8 +99,8 @@ treated as unimplemented.
 For example:
 
     { 
-        "base_url": "http://testrdap.apnic.net",
-        "object_classes": {
+        "baseUrl": "http://testrdap.apnic.net",
+        "objectClasses": {
             "ip": {
                 "supported": true,
                 "exists":    ["203.119.0.42/23"],
@@ -109,7 +109,7 @@ For example:
             "domain": {
                 "supported":  true,
                 "exists":     ["203.in-addr.arpa"],
-                "not_exists": ["google.com"]
+                "notExists": ["google.com"]
             },
             "nameserver": {
                 "supported": false
@@ -117,7 +117,7 @@ For example:
             "entity": {
                 "supported":  true,
                 "exists":     ["TP137-AP"],
-                "not_exists": ["@@@@@@@@"],
+                "notExists": ["@@@@@@@@"],
                 "search": {
                     "supported": true,
                     "values": {

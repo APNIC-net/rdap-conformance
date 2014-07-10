@@ -56,9 +56,9 @@ public class Standard implements ObjectTest
             return false;
         }
 
-        Set<String> known_attributes = new HashSet<String>();
+        Set<String> knownAttributes = new HashSet<String>();
         return Utils.runTestList(
-            context, proto, data, known_attributes, true,
+            context, proto, data, knownAttributes, true,
             Arrays.asList(
                 new Domain(false),
                 new StandardResponse()

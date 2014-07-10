@@ -17,13 +17,13 @@ public class SpecificationTest
     @Test
     public void testBasic() throws Exception
     {
-        Specification s = Specification.fromString("{base_url: 'asdf'}");
+        Specification s = Specification.fromString("{baseUrl: 'asdf'}");
         assertEquals(s.getBaseUrl(), "asdf");
 
         File tempFile = File.createTempFile("temp-file", ".tmp");
         tempFile.deleteOnExit();
         OutputStream os = new FileOutputStream(tempFile);
-        String json_text = "{base_url: 'asdf2'}";
+        String json_text = "{baseUrl: 'asdf2'}";
         os.write(json_text.getBytes());
 
         Specification s2 =

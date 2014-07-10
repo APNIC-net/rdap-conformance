@@ -12,7 +12,7 @@ import net.apnic.rdap.conformance.Utils;
 
 public class PublicId implements AttributeTest
 {
-    private Set<String> known_attributes = new HashSet<String>();
+    private Set<String> knownAttributes = new HashSet<String>();
 
     public PublicId() {}
 
@@ -20,7 +20,7 @@ public class PublicId implements AttributeTest
                        Map<String, Object> data)
     {
         return Utils.runTestList(
-            context, proto, data, known_attributes, true,
+            context, proto, data, knownAttributes, true,
             Arrays.<AttributeTest>asList(
                 new ScalarAttribute("type"),
                 new ScalarAttribute("identifier")
@@ -30,6 +30,6 @@ public class PublicId implements AttributeTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

@@ -13,13 +13,13 @@ import net.apnic.rdap.conformance.AttributeTest;
 
 public class UnknownAttributes implements AttributeTest
 {
-    Set<String> known_attributes = null;
+    Set<String> knownAttributes = null;
 
     public UnknownAttributes() {}
 
-    public UnknownAttributes(Set<String> arg_known_attributes)
+    public UnknownAttributes(Set<String> argKnownAttributes)
     {
-        known_attributes = arg_known_attributes;
+        knownAttributes = argKnownAttributes;
     }
 
     public boolean run(Context context, Result proto,
@@ -33,13 +33,13 @@ public class UnknownAttributes implements AttributeTest
         boolean success = true;
 
         Set<String> attributes = data.keySet();
-        Sets.SetView<String> unknown_attributes =
-            Sets.difference(attributes, known_attributes);
-        for (String unknown_attribute : unknown_attributes) {
-            if (unknown_attribute.indexOf('_') == -1) {
+        Sets.SetView<String> unknownAttributes =
+            Sets.difference(attributes, knownAttributes);
+        for (String unknownAttribute : unknownAttributes) {
+            if (unknownAttribute.indexOf('_') == -1) {
                 Result ua = new Result(nr);
                 ua.setStatus(Status.Failure);
-                ua.addNode(unknown_attribute);
+                ua.addNode(unknownAttribute);
                 ua.setInfo("attribute is not permitted here or is " +
                            "non-standard and does not " +
                            "contain an underscore");

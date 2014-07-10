@@ -6,28 +6,24 @@ import java.util.Map;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import net.apnic.rdap.conformance.specification.ObjectClass;
 
-public class Specification
-{
-    private String base_url = null;
-    private double requests_per_second = 0;
-    private Map<String, ObjectClass> object_classes = null;
+public final class Specification {
+    private String baseUrl = null;
+    private double requestsPerSecond = 0;
+    private Map<String, ObjectClass> objectClasses = null;
 
-    private Specification() {}
+    private Specification() { }
 
-    public static Specification fromString(String json_text)
-    {
+    public static Specification fromString(final String jsonText) {
         Gson gson = new Gson();
-        return gson.fromJson(json_text, Specification.class);
+        return gson.fromJson(jsonText, Specification.class);
     }
 
-    public static Specification fromPath(String path)
-        throws FileNotFoundException, IOException
-    {
+    public static Specification fromPath(final String path)
+            throws IOException {
         BufferedReader reader =
             new BufferedReader(
                 new InputStreamReader(
@@ -44,18 +40,15 @@ public class Specification
         return fromString(data.toString());
     }
 
-    public String getBaseUrl()
-    {
-        return base_url;
+    public String getBaseUrl() {
+        return baseUrl;
     }
 
-    public ObjectClass getObjectClass(String type)
-    {
-        return object_classes.get(type);
+    public ObjectClass getObjectClass(final String type) {
+        return objectClasses.get(type);
     }
 
-    public double getRequestsPerSecond()
-    {
-        return requests_per_second;
+    public double getRequestsPerSecond() {
+        return requestsPerSecond;
     }
 }

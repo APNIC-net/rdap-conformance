@@ -16,7 +16,7 @@ import net.apnic.rdap.conformance.valuetest.PublicKey;
 
 public class KeyData implements AttributeTest
 {
-    private Set<String> known_attributes = new HashSet<String>();
+    private Set<String> knownAttributes = new HashSet<String>();
 
     public KeyData() {}
 
@@ -24,7 +24,7 @@ public class KeyData implements AttributeTest
                        Map<String, Object> data)
     {
         return Utils.runTestList(
-            context, proto, data, known_attributes, true,
+            context, proto, data, knownAttributes, true,
             Arrays.asList(
                 new ScalarAttribute("flags", new Flags()),
                 new ScalarAttribute("protocol", new Protocol()),
@@ -38,6 +38,6 @@ public class KeyData implements AttributeTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

@@ -23,21 +23,21 @@ public class DomainNames implements SearchTest
 
     public DomainNames() {}
 
-    public void setSearchDetails(String arg_key, String arg_pattern)
+    public void setSearchDetails(String argKey, String argPattern)
     {
-        pattern = arg_pattern;
+        pattern = argPattern;
     }
 
-    private int isValidLdhName(String ldh_name)
+    private int isValidLdhName(String ldhName)
     {
-        String[] labels = ldh_name.split("\\.");
-        Pattern ldh_pattern = Pattern.compile(
+        String[] labels = ldhName.split("\\.");
+        Pattern ldhPattern = Pattern.compile(
             "[\\p{Alnum}][\\p{Alnum}-]*[\\p{Alnum}]?"
         );
         boolean ldhres = true;
-        boolean a_label_found = false;
+        boolean aLabelFound = false;
         for (String label : labels) {
-            boolean labelres = ldh_pattern.matcher(label).matches();
+            boolean labelres = ldhPattern.matcher(label).matches();
             if (!labelres) {
                 ldhres = false;
             }
@@ -45,11 +45,11 @@ public class DomainNames implements SearchTest
                 ldhres = false;
             }
             if (label.startsWith("xn--")) {
-                a_label_found = true;
+                aLabelFound = true;
             }
         }
 
-        return (ldhres ? (a_label_found ? 2 : 1) : 0);
+        return (ldhres ? (aLabelFound ? 2 : 1) : 0);
     }
 
     public boolean run(Context context, Result proto,
@@ -61,30 +61,30 @@ public class DomainNames implements SearchTest
         nr.setReference("4");
 
         boolean res = true;
-        String ldh_name = Utils.getStringAttribute(context,
+        String ldhName = Utils.getStringAttribute(context,
                                                    nr, "ldhName",
                                                    Status.Failure,
                                                    data);
-        if (ldh_name == null) {
+        if (ldhName == null) {
             return false;
         }
-        int ldhres_both = isValidLdhName(ldh_name);
-        boolean ldhres = (ldhres_both >= 1);
-        boolean a_label_found = (ldhres_both == 2);
+        int ldhresBoth = isValidLdhName(ldhName);
+        boolean ldhres = (ldhresBoth >= 1);
+        boolean aLabelFound = (ldhresBoth == 2);
 
         Result dn = new Result(nr);
         dn.addNode("ldhName");
         res = dn.setDetails(ldhres, "valid", "invalid");
         context.addResult(dn);
 
-        if (!a_label_found && (pattern != null)) {
+        if (!aLabelFound && (pattern != null)) {
             Result rp = new Result(nr);
             rp.addNode("ldhName");
-            String ldh_pattern = pattern.replaceAll("\\*", ".*");
-            ldh_pattern = ".*" + ldh_pattern + ".*";
-            Pattern p = Pattern.compile(ldh_pattern,
+            String ldhPattern = pattern.replaceAll("\\*", ".*");
+            ldhPattern = ".*" + ldhPattern + ".*";
+            Pattern p = Pattern.compile(ldhPattern,
                                         Pattern.CASE_INSENSITIVE);
-            rp.setDetails(p.matcher(ldh_name).matches(),
+            rp.setDetails(p.matcher(ldhName).matches(),
                           Status.Success,
                           "response domain name matches search pattern",
                           Status.Warning,
@@ -92,9 +92,9 @@ public class DomainNames implements SearchTest
             context.addResult(rp);
         }
 
-        Object unicode_name_obj = data.get("unicodeName");
-        if (unicode_name_obj == null) {
-            if (a_label_found) {
+        Object unicodeNameObj = data.get("unicodeName");
+        if (unicodeNameObj == null) {
+            if (aLabelFound) {
                 Result nou = new Result(nr);
                 nou.addNode("unicodeName");
                 nou.setStatus(Status.Warning);
@@ -104,12 +104,12 @@ public class DomainNames implements SearchTest
             return res;
         }
 
-        String unicode_name = Utils.getStringAttribute(context,
+        String unicodeName = Utils.getStringAttribute(context,
                                                        nr, "unicodeName",
                                                        Status.Failure,
                                                        data);
-        boolean is_ascii =
-            CharMatcher.ASCII.matchesAllOf(unicode_name);
+        boolean isAscii =
+            CharMatcher.ASCII.matchesAllOf(unicodeName);
         Result hu = new Result(nr);
         hu.addNode("unicodeName");
         /* There are at least a couple of implementations that return
@@ -117,11 +117,11 @@ public class DomainNames implements SearchTest
          * This is not (currently) compliant: see section 4 of the
          * draft, as well as RFC 5890 [2.3.2.1], which requires that
          * at least one U-label be present. */
-        hu.setDetails((!is_ascii),
+        hu.setDetails((!isAscii),
                       "non-ascii characters present",
                       "no non-ascii characters present");
         context.addResult(hu);
-        if (is_ascii) {
+        if (isAscii) {
             return false;
         }
 
@@ -134,21 +134,21 @@ public class DomainNames implements SearchTest
             return res;
         }
 
-        int[] unicode_nums = new int[unicode_name.length()];
-        char[] unicode_chars = unicode_name.toCharArray();
-        for (int i = 0; i < unicode_name.length(); i++) {
-            unicode_nums[i] = unicode_chars[i];
+        int[] unicodeNums = new int[unicodeName.length()];
+        char[] unicodeChars = unicodeName.toCharArray();
+        for (int i = 0; i < unicodeName.length(); i++) {
+            unicodeNums[i] = unicodeChars[i];
         }
-        String ldh_name_check = null;
+        String ldhNameCheck = null;
         String error = null;
         try {
-            ldh_name_check = new String(idna.domainToAscii(unicode_nums));
+            ldhNameCheck = new String(idna.domainToAscii(unicodeNums));
         } catch (XcodeException ce) {
             error = ce.toString();
         }
         Result iv = new Result(nr);
         iv.addNode("unicodeName");
-        if (ldh_name_check != null) {
+        if (ldhNameCheck != null) {
             iv.setInfo("valid");
             iv.setStatus(Status.Success);
         } else {
@@ -158,17 +158,17 @@ public class DomainNames implements SearchTest
         }
         context.addResult(iv);
 
-        if (ldh_name_check != null) {
+        if (ldhNameCheck != null) {
             Result ms = new Result(nr);
             ms.addNode("unicodeName");
-            String ldh_name_canon = ldh_name.toLowerCase();
-            if (ldh_name_canon.charAt(ldh_name_canon.length() - 1) != '.') {
-                ldh_name_canon += ".";
+            String ldhNameCanon = ldhName.toLowerCase();
+            if (ldhNameCanon.charAt(ldhNameCanon.length() - 1) != '.') {
+                ldhNameCanon += ".";
             }
-            if (ldh_name_check.charAt(ldh_name_check.length() - 1) != '.') {
-                ldh_name_check += ".";
+            if (ldhNameCheck.charAt(ldhNameCheck.length() - 1) != '.') {
+                ldhNameCheck += ".";
             }
-            if (ldh_name_check.equals(ldh_name_canon)) {
+            if (ldhNameCheck.equals(ldhNameCanon)) {
                 ms.setInfo("matches ldhName");
                 ms.setStatus(Status.Success);
             } else {
@@ -182,15 +182,15 @@ public class DomainNames implements SearchTest
         if (pattern != null) {
             Result rp = new Result(nr);
             rp.addNode("unicodeName");
-            String un_pattern = pattern.replaceAll("\\*", ".*");
-            un_pattern = ".*" + un_pattern + ".*";
-            un_pattern =
-                Normalizer.normalize(un_pattern,
+            String unPattern = pattern.replaceAll("\\*", ".*");
+            unPattern = ".*" + unPattern + ".*";
+            unPattern =
+                Normalizer.normalize(unPattern,
                                      Normalizer.Form.NFKC);
-            Pattern p = Pattern.compile(un_pattern,
+            Pattern p = Pattern.compile(unPattern,
                                         Pattern.CASE_INSENSITIVE |
                                         Pattern.UNICODE_CASE);
-            if (!p.matcher(unicode_name).matches()) {
+            if (!p.matcher(unicodeName).matches()) {
                 rp.setStatus(Status.Warning);
                 rp.setInfo("response domain name does not " +
                            "match search pattern");

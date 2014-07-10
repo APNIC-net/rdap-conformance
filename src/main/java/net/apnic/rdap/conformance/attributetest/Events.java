@@ -16,14 +16,14 @@ public class Events implements AttributeTest
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        AttributeTest array_test = new ArrayAttribute(new Event(), "events");
+        AttributeTest arrayTest = new ArrayAttribute(new Event(), "events");
 
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.5");
 
-        return array_test.run(context, nr, data);
+        return arrayTest.run(context, nr, data);
     }
 
     public Set<String> getKnownAttributes()

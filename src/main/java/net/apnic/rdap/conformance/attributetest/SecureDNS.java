@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.valuetest.MaxSigLife;
 
 public class SecureDNS implements AttributeTest
 {
-    private Set<String> known_attributes = new HashSet<String>();
+    private Set<String> knownAttributes = new HashSet<String>();
 
     public SecureDNS() {}
 
@@ -22,7 +22,7 @@ public class SecureDNS implements AttributeTest
                        Map<String, Object> data)
     {
         return Utils.runTestList(
-            context, proto, data, known_attributes, true,
+            context, proto, data, knownAttributes, true,
             Arrays.asList(
                 new ScalarAttribute("zoneSigned", new BooleanValue()),
                 new ScalarAttribute("delegationSigned", new BooleanValue()),
@@ -35,6 +35,6 @@ public class SecureDNS implements AttributeTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

@@ -39,8 +39,8 @@ public class Standard implements ObjectTest
                                      Map root, String key)
     {
         Result asnres = new Result(proto);
-        Object asn_obj = root.get(key);
-        if (asn_obj == null) {
+        Object asnObj = root.get(key);
+        if (asnObj == null) {
             asnres.setStatus(Result.Status.Failure);
             asnres.addNode(key);
             asnres.setInfo("not present");
@@ -94,17 +94,17 @@ public class Standard implements ObjectTest
             return false;
         }
 
-        BigInteger start_address =
+        BigInteger startAddress =
             processAutnum(context, proto, root, "startAutnum");
-        BigInteger end_address =
+        BigInteger endAddress =
             processAutnum(context, proto, root, "endAutnum");
 
-        if ((start_address != null) && (end_address != null)) {
+        if ((startAddress != null) && (endAddress != null)) {
             r = new Result(proto);
             r.addNode("startAutnum");
             r.setStatus(Result.Status.Success);
             r.setInfo("startAutnum less then or equal to endAutnum");
-            if (start_address.compareTo(end_address) > 0) {
+            if (startAddress.compareTo(endAddress) > 0) {
                 r.setStatus(Result.Status.Failure);
                 r.setInfo("startAutnum more than endAutnum");
                 results.add(r);
@@ -113,14 +113,14 @@ public class Standard implements ObjectTest
             }
         }
 
-        Set<String> known_attributes = Sets.newHashSet("startAutnum",
+        Set<String> knownAttributes = Sets.newHashSet("startAutnum",
                                                        "endAutnum");
         Map<String, Object> data = Utils.castToMap(context, proto, root);
         if (data == null) {
             return false;
         }
         return Utils.runTestList(
-            context, proto, data, known_attributes, true,
+            context, proto, data, knownAttributes, true,
             Arrays.asList(
                 new ScalarAttribute("name"),
                 new ScalarAttribute("handle"),

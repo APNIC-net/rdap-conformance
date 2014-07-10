@@ -112,21 +112,21 @@ public class Standard implements ObjectTest
     }
 
     private boolean confirmLessThanOrEqualTo(Context context, Result proto,
-                                             String start_address,
-                                             String end_address,
+                                             String startAddress,
+                                             String endAddress,
                                              int version)
     {
         boolean ret = true;
         if (version == 4) {
-            long start = addressStringToLong(start_address);
-            long end   = addressStringToLong(end_address);
+            long start = addressStringToLong(startAddress);
+            long end   = addressStringToLong(endAddress);
             if ((start == -1) || (end == -1)) {
                 return false;
             }
             ret = (start <= end);
         } else if (version == 6) {
-            BigInteger start = addressStringToBigInteger(start_address);
-            BigInteger end   = addressStringToBigInteger(end_address);
+            BigInteger start = addressStringToBigInteger(startAddress);
+            BigInteger end   = addressStringToBigInteger(endAddress);
             if ((start.compareTo(BigInteger.valueOf(-1)) == 0) ||
                   (end.compareTo(BigInteger.valueOf(-1)) == 0)) {
                 return false;
@@ -155,8 +155,8 @@ public class Standard implements ObjectTest
     {
         Result pres = new Result(proto);
         pres.addNode("parentHandle");
-        String parent_handle = Utils.castToString(root.get("parentHandle"));
-        if (parent_handle == null) {
+        String parentHandle = Utils.castToString(root.get("parentHandle"));
+        if (parentHandle == null) {
             return true;
         }
 
@@ -167,29 +167,29 @@ public class Standard implements ObjectTest
             return true;
         }
 
-        Map<String, String> up_link = null;
+        Map<String, String> upLink = null;
         for (Map<String, String> link : links) {
             String rel = link.get("rel");
             if ((rel != null) && rel.equals("up")) {
-                up_link = link;
+                upLink = link;
                 break;
             }
         }
 
         /* Inability to fetch the link, or link invalidity, will be
          * caught by the Links content test. */
-        if (up_link == null) {
+        if (upLink == null) {
             return true;
         }
 
-        String href = up_link.get("href");
+        String href = upLink.get("href");
         if (href == null) {
             return true;
         }
 
-        Result parent_proto = new Result(proto);
-        parent_proto.setPath(href);
-        Map proot = Utils.standardRequest(context, href, parent_proto);
+        Result parentProto = new Result(proto);
+        parentProto.setPath(href);
+        Map proot = Utils.standardRequest(context, href, parentProto);
         if (proot == null) {
             return true;
         }
@@ -201,7 +201,7 @@ public class Standard implements ObjectTest
 
         Result res = new Result(proto);
         res.addNode("parentHandle");
-        if (handle.equals(parent_handle)) {
+        if (handle.equals(parentHandle)) {
             res.setStatus(Result.Status.Success);
             res.setInfo("parentHandle matches parent handle");
             context.addResult(res);
@@ -238,29 +238,29 @@ public class Standard implements ObjectTest
         }
 
         int version = 0;
-        String start_address =
+        String startAddress =
             processIpAddress(context, proto, root, "startAddress");
-        String end_address =
+        String endAddress =
             processIpAddress(context, proto, root, "endAddress");
-        if ((start_address != null) && (end_address != null)) {
-            Result types_match = new Result(proto);
-            types_match.addNode("startAddress");
-            types_match.setInfo("start and end address types match");
-            types_match.setStatus(Result.Status.Success);
-            if (InetAddressUtils.isIPv4Address(start_address)
-                    && InetAddressUtils.isIPv4Address(end_address)) {
-                context.addResult(types_match);
+        if ((startAddress != null) && (endAddress != null)) {
+            Result typesMatch = new Result(proto);
+            typesMatch.addNode("startAddress");
+            typesMatch.setInfo("start and end address types match");
+            typesMatch.setStatus(Result.Status.Success);
+            if (InetAddressUtils.isIPv4Address(startAddress)
+                    && InetAddressUtils.isIPv4Address(endAddress)) {
+                context.addResult(typesMatch);
                 version = 4;
-            } else if (InetAddressUtils.isIPv6Address(start_address)
-                    && InetAddressUtils.isIPv6Address(end_address)) {
-                context.addResult(types_match);
+            } else if (InetAddressUtils.isIPv6Address(startAddress)
+                    && InetAddressUtils.isIPv6Address(endAddress)) {
+                context.addResult(typesMatch);
                 version = 6;
             } else {
-                types_match.setInfo(
+                typesMatch.setInfo(
                     "start and end address types do not match"
                 );
-                types_match.setStatus(Result.Status.Failure);
-                context.addResult(types_match);
+                typesMatch.setStatus(Result.Status.Failure);
+                context.addResult(typesMatch);
                 ret = false;
             }
         }
@@ -268,7 +268,7 @@ public class Standard implements ObjectTest
         if (version != 0) {
             boolean cltret =
                 confirmLessThanOrEqualTo(
-                    context, proto, start_address, end_address, version
+                    context, proto, startAddress, endAddress, version
                 );
             if (!cltret) {
                 ret = false;
@@ -302,10 +302,10 @@ public class Standard implements ObjectTest
             vres.setInfo("present");
             context.addResult(vres);
             Result vres2 = new Result(vres);
-            int check_version = ipversion.equals("v4") ? 4
+            int checkVersion = ipversion.equals("v4") ? 4
                               : ipversion.equals("v6") ? 6
                                                        : 0;
-            if (check_version == 0) {
+            if (checkVersion == 0) {
                 vres2.setStatus(Result.Status.Failure);
                 vres2.setInfo("invalid: " + ipversion);
                 context.addResult(vres2);
@@ -316,7 +316,7 @@ public class Standard implements ObjectTest
                 context.addResult(vres2);
                 if (version != 0) {
                     Result vres3 = new Result(vres);
-                    if (version == check_version) {
+                    if (version == checkVersion) {
                         vres3.setStatus(Result.Status.Success);
                         vres3.setInfo("matches address version");
                         context.addResult(vres3);
@@ -335,12 +335,12 @@ public class Standard implements ObjectTest
             return false;
         }
 
-        Set<String> known_attributes = Sets.newHashSet(
+        Set<String> knownAttributes = Sets.newHashSet(
             "startAddress", "endAddress", "ipVersion"
         );
 
         return (Utils.runTestList(
-            context, proto, root, known_attributes, true,
+            context, proto, root, knownAttributes, true,
             Arrays.asList(
                 new ScalarAttribute("name"),
                 new ScalarAttribute("handle"),

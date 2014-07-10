@@ -15,25 +15,25 @@ import net.apnic.rdap.conformance.Utils;
 
 public class ArrayAttribute implements AttributeTest
 {
-    Set<String> known_attributes = null;
-    ValueTest element_value_test = null;
-    AttributeTest element_attribute_test = null;
+    Set<String> knownAttributes = null;
+    ValueTest elementValueTest = null;
+    AttributeTest elementAttributeTest = null;
     String key = null;
 
-    public ArrayAttribute(ValueTest arg_element_test,
-                          String arg_key)
+    public ArrayAttribute(ValueTest argElementTest,
+                          String argKey)
     {
-        element_value_test = arg_element_test;
-        key = arg_key;
-        known_attributes = Sets.newHashSet(arg_key);
+        elementValueTest = argElementTest;
+        key = argKey;
+        knownAttributes = Sets.newHashSet(argKey);
     }
 
-    public ArrayAttribute(AttributeTest arg_element_test,
-                          String arg_key)
+    public ArrayAttribute(AttributeTest argElementTest,
+                          String argKey)
     {
-        element_attribute_test = arg_element_test;
-        key = arg_key;
-        known_attributes = Sets.newHashSet(arg_key);
+        elementAttributeTest = argElementTest;
+        key = argKey;
+        knownAttributes = Sets.newHashSet(argKey);
     }
 
     public boolean run(Context context, Result proto,
@@ -57,10 +57,10 @@ public class ArrayAttribute implements AttributeTest
         for (Object e : elements) {
             Result proto2 = new Result(nr);
             proto2.addNode(Integer.toString(i++));
-            if (element_value_test != null) {
-                boolean element_success =
-                    element_value_test.run(context, proto2, e);
-                if (!element_success) {
+            if (elementValueTest != null) {
+                boolean elementSuccess =
+                    elementValueTest.run(context, proto2, e);
+                if (!elementSuccess) {
                     success = false;
                 }
             } else {
@@ -68,9 +68,9 @@ public class ArrayAttribute implements AttributeTest
                 if (subdata == null) {
                     success = false;
                 } else {
-                    boolean attribute_success =
-                        element_attribute_test.run(context, proto2, subdata);
-                    if (!attribute_success) {
+                    boolean attributeSuccess =
+                        elementAttributeTest.run(context, proto2, subdata);
+                    if (!attributeSuccess) {
                         success = false;
                     }
                 }
@@ -82,6 +82,6 @@ public class ArrayAttribute implements AttributeTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

@@ -21,29 +21,31 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 
-public class Utils
-{
-    static public HttpRequestBase httpGetRequest(Context context,
-                                                 String path,
-                                                 boolean follow_redirects)
-    {
+public final class Utils {
+    private static final int TIMEOUT_MS = 5000;
+
+    private Utils() { }
+
+    public static HttpRequestBase httpGetRequest(
+                final Context context,
+                final String path,
+                final boolean followRedirects) {
         HttpGet request = new HttpGet(path);
         request.setHeader("Accept", context.getContentType());
         RequestConfig config =
             RequestConfig.custom()
-                         .setConnectionRequestTimeout(5000)
-                         .setConnectTimeout(5000)
-                         .setSocketTimeout(5000)
-                         .setRedirectsEnabled(follow_redirects)
+                         .setConnectionRequestTimeout(TIMEOUT_MS)
+                         .setConnectTimeout(TIMEOUT_MS)
+                         .setSocketTimeout(TIMEOUT_MS)
+                         .setRedirectsEnabled(followRedirects)
                          .build();
         request.setConfig(config);
         return request;
     }
 
-    static public Map standardRequest(Context context,
-                                      String path,
-                                      Result proto)
-    {
+    public static Map standardRequest(final Context context,
+                                      final String path,
+                                      final Result proto) {
         List<Result> results = context.getResults();
 
         Result r = new Result(proto);
@@ -113,8 +115,7 @@ public class Utils
         return root;
     }
 
-    public static String castToString(Object b)
-    {
+    public static String castToString(final Object b) {
         if (b == null) {
             return null;
         }
@@ -127,8 +128,7 @@ public class Utils
         return sb;
     }
 
-    public static Integer castToInteger(Object n)
-    {
+    public static Integer castToInteger(final Object n) {
         if (n == null) {
             return null;
         }
@@ -144,37 +144,35 @@ public class Utils
         return value;
     }
 
-    public static Map<String, Object> castToMap(Context context,
-                                                Result proto,
-                                                Object obj)
-    {
+    public static Map<String, Object> castToMap(final Context context,
+                                                final Result proto,
+                                                final Object obj) {
         Map<String, Object> data = null;
-        Result cast_result = new Result(proto);
+        Result castResult = new Result(proto);
         try {
             data = (Map<String, Object>) obj;
         } catch (ClassCastException e) {
-            cast_result.setInfo("structure is invalid");
-            cast_result.setStatus(Status.Failure);
-            context.addResult(cast_result);
+            castResult.setInfo("structure is invalid");
+            castResult.setStatus(Status.Failure);
+            context.addResult(castResult);
         }
         return data;
     }
 
-    public static Object getAttribute(Context context,
-                                      Result proto,
-                                      String key,
-                                      Status missing_status,
-                                      Map<String, Object> data)
-    {
+    public static Object getAttribute(final Context context,
+                                      final Result proto,
+                                      final String key,
+                                      final Status missingStatus,
+                                      final Map<String, Object> data) {
         Object obj = data.get(key);
         boolean res = true;
         Result lnr = new Result(proto);
         lnr.addNode(key);
         if (obj == null) {
-            if (missing_status == null) {
+            if (missingStatus == null) {
                 return null;
             }
-            lnr.setStatus(missing_status);
+            lnr.setStatus(missingStatus);
             lnr.setInfo("not present");
             res = false;
         } else {
@@ -188,13 +186,12 @@ public class Utils
         return obj;
     }
 
-    public static String getStringAttribute(Context context,
-                                            Result proto,
-                                            String key,
-                                            Status missing_status,
-                                            Map<String, Object> data)
-    {
-        Object obj = getAttribute(context, proto, key, missing_status, data);
+    public static String getStringAttribute(final Context context,
+                                            final Result proto,
+                                            final String key,
+                                            final Status missingStatus,
+                                            final Map<String, Object> data) {
+        Object obj = getAttribute(context, proto, key, missingStatus, data);
         if (obj == null) {
             return null;
         }
@@ -219,26 +216,26 @@ public class Utils
         return str;
     }
 
-    public static Map<String, Object> getMapAttribute(Context context,
-                                                      Result proto,
-                                                      String key,
-                                                      Status missing_status,
-                                                      Map<String, Object> data)
-    {
-        Object obj = getAttribute(context, proto, key, missing_status, data);
+    public static Map<String, Object> getMapAttribute(
+                final Context context,
+                final Result proto,
+                final String key,
+                final Status missingStatus,
+                final Map<String, Object> data) {
+        Object obj = getAttribute(context, proto, key, missingStatus, data);
         if (obj == null) {
             return null;
         }
 
-        Map<String, Object> map_data;
+        Map<String, Object> mapData;
         try {
-            map_data = (Map<String, Object>) obj;
+            mapData = (Map<String, Object>) obj;
         } catch (ClassCastException e) {
-            map_data = null;
+            mapData = null;
         }
         Result snr = new Result(proto);
         snr.addNode(key);
-        if (map_data == null) {
+        if (mapData == null) {
             snr.setStatus(Status.Failure);
             snr.setInfo("not object");
         } else {
@@ -247,29 +244,29 @@ public class Utils
         }
         context.addResult(snr);
 
-        return map_data;
+        return mapData;
     }
 
-    public static List<Object> getListAttribute(Context context,
-                                                Result proto,
-                                                String key,
-                                                Status missing_status,
-                                                Map<String, Object> data)
-    {
-        Object obj = getAttribute(context, proto, key, missing_status, data);
+    public static List<Object> getListAttribute(
+                final Context context,
+                final Result proto,
+                final String key,
+                final Status missingStatus,
+                final Map<String, Object> data) {
+        Object obj = getAttribute(context, proto, key, missingStatus, data);
         if (obj == null) {
             return null;
         }
 
-        List<Object> list_data;
+        List<Object> listData;
         try {
-            list_data = (List<Object>) obj;
+            listData = (List<Object>) obj;
         } catch (ClassCastException e) {
-            list_data = null;
+            listData = null;
         }
         Result snr = new Result(proto);
         snr.addNode(key);
-        if (list_data == null) {
+        if (listData == null) {
             snr.setStatus(Status.Failure);
             snr.setInfo("not array");
         } else {
@@ -278,28 +275,28 @@ public class Utils
         }
         context.addResult(snr);
 
-        return list_data;
+        return listData;
     }
 
-    public static boolean runTestList(Context context,
-                                      Result proto,
-                                      Map<String, Object> data,
-                                      Set<String> known_attributes,
-                                      boolean check_unknown,
-                                      List<AttributeTest> tests)
-    {
+    public static boolean runTestList(
+                final Context context,
+                final Result proto,
+                final Map<String, Object> data,
+                final Set<String> knownAttributes,
+                final boolean checkUnknown,
+                final List<AttributeTest> tests) {
         boolean ret = true;
         for (AttributeTest test : tests) {
             boolean res = test.run(context, proto, data);
             if (!res) {
                 ret = false;
             }
-            known_attributes.addAll(test.getKnownAttributes());
+            knownAttributes.addAll(test.getKnownAttributes());
         }
 
         boolean ret2 = true;
-        if (check_unknown) {
-            AttributeTest ua = new UnknownAttributes(known_attributes);
+        if (checkUnknown) {
+            AttributeTest ua = new UnknownAttributes(knownAttributes);
             ret2 = ua.run(context, proto, data);
         }
         return (ret && ret2);

@@ -12,16 +12,16 @@ public class IPv6Address implements ValueTest
     public IPv6Address() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Object argData)
     {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("4");
 
-        String ipv6_address = Utils.castToString(arg_data);
+        String ipv6Address = Utils.castToString(argData);
 
-        boolean res = nr.setDetails((ipv6_address != null),
+        boolean res = nr.setDetails((ipv6Address != null),
                                     "is string",
                                     "not string");
         context.addResult(nr);
@@ -30,7 +30,7 @@ public class IPv6Address implements ValueTest
         }
 
         Result nr2 = new Result(proto);
-        res = nr2.setDetails(InetAddressUtils.isIPv6Address(ipv6_address),
+        res = nr2.setDetails(InetAddressUtils.isIPv6Address(ipv6Address),
                              "valid",
                              "invalid");
         context.addResult(nr2);

@@ -10,10 +10,10 @@ public class StringTest implements ValueTest
     public StringTest() {}
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Object argData)
     {
         Result nr = new Result(proto);
-        boolean res = nr.setDetails((Utils.castToString(arg_data) != null),
+        boolean res = nr.setDetails((Utils.castToString(argData) != null),
                                     "is string", "not string");
         context.addResult(nr);
         return res;

@@ -12,7 +12,7 @@ import net.apnic.rdap.conformance.Utils;
 
 public class StandardResponse implements AttributeTest
 {
-    Set<String> known_attributes = new HashSet<String>();
+    Set<String> knownAttributes = new HashSet<String>();
 
     public StandardResponse() {}
 
@@ -20,7 +20,7 @@ public class StandardResponse implements AttributeTest
                        Map<String, Object> data)
     {
         return Utils.runTestList(
-            context, proto, data, known_attributes, false,
+            context, proto, data, knownAttributes, false,
             Arrays.asList(
                 new RdapConformance(),
                 new Notices(),
@@ -31,6 +31,6 @@ public class StandardResponse implements AttributeTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

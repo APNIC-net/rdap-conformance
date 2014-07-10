@@ -13,7 +13,7 @@ import net.apnic.rdap.conformance.valuetest.StringTest;
 
 public class Notice implements AttributeTest
 {
-    private Set<String> known_attributes = new HashSet<String>();
+    private Set<String> knownAttributes = new HashSet<String>();
 
     public Notice() {}
 
@@ -24,7 +24,7 @@ public class Notice implements AttributeTest
         nr.setCode("content");
 
         return Utils.runTestList(
-            context, nr, data, known_attributes, true,
+            context, nr, data, knownAttributes, true,
             Arrays.asList(
                 new ScalarAttribute("title"),
                 new ArrayAttribute(new StringTest(), "description"),
@@ -35,6 +35,6 @@ public class Notice implements AttributeTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

@@ -15,23 +15,23 @@ public class Notices implements AttributeTest
 
     public Notices() {}
 
-    public Notices(String arg_key)
+    public Notices(String argKey)
     {
-        key = arg_key;
+        key = argKey;
     }
 
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
         String mkey = (key != null) ? key : "notices";
-        AttributeTest array_test = new ArrayAttribute(new Notice(), mkey);
+        AttributeTest arrayTest = new ArrayAttribute(new Notice(), mkey);
 
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-06");
         nr.setReference("5.3");
 
-        return array_test.run(context, nr, data);
+        return arrayTest.run(context, nr, data);
     }
 
     public Set<String> getKnownAttributes()

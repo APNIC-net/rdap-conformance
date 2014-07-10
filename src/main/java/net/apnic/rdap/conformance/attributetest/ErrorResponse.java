@@ -15,12 +15,12 @@ import net.apnic.rdap.conformance.valuetest.StringTest;
 
 public class ErrorResponse implements AttributeTest
 {
-    Set<String> known_attributes = null;
-    private int status_code;
+    Set<String> knownAttributes = null;
+    private int statusCode;
 
-    public ErrorResponse(int arg_status_code)
+    public ErrorResponse(int argStatusCode)
     {
-        status_code = arg_status_code;
+        statusCode = argStatusCode;
     }
 
     public boolean run(Context context, Result proto,
@@ -40,7 +40,7 @@ public class ErrorResponse implements AttributeTest
             new Lang()
         ));
 
-        known_attributes = new HashSet<String>();
+        knownAttributes = new HashSet<String>();
 
         boolean ret = true;
         for (AttributeTest test : tests) {
@@ -48,16 +48,16 @@ public class ErrorResponse implements AttributeTest
             if (!res) {
                 ret = false;
             }
-            known_attributes.addAll(test.getKnownAttributes());
+            knownAttributes.addAll(test.getKnownAttributes());
         }
 
         if (ret) {
-            Double error_code;
+            Double errorCode;
             Result p2 = new Result(p);
             p2.addNode("errorCode");
             p2.setInfo("is a number");
             try {
-                error_code = (Double) data.get("errorCode");
+                errorCode = (Double) data.get("errorCode");
             } catch (Exception e) {
                 p2.setStatus(Status.Failure);
                 p2.setInfo("is not a number");
@@ -71,7 +71,7 @@ public class ErrorResponse implements AttributeTest
             p3.addNode("errorCode");
             p3.setInfo("matches the response code");
 
-            if (error_code != status_code) {
+            if (errorCode != statusCode) {
                 p3.setStatus(Status.Failure);
                 p3.setInfo("does not match the response code");
                 context.addResult(p3);
@@ -81,7 +81,7 @@ public class ErrorResponse implements AttributeTest
             context.addResult(p3);
         }
 
-        AttributeTest ua = new UnknownAttributes(known_attributes);
+        AttributeTest ua = new UnknownAttributes(knownAttributes);
         boolean ret2 = ua.run(context, proto, data);
 
         return (ret && ret2);
@@ -89,6 +89,6 @@ public class ErrorResponse implements AttributeTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

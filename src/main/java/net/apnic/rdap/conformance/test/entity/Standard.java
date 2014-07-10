@@ -18,9 +18,9 @@ public class Standard implements Test
 {
     String entity = "";
 
-    public Standard(String arg_entity)
+    public Standard(String argEntity)
     {
-        entity = arg_entity;
+        entity = argEntity;
     }
 
     public boolean run(Context context)
@@ -45,9 +45,9 @@ public class Standard implements Test
             return false;
         }
 
-        Set<String> known_attributes = new HashSet<String>();
+        Set<String> knownAttributes = new HashSet<String>();
         return Utils.runTestList(
-            context, proto, root, known_attributes, true,
+            context, proto, root, knownAttributes, true,
             Arrays.asList(
                 new Entity(entity, false),
                 new RdapConformance(),

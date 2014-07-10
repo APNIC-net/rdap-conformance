@@ -15,35 +15,35 @@ import net.apnic.rdap.conformance.valuetest.Variant;
 
 public class Domain implements SearchTest
 {
-    boolean check_unknown = false;
-    Set<String> known_attributes = new HashSet<String>();
+    boolean checkUnknown = false;
+    Set<String> knownAttributes = new HashSet<String>();
     String key = null;
     String pattern = null;
 
-    public Domain(boolean arg_check_unknown)
+    public Domain(boolean argCheckUnknown)
     {
-        check_unknown = arg_check_unknown;
+        checkUnknown = argCheckUnknown;
     }
 
-    public void setSearchDetails(String arg_key, String arg_pattern)
+    public void setSearchDetails(String argKey, String argPattern)
     {
-        key = arg_key;
-        pattern = arg_pattern;
+        key = argKey;
+        pattern = argPattern;
     }
 
     public boolean run(Context context, Result proto,
                        Map<String, Object> data)
     {
-        SearchTest domain_names = new DomainNames();
+        SearchTest domainNames = new DomainNames();
         if (key != null) {
-            domain_names.setSearchDetails(key, pattern);
+            domainNames.setSearchDetails(key, pattern);
         }
 
         return Utils.runTestList(
-            context, proto, data, known_attributes, check_unknown,
+            context, proto, data, knownAttributes, checkUnknown,
             Arrays.asList(
                 new ScalarAttribute("handle"),
-                domain_names,
+                domainNames,
                 new ArrayAttribute(new Variant(), "variants"),
                 new ArrayAttribute(new Nameserver(true), "nameServers"),
                 new ScalarAttribute("secureDNS", new SecureDNS()),
@@ -54,6 +54,6 @@ public class Domain implements SearchTest
 
     public Set<String> getKnownAttributes()
     {
-        return known_attributes;
+        return knownAttributes;
     }
 }

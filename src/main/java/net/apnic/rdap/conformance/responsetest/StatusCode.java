@@ -15,49 +15,49 @@ import net.apnic.rdap.conformance.ResponseTest;
 
 public class StatusCode implements ResponseTest
 {
-    Set<Integer> expected_codes = new HashSet<Integer>();
+    Set<Integer> expectedCodes = new HashSet<Integer>();
 
-    public StatusCode(int arg_expected_code)
+    public StatusCode(int argExpectedCode)
     {
-        expected_codes.add(arg_expected_code);
+        expectedCodes.add(argExpectedCode);
     }
 
-    public StatusCode(Set<Integer> arg_expected_codes)
+    public StatusCode(Set<Integer> argExpectedCodes)
     {
-        expected_codes.addAll(arg_expected_codes);
+        expectedCodes.addAll(argExpectedCodes);
     }
 
     public boolean run(Context context, Result proto,
                        HttpResponse hr)
     {
-        boolean has_multiple = expected_codes.size() > 1;
+        boolean hasMultiple = expectedCodes.size() > 1;
 
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
         nr.setCode("status-code");
         if (nr.getDocument().equals("")
-                && !has_multiple
-                && expected_codes.contains(HttpStatus.SC_BAD_REQUEST)) {
+                && !hasMultiple
+                && expectedCodes.contains(HttpStatus.SC_BAD_REQUEST)) {
             nr.setDocument("draft-ietf-weirds-using-http-08");
             nr.setReference("5.4");
         }
 
         int code = hr.getStatusLine().getStatusCode();
 
-        if (expected_codes.contains(code)) {
+        if (expectedCodes.contains(code)) {
             nr.setStatus(Status.Success);
-            nr.setInfo("got " + (has_multiple ? "an " : "") +
+            nr.setInfo("got " + (hasMultiple ? "an " : "") +
                        "expected code (" +
-                       expected_codes.iterator().next() + ")");
+                       expectedCodes.iterator().next() + ")");
             results.add(nr);
             return true;
         } else {
             nr.setStatus(Status.Failure);
             nr.setInfo("got " + code + " instead of " +
-                       (has_multiple
-                           ? ("one of " + Joiner.on(", ").join(expected_codes))
-                           : expected_codes.iterator().next()));
+                       (hasMultiple
+                           ? ("one of " + Joiner.on(", ").join(expectedCodes))
+                           : expectedCodes.iterator().next()));
             results.add(nr);
             return false;
         }

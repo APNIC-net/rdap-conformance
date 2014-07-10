@@ -10,9 +10,9 @@ public class MaxSigLife implements ValueTest
     public MaxSigLife() { }
 
     public boolean run(Context context, Result proto,
-                       Object arg_data)
+                       Object argData)
     {
-        Integer value = Utils.castToInteger(arg_data);
+        Integer value = Utils.castToInteger(argData);
 
         Result nr = new Result(proto);
         nr.setDetails((value != null), "is integer", "not integer");

@@ -14,27 +14,27 @@ import net.apnic.rdap.conformance.Utils;
 
 public class ScalarAttribute implements AttributeTest
 {
-    private String attribute_name = null;
-    private ValueTest value_test = null;
-    private AttributeTest attribute_test = null;
+    private String attributeName = null;
+    private ValueTest valueTest = null;
+    private AttributeTest attributeTest = null;
 
-    public ScalarAttribute(String arg_attribute_name)
+    public ScalarAttribute(String argAttributeName)
     {
-        attribute_name = arg_attribute_name;
+        attributeName = argAttributeName;
     }
 
-    public ScalarAttribute(String arg_attribute_name,
-                           AttributeTest arg_attribute_test)
+    public ScalarAttribute(String argAttributeName,
+                           AttributeTest argAttributeTest)
     {
-        attribute_name = arg_attribute_name;
-        attribute_test = arg_attribute_test;
+        attributeName = argAttributeName;
+        attributeTest = argAttributeTest;
     }
 
-    public ScalarAttribute(String arg_attribute_name,
-                           ValueTest arg_value_test)
+    public ScalarAttribute(String argAttributeName,
+                           ValueTest argValueTest)
     {
-        attribute_name = arg_attribute_name;
-        value_test = arg_value_test;
+        attributeName = argAttributeName;
+        valueTest = argValueTest;
     }
 
     public boolean run(Context context, Result proto,
@@ -44,19 +44,19 @@ public class ScalarAttribute implements AttributeTest
         nr.setCode("content");
         nr.setInfo("present");
 
-        Object value = Utils.getAttribute(context, nr, attribute_name,
+        Object value = Utils.getAttribute(context, nr, attributeName,
                                           Status.Notification, data);
         boolean res = (value != null);
 
-        if (value_test != null) {
-            return (res && value_test.run(context, nr, value));
-        } else if (attribute_test != null) {
+        if (valueTest != null) {
+            return (res && valueTest.run(context, nr, value));
+        } else if (attributeTest != null) {
             Map<String, Object> subdata =
                 Utils.castToMap(context, nr, value);
             if (subdata == null) {
                 return false;
             } else {
-                return (res && attribute_test.run(context, nr, subdata));
+                return (res && attributeTest.run(context, nr, subdata));
             }
         }
 
@@ -65,6 +65,6 @@ public class ScalarAttribute implements AttributeTest
 
     public Set<String> getKnownAttributes()
     {
-        return Sets.newHashSet(attribute_name);
+        return Sets.newHashSet(attributeName);
     }
 }

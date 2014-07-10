@@ -49,9 +49,9 @@ public class VariantRelation implements AttributeTest
         Result nr2 = new Result(nr);
         nr2.setInfo("is an array");
 
-        List<Object> relation_entries;
+        List<Object> relationEntries;
         try {
-            relation_entries = (List<Object>) value;
+            relationEntries = (List<Object>) value;
         } catch (ClassCastException e) {
             nr2.setStatus(Result.Status.Failure);
             nr2.setInfo("is not an array");
@@ -64,7 +64,7 @@ public class VariantRelation implements AttributeTest
 
         boolean success = true;
         int i = 0;
-        for (Object re : relation_entries) {
+        for (Object re : relationEntries) {
             Result r2 = new Result(nr);
             r2.addNode(Integer.toString(i++));
             r2.setReference("11.2.4");
