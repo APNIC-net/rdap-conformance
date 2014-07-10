@@ -15,8 +15,8 @@ public class RdapConformance implements AttributeTest
 {
     public RdapConformance() {}
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data)
     {
         Result nr = new Result(proto);
         /* All attributes are optional, strictly speaking (json-response 3.2),

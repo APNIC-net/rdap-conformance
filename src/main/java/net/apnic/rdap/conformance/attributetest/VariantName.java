@@ -16,8 +16,8 @@ public class VariantName implements AttributeTest
 
     public VariantName() {}
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data)
     {
         Result nr = new Result(proto);
         nr.setCode("content");

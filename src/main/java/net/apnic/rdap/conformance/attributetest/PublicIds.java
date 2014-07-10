@@ -13,8 +13,8 @@ public class PublicIds implements AttributeTest
 {
     public PublicIds() {}
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data)
     {
         AttributeTest arrayTest =
             new ArrayAttribute(new PublicId(), "publicIds");

@@ -10,7 +10,7 @@ import net.apnic.rdap.conformance.Context;
 public final class Entities implements AttributeTest {
     private Set<String> knownAttributes;
 
-    public Entities() {}
+    public Entities() { }
 
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {

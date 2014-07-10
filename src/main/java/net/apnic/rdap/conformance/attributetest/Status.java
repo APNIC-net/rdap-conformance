@@ -34,8 +34,8 @@ public class Status implements AttributeTest
 
     public Status() {}
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data)
     {
         List<Result> results = context.getResults();
 

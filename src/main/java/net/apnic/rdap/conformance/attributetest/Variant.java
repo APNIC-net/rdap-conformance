@@ -18,7 +18,7 @@ public class Variant implements ValueTest
 {
     public Variant() {}
 
-    public boolean run(Context context, Result proto,
+    public boolean run(final Context context, final Result proto,
                        Object argData)
     {
         Result nr = new Result(proto);
@@ -31,7 +31,7 @@ public class Variant implements ValueTest
          * IANA'. Not sure if this means others might be allowed, so
          * leaving it as ScalarAttribute for now. */
 
-        Map<String, Object> data = Utils.castToMap(context, nr, argData);
+        final Map<String, Object> data = Utils.castToMap(context, nr, argData);
         if (data == null) {
             return false;
         }

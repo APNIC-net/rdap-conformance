@@ -16,8 +16,8 @@ public class StandardResponse implements AttributeTest
 
     public StandardResponse() {}
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data)
     {
         return Utils.runTestList(
             context, proto, data, knownAttributes, false,

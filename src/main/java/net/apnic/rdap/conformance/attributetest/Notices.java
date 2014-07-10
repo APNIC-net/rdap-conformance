@@ -14,7 +14,7 @@ public final class Notices implements AttributeTest {
 
     public Notices() { }
 
-    public Notices(String argKey) {
+    public Notices(final String argKey) {
         key = argKey;
     }
 
