@@ -16,15 +16,15 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class Port43 implements AttributeTest
-{
+public final class Port43 implements AttributeTest {
     private static Set<String> hostsChecked = new HashSet<String>();
+    private static final int TIMEOUT_MS = 1000;
+    private static final int WHOIS_PORT = 43;
 
-    public Port43() {}
+    public Port43() { }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
@@ -50,7 +50,8 @@ public class Port43 implements AttributeTest
         try {
             Socket socket = new Socket();
             InetAddress addr = InetAddress.getByName(port43);
-            socket.connect(new InetSocketAddress(addr, 43), 1000);
+            socket.connect(new InetSocketAddress(addr, WHOIS_PORT),
+                           TIMEOUT_MS);
             socket.close();
         } catch (Exception ex) {
             nr3.setStatus(Status.Failure);
@@ -62,8 +63,7 @@ public class Port43 implements AttributeTest
         return found;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("port43");
     }
 }

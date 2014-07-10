@@ -16,27 +16,23 @@ import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.valuetest.IPv4Address;
 import net.apnic.rdap.conformance.valuetest.IPv6Address;
 
-public class Nameserver implements SearchTest
-{
+public final class Nameserver implements SearchTest {
     private String key = null;
     private String pattern = null;
     private boolean checkUnknown = false;
-    Set<String> knownAttributes = null;
+    private Set<String> knownAttributes = null;
 
-    public Nameserver(boolean argCheckUnknown)
-    {
+    public Nameserver(final boolean argCheckUnknown) {
         checkUnknown = argCheckUnknown;
     }
 
-    public void setSearchDetails(String argKey, String argPattern)
-    {
+    public void setSearchDetails(final String argKey, final String argPattern) {
         key = argKey;
         pattern = argPattern;
     }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
@@ -92,8 +88,7 @@ public class Nameserver implements SearchTest
         return (ret && ret2);
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }

@@ -5,8 +5,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import org.joda.time.*;
-import org.joda.time.format.*;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
@@ -14,11 +15,10 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class Event implements AttributeTest
-{
-    boolean allowActor = true;
+public final class Event implements AttributeTest {
+    private boolean allowActor = true;
 
-    private static final Set<String> eventActions =
+    private static final Set<String> EVENT_ACTIONS =
         Sets.newHashSet("registration",
                         "reregistration",
                         "last changed",
@@ -29,16 +29,14 @@ public class Event implements AttributeTest
                         "locked",
                         "unlocked");
 
-    public Event(boolean argAllowActor)
-    {
+    public Event(final boolean argAllowActor) {
         allowActor = argAllowActor;
     }
 
     public Event() { }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
@@ -56,7 +54,7 @@ public class Event implements AttributeTest
             evr.addNode("eventAction");
             evr.setDocument("draft-ietf-weirds-json-response-06");
             evr.setReference("10.2.2");
-            if (eventActions.contains(eventAction)) {
+            if (EVENT_ACTIONS.contains(eventAction)) {
                 evr.setInfo("registered");
                 evr.setStatus(Status.Success);
                 results.add(evr);
@@ -115,8 +113,7 @@ public class Event implements AttributeTest
         return (evtres && evdres && eacres && lstres);
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("eventActor", "eventDate",
                                "eventAction");
     }

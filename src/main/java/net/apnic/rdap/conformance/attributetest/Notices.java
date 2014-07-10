@@ -9,20 +9,17 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
-public class Notices implements AttributeTest
-{
-    String key = null;
+public final class Notices implements AttributeTest {
+    private String key = null;
 
-    public Notices() {}
+    public Notices() { }
 
-    public Notices(String argKey)
-    {
+    public Notices(String argKey) {
         key = argKey;
     }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         String mkey = (key != null) ? key : "notices";
         AttributeTest arrayTest = new ArrayAttribute(new Notice(), mkey);
 
@@ -34,8 +31,7 @@ public class Notices implements AttributeTest
         return arrayTest.run(context, nr, data);
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet(key != null ? key : "notices");
     }
 }

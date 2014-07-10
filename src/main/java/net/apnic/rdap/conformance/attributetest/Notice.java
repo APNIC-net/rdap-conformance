@@ -11,15 +11,13 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.valuetest.StringTest;
 
-public class Notice implements AttributeTest
-{
+public final class Notice implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();
 
-    public Notice() {}
+    public Notice() { }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
 
@@ -33,8 +31,7 @@ public class Notice implements AttributeTest
         );
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }

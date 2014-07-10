@@ -13,19 +13,16 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.valuetest.StringTest;
 
-public class ErrorResponse implements AttributeTest
-{
-    Set<String> knownAttributes = null;
+public final class ErrorResponse implements AttributeTest {
+    private Set<String> knownAttributes = null;
     private int statusCode;
 
-    public ErrorResponse(int argStatusCode)
-    {
+    public ErrorResponse(final int argStatusCode) {
         statusCode = argStatusCode;
     }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         Result p = new Result(proto);
         p.setCode("content");
         p.setDocument("draft-ietf-json-response-06");
@@ -87,8 +84,7 @@ public class ErrorResponse implements AttributeTest
         return (ret && ret2);
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }

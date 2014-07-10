@@ -20,9 +20,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.config.RequestConfig;
 
-public class Link implements AttributeTest
-{
-    private static final Set<String> linkRelations =
+public final class Link implements AttributeTest {
+    private static final Set<String> LINK_RELATIONS =
         Sets.newHashSet("about",
                         "alternate",
                         "appendix",
@@ -97,7 +96,7 @@ public class Link implements AttributeTest
 
     /* The first nine are defined by HTML 4.01, and the last two by
      * CSS 2. */
-    private static final Set<String> mediaTypes =
+    private static final Set<String> MEDIA_TYPES =
         Sets.newHashSet("aural",
                         "braille",
                         "handheld",
@@ -110,13 +109,14 @@ public class Link implements AttributeTest
                         "embossed",
                         "speech");
 
-    public Link() {}
+    private static final int TIMEOUT_MS = 5000;
 
-    private boolean urlIsFetchable(Context context,
-                                   Result proto,
-                                   String key,
-                                   String url)
-    {
+    public Link() { }
+
+    private boolean urlIsFetchable(final Context context,
+                                   final Result proto,
+                                   final String key,
+                                   final String url) {
         boolean success = true;
         Result vnr = new Result(proto);
         vnr.addNode(key);
@@ -126,9 +126,9 @@ public class Link implements AttributeTest
             request = new HttpGet(url);
             RequestConfig config =
                 RequestConfig.custom()
-                             .setConnectionRequestTimeout(5000)
-                             .setConnectTimeout(5000)
-                             .setSocketTimeout(5000)
+                             .setConnectionRequestTimeout(TIMEOUT_MS)
+                             .setConnectTimeout(TIMEOUT_MS)
+                             .setSocketTimeout(TIMEOUT_MS)
                              .build();
             request.setConfig(config);
             HttpResponse response =
@@ -136,8 +136,8 @@ public class Link implements AttributeTest
             code = response.getStatusLine().getStatusCode();
         } catch (Exception e) {
             vnr.setStatus(Status.Failure);
-            vnr.setInfo("unable to send request for URL: " +
-                            e.toString());
+            vnr.setInfo("unable to send request for URL: "
+                        + e.toString());
             context.addResult(vnr);
             success = false;
         }
@@ -155,9 +155,8 @@ public class Link implements AttributeTest
         return success;
     }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         List<Result> results = context.getResults();
 
         Result nr = new Result(proto);
@@ -186,7 +185,7 @@ public class Link implements AttributeTest
             success = false;
         } else {
             Result valid = new Result(nr);
-            if (linkRelations.contains(rel)) {
+            if (LINK_RELATIONS.contains(rel)) {
                 valid.setInfo("valid");
                 valid.setStatus(Status.Success);
             } else {
@@ -254,10 +253,10 @@ public class Link implements AttributeTest
             mtr.addNode("media");
             mtr.setStatus(Status.Success);
             mtr.setInfo("registered");
-            if (!mediaTypes.contains(media)) {
+            if (!MEDIA_TYPES.contains(media)) {
                 /* It's not impossible that the media type is one
-                    * that has been registered in the meantime, which
-                    * is why this is only a warning. */
+                 * that has been registered in the meantime, which
+                 * is why this is only a warning. */
                 mtr.setStatus(Status.Warning);
                 mtr.setInfo("unregistered: " + media);
             }
@@ -286,8 +285,7 @@ public class Link implements AttributeTest
         return (success && ret2);
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("type", "title", "media",
                                "href", "hreflang", "rel", "value");
     }

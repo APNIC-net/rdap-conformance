@@ -21,7 +21,7 @@ public final class DomainNames implements SearchTest {
     private static final int DOMAIN_LABEL_MAX_LENGTH = 63;
     private String pattern = null;
 
-    public DomainNames() {}
+    public DomainNames() { }
 
     public void setSearchDetails(final String argKey,
                                  final String argPattern) {

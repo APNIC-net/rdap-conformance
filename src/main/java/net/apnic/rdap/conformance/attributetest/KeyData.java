@@ -14,15 +14,13 @@ import net.apnic.rdap.conformance.valuetest.Algorithm;
 import net.apnic.rdap.conformance.valuetest.Protocol;
 import net.apnic.rdap.conformance.valuetest.PublicKey;
 
-public class KeyData implements AttributeTest
-{
+public final class KeyData implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();
 
-    public KeyData() {}
+    public KeyData() { }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         return Utils.runTestList(
             context, proto, data, knownAttributes, true,
             Arrays.asList(
@@ -36,8 +34,7 @@ public class KeyData implements AttributeTest
         );
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }

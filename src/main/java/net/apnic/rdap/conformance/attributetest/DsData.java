@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.valuetest.Algorithm;
 import net.apnic.rdap.conformance.valuetest.Digest;
 import net.apnic.rdap.conformance.valuetest.DigestType;
 
-public class DsData implements AttributeTest {
+public final class DsData implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();
 
     public DsData() { }

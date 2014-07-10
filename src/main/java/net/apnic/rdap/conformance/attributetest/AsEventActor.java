@@ -10,7 +10,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 
 public final class AsEventActor implements AttributeTest {
-    public AsEventActor() {}
+    public AsEventActor() { }
 
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> argData) {

@@ -20,15 +20,14 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
 
-public class Entity implements SearchTest
-{
-    boolean checkUnknown = false;
-    boolean searchContext = false;
-    String handle = null;
-    String fn = null;
-    Set<String> knownAttributes = null;
+public final class Entity implements SearchTest {
+    private boolean checkUnknown = false;
+    private boolean searchContext = false;
+    private String handle = null;
+    private String fn = null;
+    private Set<String> knownAttributes = null;
 
-    private static final Set<String> roles =
+    private static final Set<String> ROLES =
         Sets.newHashSet("registrant",
                         "technical",
                         "administrative",
@@ -41,17 +40,15 @@ public class Entity implements SearchTest
                         "notifications",
                         "noc");
 
-    public Entity() {}
+    public Entity() { }
 
-    public Entity(String argHandle, boolean argCheckUnknown)
-    {
+    public Entity(final String argHandle, final boolean argCheckUnknown) {
         handle = argHandle;
         checkUnknown = argCheckUnknown;
         searchContext = false;
     }
 
-    public void setSearchDetails(String key, String pattern)
-    {
+    public void setSearchDetails(final String key, final String pattern) {
         fn = null;
         handle = null;
         searchContext = false;
@@ -65,9 +62,8 @@ public class Entity implements SearchTest
         }
     }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         knownAttributes = Sets.newHashSet("handle", "roles", "vcardArray");
 
         Result nr = new Result(proto);
@@ -99,15 +95,15 @@ public class Entity implements SearchTest
                                   | Pattern.UNICODE_CASE);
                 if (!p.matcher(responseHandle).matches()) {
                     r2.setStatus(Status.Warning);
-                    r2.setInfo("response handle does not " +
-                               "match search pattern");
+                    r2.setInfo("response handle does not "
+                               + "match search pattern");
                 }
             } else {
                 r2.setInfo("response handle matches requested handle");
                 if (!responseHandle.equals(handle)) {
                     r2.setStatus(Status.Warning);
-                    r2.setInfo("response handle does not " +
-                               "match requested handle");
+                    r2.setInfo("response handle does not "
+                               + "match requested handle");
                 }
             }
             context.addResult(r2);
@@ -145,7 +141,7 @@ public class Entity implements SearchTest
                     rr.setInfo("registered");
                     rr.setStatus(Status.Success);
                     rr.setReference("10.2.3");
-                    if (!roles.contains(role)) {
+                    if (!ROLES.contains(role)) {
                         rr.setInfo("unregistered: " + role);
                         rr.setStatus(Status.Failure);
                     }
@@ -222,8 +218,8 @@ public class Entity implements SearchTest
             if ((vcard == null)
                     || (vcard.getFormattedName().getValue() == null)) {
                 r2.setStatus(Status.Warning);
-                r2.setInfo("no vcard or name in response so unable to " +
-                           "check search pattern");
+                r2.setInfo("no vcard or name in response so unable to "
+                           + "check search pattern");
             } else {
                 r2.setStatus(Status.Success);
                 r2.setInfo("response name matches search pattern");
@@ -236,8 +232,8 @@ public class Entity implements SearchTest
                 String name = vcard.getFormattedName().getValue();
                 if (!p.matcher(name).matches()) {
                     r2.setStatus(Status.Warning);
-                    r2.setInfo("response name does not " +
-                               "match search pattern");
+                    r2.setInfo("response name does not "
+                               + "match search pattern");
                 }
             }
             context.addResult(r2);
@@ -254,8 +250,7 @@ public class Entity implements SearchTest
         return (ret && vret);
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return knownAttributes;
     }
 }

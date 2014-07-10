@@ -14,13 +14,11 @@ import net.apnic.rdap.conformance.AttributeTest;
 import java.util.IllformedLocaleException;
 import java.util.Locale;
 
-public class Lang implements AttributeTest
-{
-    public Lang() {}
+public final class Lang implements AttributeTest {
+    public Lang() { }
 
-    public boolean run(Context context, Result proto,
-                       Map<String, Object> data)
-    {
+    public boolean run(final Context context, final Result proto,
+                       final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("lang");
@@ -53,8 +51,7 @@ public class Lang implements AttributeTest
         return res;
     }
 
-    public Set<String> getKnownAttributes()
-    {
+    public Set<String> getKnownAttributes() {
         return Sets.newHashSet("lang");
     }
 }
