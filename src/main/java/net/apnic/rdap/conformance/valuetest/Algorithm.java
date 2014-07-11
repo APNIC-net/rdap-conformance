@@ -9,13 +9,31 @@ import net.apnic.rdap.conformance.ValueTest;
 /**
  * <p>Algorithm class.</p>
  *
+ * See RFC 4034 [A.1] and the documents that update it. The registry
+ * is available at http://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xml.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */
 public final class Algorithm implements ValueTest {
+    private static final int DSA        = 3;
+    private static final int RSASHA1    = 5;
+    private static final int PRIVATEDNS = 253;
+    private static final int PRIVATEOID = 254;
+
+    private static final int DSA_NSEC3_SHA1     = 6;
+    private static final int RSASHA1_NSEC3_SHA1 = 7;
+    private static final int RSASHA256          = 8;
+    private static final int RSASHA512          = 10;
+    private static final int ECC_GOST           = 12;
+    private static final int ECDSAP256SHA256    = 13;
+    private static final int ECDSAP384SHA384    = 14;
+
     private static IntegerSet integerSet =
         new IntegerSet(Sets.newHashSet(
-            3, 5, 6, 7, 8, 10, 12, 13, 14, 253, 254
+            DSA, RSASHA1, PRIVATEDNS, PRIVATEOID,
+            DSA_NSEC3_SHA1, RSASHA1_NSEC3_SHA1, RSASHA256,
+            RSASHA512, ECC_GOST, ECDSAP256SHA256, ECDSAP384SHA384
         ));
 
     /**
