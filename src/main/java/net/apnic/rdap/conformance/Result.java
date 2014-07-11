@@ -343,7 +343,7 @@ public final class Result {
         for (int i = 0; i < slen; i++) {
             char c = path.charAt(i);
             if (Character.isISOControl(c)) {
-                epath.append("{\\x" + ((int) c) + "}");
+                epath.append("{" + ((int) c) + "}");
             } else {
                 epath.append(c);
             }
@@ -354,16 +354,21 @@ public final class Result {
             nodeMapped.add(nodeToString(n));
         }
 
-        return
-            Joiner.on(",").join(
-                Arrays.asList(getTestName(),
-                              epath.toString(),
-                              getStatusAsString(),
-                              getCode(),
-                              getInfo(),
-                              Joiner.on(":").join(nodeMapped),
-                              getDocument(),
-                              getReference())
-            );
+        List<String> elements =
+            Arrays.asList(getTestName(),
+                          epath.toString(),
+                          getStatusAsString(),
+                          getCode(),
+                          getInfo(),
+                          Joiner.on(":").join(nodeMapped),
+                          getDocument(),
+                          getReference());
+
+        List<String> elementsEscaped = new ArrayList<String>();
+        for (String n : elements) {
+            elementsEscaped.add(n.replaceAll(",", "{44}"));
+        }
+
+        return Joiner.on(",").join(elementsEscaped);
     }
 }

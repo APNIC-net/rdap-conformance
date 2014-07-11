@@ -88,7 +88,7 @@ public final class Application {
         return proto;
     }
 
-    private static void runNonRdapTests(List<Test> tests)
+    private static void runNonRdapTests(Context c, List<Test> tests)
     {
         /* Relative URI in the HTTP request. */
         Result relative = new Result();
@@ -204,7 +204,7 @@ public final class Application {
          * are fairly niche, and in many cases can't easily be fixed
          * by implementers anyway. See e.g.
          * https://bugs.eclipse.org/bugs/show_bug.cgi?id=414636. */
-        // runNonRdapTests(tests);
+        // runNonRdapTests(c, tests);
 
         /* application/json content-type. This is deliberately using
          * an invalid status code with inverted sense, because so long
