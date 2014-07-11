@@ -39,8 +39,12 @@ public final class NotStatusCode implements ResponseTest {
 
         if (code != notExpectedCode) {
             nr.setStatus(Status.Success);
-            nr.setInfo("got " + code + " instead of unexpected code ("
-                       + notExpectedCode + ")");
+            if (notExpectedCode != 0) {
+                nr.setInfo("got " + code + " instead of unexpected code ("
+                           + notExpectedCode + ")");
+            } else {
+                nr.setInfo("got valid code (" + code + ")");
+            }
             results.add(nr);
             return true;
         } else {

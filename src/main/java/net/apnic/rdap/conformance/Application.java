@@ -150,16 +150,6 @@ public final class Application {
 
         List<Test> tests = new ArrayList();
 
-        for (String objectType : objectTypes) {
-            ObjectClass oc = s.getObjectClass(objectType);
-            if ((oc != null)
-                    && (!s.getObjectClass(objectType).isSupported())) {
-                tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "/" + objectType)
-                         );
-            }
-        }
-
         /* Relative URI in the HTTP request. */
         Result relative = new Result();
         relative.setTestName("common.bad-uri-relative");
@@ -195,6 +185,9 @@ public final class Application {
             )
         );
 
+        /* From here onwards, the tests are RDAP-specific, except for
+         * the unescaped-URI IP test. */
+
         /* application/json content-type. This is deliberately using
          * an invalid status code with inverted sense, because so long
          * as the request is 'successful', it's fine. */
@@ -211,6 +204,26 @@ public final class Application {
                           ctres
                   ));
         c.setContentType(null);
+
+        /* Unsupported query types. */
+        for (String objectType : objectTypes) {
+            Result unsupported = new Result();
+            unsupported.setTestName("common.unsupported");
+            unsupported.setDocument("draft-ietf-weirds-using-http-08");
+            unsupported.setReference("5.4");
+            ObjectClass oc = s.getObjectClass(objectType);
+            if ((oc == null)
+                    || (!s.getObjectClass(objectType).isSupported())) {
+                tests.add(
+                    new net.apnic.rdap.conformance.test.common.BasicRequest(
+                        HttpStatus.SC_BAD_REQUEST,
+                        "/" + objectType + "/1.2.3.4",
+                        "common.unsupported",
+                        false,
+                        unsupported
+                    ));
+            }
+        }
 
         ObjectClass ocIp = s.getObjectClass("ip");
         if ((ocIp != null) && (ocIp.isSupported())) {
