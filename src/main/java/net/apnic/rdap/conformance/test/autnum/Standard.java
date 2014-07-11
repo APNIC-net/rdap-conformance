@@ -98,7 +98,7 @@ public final class Standard implements ObjectTest {
         Result proto = new Result(Result.Status.Notification, path,
                                   "autnum.standard",
                                   "content", "",
-                                  "draft-ietf-weirds-json-response-06",
+                                  "draft-ietf-weirds-json-response-07",
                                   "6.5");
         Result r = new Result(proto);
         r.setCode("response");

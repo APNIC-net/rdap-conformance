@@ -46,7 +46,7 @@ public final class UnknownAttributes implements AttributeTest {
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-06");
+        nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("3.2");
 
         boolean success = true;

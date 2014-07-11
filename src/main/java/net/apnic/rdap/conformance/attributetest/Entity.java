@@ -85,7 +85,7 @@ public final class Entity implements SearchTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-06");
+        nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("6.1");
 
         String responseHandle =
@@ -157,7 +157,7 @@ public final class Entity implements SearchTest {
                     rr.addNode(Integer.toString(i));
                     rr.setInfo("registered");
                     rr.setStatus(Status.Success);
-                    rr.setReference("10.2.3");
+                    rr.setReference("11.2.3");
                     if (!ROLES.contains(role)) {
                         rr.setInfo("unregistered: " + role);
                         rr.setStatus(Status.Failure);

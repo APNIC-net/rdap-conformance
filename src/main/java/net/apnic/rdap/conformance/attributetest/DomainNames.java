@@ -65,6 +65,10 @@ public final class DomainNames implements SearchTest {
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
+        /* This would refer to a specific object class, but ldhName
+         * and unicodeName appear in both nameservers and domains, and
+         * section 4 is likely to be the most helpful part of the
+         * document in the event of failure anyway. */
         nr.setCode("content");
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("4");

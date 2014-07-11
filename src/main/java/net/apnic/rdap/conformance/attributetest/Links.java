@@ -28,7 +28,7 @@ public final class Links implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-06");
+        nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("5.2");
 
         return arrayTest.run(context, nr, data);

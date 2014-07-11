@@ -56,6 +56,8 @@ public final class Event implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
+        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setReference("5.5");
 
         boolean evtres = true;
         String eventAction =
@@ -64,11 +66,9 @@ public final class Event implements AttributeTest {
         if (eventAction == null) {
             evtres = false;
         } else {
-            Result evr = new Result(proto);
-            evr.setCode("content");
+            Result evr = new Result(nr);
             evr.addNode("eventAction");
-            evr.setDocument("draft-ietf-weirds-json-response-06");
-            evr.setReference("10.2.2");
+            evr.setReference("11.2.2");
             if (EVENT_ACTIONS.contains(eventAction)) {
                 evr.setInfo("registered");
                 evr.setStatus(Status.Success);
@@ -90,11 +90,9 @@ public final class Event implements AttributeTest {
         if (eventDate == null) {
             evdres = false;
         } else {
-            Result edvr = new Result(proto);
-            edvr.setCode("content");
+            Result edvr = new Result(nr);
             edvr.addNode("eventDate");
-            edvr.setDocument("draft-ietf-weirds-json-response-06");
-            edvr.setReference("10.2.2");
+            edvr.setReference("4");
             DateTime dth = parser.parseDateTime(eventDate);
             if (dth != null) {
                 edvr.setInfo("valid");
@@ -113,8 +111,7 @@ public final class Event implements AttributeTest {
             Utils.getStringAttribute(context, nr, "eventActor",
                                      Status.Notification, data);
         if ((eventActor != null) && !allowActor) {
-            Result eacr = new Result(proto);
-            eacr.setCode("content");
+            Result eacr = new Result(nr);
             eacr.addNode("eventActor");
             eacr.setInfo("not permitted here");
             eacr.setStatus(Status.Failure);

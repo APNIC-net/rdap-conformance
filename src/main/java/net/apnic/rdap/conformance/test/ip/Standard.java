@@ -234,7 +234,7 @@ public final class Standard implements ObjectTest {
         Result proto = new Result(Result.Status.Notification, path,
                                   "ip.standard",
                                   "content", "",
-                                  "draft-ietf-weirds-json-response-06",
+                                  "draft-ietf-weirds-json-response-07",
                                   "6.4");
 
         proto.setCode("content");

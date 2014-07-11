@@ -12,6 +12,10 @@ import net.apnic.rdap.conformance.AttributeTest;
 /**
  * <p>Notices class.</p>
  *
+ * The key argument in the constructor is present so that both
+ * 'remarks' and 'notices' elements can be tested by way of this
+ * class.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */
@@ -40,7 +44,7 @@ public final class Notices implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-06");
+        nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("5.3");
 
         return arrayTest.run(context, nr, data);
