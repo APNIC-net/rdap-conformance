@@ -9,13 +9,22 @@ import net.apnic.rdap.conformance.ValueTest;
 /**
  * <p>DigestType class.</p>
  *
+ * See RFC 4034 [A.2] and the documents that update it. The registry
+ * is available at
+ * http://www.iana.org/assignments/ds-rr-types/ds-rr-types.xml.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */
 public final class DigestType implements ValueTest {
+    private static final int SHA1        = 1;
+    private static final int SHA256      = 2;
+    private static final int GOSTR341194 = 3;
+    private static final int SHA384      = 4;
+
     private static IntegerSet integerSet =
         new IntegerSet(Sets.newHashSet(
-            1, 2, 3, 4
+            SHA1, SHA256, GOSTR341194, SHA384
         ));
 
     /**
