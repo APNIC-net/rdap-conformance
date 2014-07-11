@@ -8,6 +8,8 @@ import net.apnic.rdap.conformance.Utils;
 /**
  * <p>Protocol class.</p>
  *
+ * See RFC 4034 [2.1.2].
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

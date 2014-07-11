@@ -8,6 +8,8 @@ import net.apnic.rdap.conformance.Utils;
 /**
  * <p>MaxSigLife class.</p>
  *
+ * See RFC 5910 [3.3].
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

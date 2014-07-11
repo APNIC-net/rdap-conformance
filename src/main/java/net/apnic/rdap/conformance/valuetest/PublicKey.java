@@ -7,6 +7,8 @@ import net.apnic.rdap.conformance.ValueTest;
 /**
  * <p>PublicKey class.</p>
  *
+ * See RFC 4034 [2.1.4].
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

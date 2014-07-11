@@ -8,10 +8,14 @@ import net.apnic.rdap.conformance.Utils;
 /**
  * <p>KeyTag class.</p>
  *
+ * See RFC 4034 [3.1.6].
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */
 public final class KeyTag implements ValueTest {
+    private static final int MAX_16BIT = 65535;
+
     /**
      * <p>Constructor for KeyTag.</p>
      */
@@ -28,8 +32,9 @@ public final class KeyTag implements ValueTest {
 
         if (value != null) {
             Result cvr = new Result(proto);
-            boolean res = cvr.setDetails(((value >= 0) && (value <= 65535)),
-                                         "valid", "invalid");
+            boolean res = 
+                cvr.setDetails(((value >= 0) && (value <= MAX_16BIT)),
+                               "valid", "invalid");
             context.addResult(cvr);
             return res;
         } else {
