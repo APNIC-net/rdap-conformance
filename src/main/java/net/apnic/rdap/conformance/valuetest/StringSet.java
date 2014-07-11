@@ -37,7 +37,7 @@ public final class StringSet implements ValueTest {
         if (value != null) {
             Result cvr = new Result(proto);
             boolean res = cvr.setDetails(members.contains(value),
-                                         "valid", 
+                                         "valid",
                                          "invalid: " + value);
             context.addResult(cvr);
             return res;

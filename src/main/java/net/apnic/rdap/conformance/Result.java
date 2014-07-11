@@ -21,7 +21,7 @@ public final class Result {
 
     private Status status     = Status.Notification;
     private String path       = "";
-    private String testName  = "";
+    private String testName   = "";
     private String code       = "";
     private String info       = "";
     private String document   = "";

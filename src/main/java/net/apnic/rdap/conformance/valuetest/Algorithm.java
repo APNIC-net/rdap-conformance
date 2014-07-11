@@ -10,7 +10,7 @@ import net.apnic.rdap.conformance.ValueTest;
  * <p>Algorithm class.</p>
  *
  * See RFC 4034 [A.1] and the documents that update it. The registry
- * is available at 
+ * is available at
  * http://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xml.
  *
  * @author Tom Harrison <tomh@apnic.net>

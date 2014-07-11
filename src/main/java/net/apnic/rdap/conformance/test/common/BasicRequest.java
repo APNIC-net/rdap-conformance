@@ -38,6 +38,36 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
     private String testName;
     private String urlPath;
     private boolean invertStatusTest;
+    private Result proto;
+
+    /**
+     * <p>Constructor for BasicRequest.</p>
+     *
+     * @param argExpectedStatus a int.
+     * @param argUrlPath a {@link java.lang.String} object.
+     * @param argTestName a {@link java.lang.String} object.
+     * @param argInvertStatusTest a boolean.
+     * @param argProto a {@link Result} object.
+     */
+    public BasicRequest(final int argExpectedStatus,
+                        final String argUrlPath,
+                        final String argTestName,
+                        final boolean argInvertStatusTest,
+                        final Result argProto) {
+        expectedStatus = argExpectedStatus;
+        testName = argTestName;
+        urlPath  = argUrlPath;
+        invertStatusTest = argInvertStatusTest;
+        proto = argProto;
+
+        if (testName == null) {
+            testName = "common." +
+                        (argInvertStatusTest ? "not-" : "")
+                        + ((expectedStatus == HttpStatus.SC_NOT_FOUND)
+                            ? "not-found"
+                            : expectedStatus);
+        }
+    }
 
     /**
      * <p>Constructor for BasicRequest.</p>
@@ -51,18 +81,8 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
                         final String argUrlPath,
                         final String argTestName,
                         final boolean argInvertStatusTest) {
-        expectedStatus = argExpectedStatus;
-        testName = argTestName;
-        urlPath  = argUrlPath;
-        invertStatusTest = argInvertStatusTest;
-
-        if (testName == null) {
-            testName = "common." +
-                        (argInvertStatusTest ? "not-" : "")
-                        + ((expectedStatus == HttpStatus.SC_NOT_FOUND)
-                            ? "not-found"
-                            : expectedStatus);
-        }
+        this(argExpectedStatus, argUrlPath, argTestName,
+             argInvertStatusTest, null);
     }
 
     /** {@inheritDoc} */
@@ -72,9 +92,13 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + urlPath;
 
-        Result proto = new Result(Status.Notification, path,
-                                  testName,
-                                  "", "", "", "");
+        if (proto == null) {
+            proto = new Result(Status.Notification, path, testName,
+                               "", "", "", "");
+        } else {
+            proto = new Result(proto);
+            proto.setPath(path);
+        }
         Result r = new Result(proto);
         r.setCode("response");
 

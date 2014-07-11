@@ -199,11 +199,16 @@ public final class Application {
          * an invalid status code with inverted sense, because so long
          * as the request is 'successful', it's fine. */
         c.setContentType("application/json");
+        Result ctres = new Result();
+        ctres.setTestName("common.application-json");
+        ctres.setDocument("draft-ietf-weirds-using-http-08");
+        ctres.setReference("4.1");
         tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
                           0,
                           "/domain/example.com",
                           "common.application-json",
-                          true
+                          true,
+                          ctres
                   ));
         c.setContentType(null);
 

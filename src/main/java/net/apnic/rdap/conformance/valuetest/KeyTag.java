@@ -32,7 +32,7 @@ public final class KeyTag implements ValueTest {
 
         if (value != null) {
             Result cvr = new Result(proto);
-            boolean res = 
+            boolean res =
                 cvr.setDetails(((value >= 0) && (value <= MAX_16BIT)),
                                "valid", "invalid");
             context.addResult(cvr);
