@@ -88,6 +88,45 @@ public final class Application {
         return proto;
     }
 
+    private static void runNonRdapTests(List<Test> tests)
+    {
+        /* Relative URI in the HTTP request. */
+        Result relative = new Result();
+        relative.setTestName("common.bad-uri-relative");
+        relative.setStatus(Result.Status.Notification);
+        tests.add(
+            new net.apnic.rdap.conformance.test.common.RawURIRequest(
+                "domain/example.com",
+                relative,
+                false
+            )
+        );
+
+        /* Unprintable characters in the URI in the HTTP request. */
+        Result unprintable = new Result();
+        unprintable.setTestName("common.bad-uri-unprintable");
+        unprintable.setStatus(Result.Status.Notification);
+        tests.add(
+            new net.apnic.rdap.conformance.test.common.RawURIRequest(
+                "/domain/" + new String(Character.toChars(0)),
+                unprintable,
+                false
+            )
+        );
+
+        /* Absolute URI in the HTTP request. */
+        Result absolute = new Result();
+        absolute.setTestName("common.uri-absolute");
+        absolute.setStatus(Result.Status.Notification);
+        tests.add(
+            new net.apnic.rdap.conformance.test.common.RawURIRequest(
+                c.getSpecification().getBaseUrl() + "/domain/example.com",
+                absolute,
+                true
+            )
+        );
+    }
+
     /**
      * <p>main.</p>
      *
@@ -161,43 +200,11 @@ public final class Application {
 
         List<Test> tests = new ArrayList();
 
-        /* Relative URI in the HTTP request. */
-        Result relative = new Result();
-        relative.setTestName("common.bad-uri-relative");
-        relative.setStatus(Result.Status.Notification);
-        tests.add(
-            new net.apnic.rdap.conformance.test.common.RawURIRequest(
-                "domain/example.com",
-                relative,
-                false
-            )
-        );
-
-        /* Unprintable characters in the URI in the HTTP request. */
-        Result unprintable = new Result();
-        unprintable.setTestName("common.bad-uri-unprintable");
-        unprintable.setStatus(Result.Status.Notification);
-        tests.add(
-            new net.apnic.rdap.conformance.test.common.RawURIRequest(
-                "/domain/" + new String(Character.toChars(0)),
-                unprintable,
-                false
-            )
-        );
-
-        /* Absolute URI in the HTTP request. */
-        Result absolute = new Result();
-        absolute.setTestName("common.uri-absolute");
-        tests.add(
-            new net.apnic.rdap.conformance.test.common.RawURIRequest(
-                c.getSpecification().getBaseUrl() + "/domain/example.com",
-                absolute,
-                true
-            )
-        );
-
-        /* From here onwards, the tests are RDAP-specific, except for
-         * the unescaped-URI IP test. */
+        /* For now, the non-RDAP-specific tests are disabled. These
+         * are fairly niche, and in many cases can't easily be fixed
+         * by implementers anyway. See e.g.
+         * https://bugs.eclipse.org/bugs/show_bug.cgi?id=414636. */
+        // runNonRdapTests(tests);
 
         /* application/json content-type. This is deliberately using
          * an invalid status code with inverted sense, because so long
