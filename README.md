@@ -6,9 +6,6 @@ rdap-conformance
 Tests an RDAP server for conformance with the current drafts. See
 http://datatracker.ietf.org/wg/weirds.
 
-This does not currently cover every aspect of the protocol. The issue
-tracker contains work items for the extra parts that are required.
-
 Synopsis
 --------
 
@@ -56,6 +53,9 @@ elements are as follows:
   fields will contain the document name (e.g.
   'draft-ietf-weirds-using-http-08') and the paragraph reference for
   the text.
+
+The output format and elements are subject to change in later
+releases.
 
 Configuration
 -------------
@@ -132,3 +132,15 @@ For example:
             }
         } 
     }
+
+License
+-------
+
+See LICENSE.txt.
+
+Acknowledgments
+---------------
+
+Viagénie (viagenie.ca) has conducted several live interoperability
+tests for the protocol, which were helpful in identifying specific
+behaviours that need to be tested.
