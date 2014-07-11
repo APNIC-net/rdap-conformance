@@ -2,6 +2,7 @@ package net.apnic.rdap.conformance.test.ip;
 
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Test;
+import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.test.common.BasicRequest;
 import org.apache.http.HttpStatus;
 
@@ -18,11 +19,16 @@ public class BadRequest implements Test {
      * <p>Constructor for BadRequest.</p>
      */
     public BadRequest() {
+        Result proto = new Result();
+        proto.setDocument("draft-ietf-weirds-rdap-query-10");
+        proto.setReference("3.1.1");
+        proto.setTestName("ip.bad-request");
         cbr = new BasicRequest(
             HttpStatus.SC_BAD_REQUEST,
             "/ip/...",
-            "ip.bad-request",
-            false
+            null,
+            false,
+            proto
         );
     }
 

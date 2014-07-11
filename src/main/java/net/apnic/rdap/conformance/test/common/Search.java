@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
 import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
-import net.apnic.rdap.conformance.valuetest.BooleanValue;
+import net.apnic.rdap.conformance.attributetest.ResultsTruncated;
 import net.apnic.rdap.conformance.Utils;
 
 /**
@@ -74,7 +74,9 @@ public class Search implements Test {
 
         Result proto = new Result(Status.Notification, path,
                                   testName,
-                                  "", "", "", "");
+                                  "", "",
+                                  "draft-ietf-weirds-json-response-07",
+                                  "9");
         Result r = new Result(proto);
         r.setCode("response");
 
@@ -93,8 +95,7 @@ public class Search implements Test {
             context, proto, root, knownAttributes, true,
             Arrays.asList(
                 new ArrayAttribute(searchTest, searchResultsKey),
-                new ScalarAttribute("resultsTruncated",
-                                    new BooleanValue()),
+                new ResultsTruncated(),
                 new StandardResponse()
             )
         );

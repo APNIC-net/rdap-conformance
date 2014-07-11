@@ -73,7 +73,9 @@ public final class Redirect implements Test {
 
         Result proto = new Result(Status.Notification, path,
                                   testName,
-                                  "", "", "", "");
+                                  "", "",
+                                  "draft-ietf-weirds-using-http-08",
+                                  "5.2");
         Result r = new Result(proto);
         r.setCode("response");
 

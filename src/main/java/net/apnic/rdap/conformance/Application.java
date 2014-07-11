@@ -77,6 +77,17 @@ public final class Application {
         }
     }
 
+    private static Result getDocRefProto(String document,
+                                         String reference,
+                                         String testName)
+    {
+        Result proto = new Result();
+        proto.setDocument(document);
+        proto.setReference(reference);
+        proto.setTestName(testName);
+        return proto;
+    }
+
     /**
      * <p>main.</p>
      *
@@ -225,6 +236,10 @@ public final class Application {
             }
         }
 
+        Result extraQueryParam =
+            getDocRefProto("draft-ietf-weirds-using-http-08", "4.2",
+                           "common.extra-query-parameter");
+
         ObjectClass ocIp = s.getObjectClass("ip");
         if ((ocIp != null) && (ocIp.isSupported())) {
             tests.add(new net.apnic.rdap.conformance.test.ip.BadRequest());
@@ -236,7 +251,7 @@ public final class Application {
             for (String e : notExists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                             "/ip/" + e
-                         ));
+                          ));
             }
             List<String> redirects = ocIp.getRedirects();
             for (String e : redirects) {
@@ -260,7 +275,8 @@ public final class Application {
                               HttpStatus.SC_BAD_REQUEST,
                               "/ip/1.2.3.4?asdf=zxcv",
                               "ip.extra-query-parameter",
-                              true
+                              true,
+                              extraQueryParam
                       ));
         }
 
@@ -277,7 +293,7 @@ public final class Application {
             for (String e : notExists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                             "/autnum/" + e
-                         ));
+                          ));
             }
             ObjectTest std =
                 new net.apnic.rdap.conformance.test.autnum.Standard();
@@ -295,7 +311,8 @@ public final class Application {
                               HttpStatus.SC_BAD_REQUEST,
                               "/autnum/1234?asdf=zxcv",
                               "autnum.extra-query-parameter",
-                              true
+                              true,
+                              extraQueryParam
                       ));
         }
 
@@ -314,7 +331,7 @@ public final class Application {
             for (String e : notExists) {
                 tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
                             "/nameserver/" + e
-                         ));
+                          ));
             }
             ObjectTest std =
                 new net.apnic.rdap.conformance.test.nameserver.Standard();
@@ -333,7 +350,8 @@ public final class Application {
                         HttpStatus.SC_BAD_REQUEST,
                         "/nameserver/example.com?asdf=zxcv",
                         "nameserver.extra-query-parameter",
-                        true
+                        true,
+                        extraQueryParam
                 )
             );
             runSearchTests(
@@ -362,19 +380,26 @@ public final class Application {
             }
             /* That the entity handle happens to be an IP address should
                not cause a 400 to be returned. */
-            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                              HttpStatus.SC_BAD_REQUEST,
-                              "/entity/1.2.3.4",
-                              "entity.not-bad-request",
-                              true
-                      ));
+            tests.add(
+                new net.apnic.rdap.conformance.test.common.BasicRequest(
+                    HttpStatus.SC_BAD_REQUEST,
+                    "/entity/1.2.3.4",
+                    null,
+                    true,
+                    getDocRefProto("draft-ietf-weirds-rdap-query-10", "3.1.5",
+                                   "entity.not-bad-request")
+                )
+            );
             /* Extra query parameter. */
-            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                              HttpStatus.SC_BAD_REQUEST,
-                              "/entity/asdf?asdf=zxcv",
-                              "entity.extra-query-parameter",
-                              true
-                      ));
+            tests.add(
+                new net.apnic.rdap.conformance.test.common.BasicRequest(
+                    HttpStatus.SC_BAD_REQUEST,
+                    "/entity/asdf?asdf=zxcv",
+                    "entity.extra-query-parameter",
+                    true,
+                    extraQueryParam
+                )
+            );
             runSearchTests(
                 tests,
                 ocEn,
@@ -413,26 +438,37 @@ public final class Application {
             }
             /* Number registries should not return 400 on forward
              * domains. */
-            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                              HttpStatus.SC_BAD_REQUEST,
-                              "/domain/example.com",
-                              "domain.not-bad-request",
-                              true
-                      ));
+            tests.add(
+                new net.apnic.rdap.conformance.test.common.BasicRequest(
+                    HttpStatus.SC_BAD_REQUEST,
+                    "/domain/example.com",
+                    null,
+                    true,
+                    getDocRefProto("draft-ietf-weirds-rdap-query-10", "3.1.3",
+                                   "domain.not-bad-request")
+                )
+            );
             /* As above, but for name registries and reverse domains. */
-            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                              HttpStatus.SC_BAD_REQUEST,
-                              "/domain/202.in-addr.arpa",
-                              "domain.not-bad-request",
-                              true
-                      ));
+            tests.add(
+                new net.apnic.rdap.conformance.test.common.BasicRequest(
+                    HttpStatus.SC_BAD_REQUEST,
+                    "/domain/202.in-addr.arpa",
+                    null,
+                    true,
+                    getDocRefProto("draft-ietf-weirds-rdap-query-10", "3.1.3",
+                                   "domain.not-bad-request")
+                )
+            );
             /* Extra query parameter. */
-            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                              HttpStatus.SC_BAD_REQUEST,
-                              "/domain/example.com?asdf=zxcv",
-                              "domain.extra-query-parameter",
-                              true
-                      ));
+            tests.add(
+                new net.apnic.rdap.conformance.test.common.BasicRequest(
+                    HttpStatus.SC_BAD_REQUEST,
+                    "/domain/example.com?asdf=zxcv",
+                    "domain.extra-query-parameter",
+                    true,
+                    extraQueryParam
+                )
+            );
             runSearchTests(
                 tests,
                 ocDom,
