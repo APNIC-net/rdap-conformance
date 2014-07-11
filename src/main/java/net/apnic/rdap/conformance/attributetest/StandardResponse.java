@@ -13,6 +13,10 @@ import net.apnic.rdap.conformance.Utils;
 /**
  * <p>StandardResponse class.</p>
  *
+ * Tests for all the attributes that may be present in a standard
+ * response. Cf. StandardObject, which covers the individual objects
+ * present in the response.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

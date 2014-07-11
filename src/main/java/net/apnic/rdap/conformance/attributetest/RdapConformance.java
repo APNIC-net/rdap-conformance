@@ -14,6 +14,11 @@ import net.apnic.rdap.conformance.AttributeTest;
 /**
  * <p>RdapConformance class.</p>
  *
+ * This test is fairly basic at the moment: it just confirms that
+ * rdapConformance is an array and that it contains an "rdap_level_0"
+ * entry. It does not e.g. report on extension entries so that extra
+ * tests can be enabled, or unknown attributes properly determined.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */
@@ -27,9 +32,6 @@ public final class RdapConformance implements AttributeTest {
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
-        /* All attributes are optional, strictly speaking (json-response 3.2),
-         * but for the attributes which aren't sensitive and will always be
-         * available, absence will be treated as error. */
         nr.setCode("content");
         nr.addNode("rdapConformance");
         nr.setDocument("draft-ietf-weirds-json-response-06");

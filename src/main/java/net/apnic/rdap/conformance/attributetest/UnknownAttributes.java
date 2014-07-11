@@ -14,6 +14,13 @@ import net.apnic.rdap.conformance.AttributeTest;
 /**
  * <p>UnknownAttributes class.</p>
  *
+ * Takes a set of "known attributes", and checks in the map for
+ * attributes that do not have corresponding entries in that set. Any
+ * attribute that contains an underscore is assumed to be correct and
+ * to belong to a documented extension; this may become stricter in
+ * the future, depending on how many extensions are proposed and
+ * implemented.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

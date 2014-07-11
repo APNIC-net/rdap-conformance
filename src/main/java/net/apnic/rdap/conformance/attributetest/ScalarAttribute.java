@@ -15,6 +15,10 @@ import net.apnic.rdap.conformance.Utils;
 /**
  * <p>ScalarAttribute class.</p>
  *
+ * Provides for testing that a particular attribute in a map has a scalar
+ * value, and that that value satisfies a particular ValueTest or
+ * AttributeTest.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

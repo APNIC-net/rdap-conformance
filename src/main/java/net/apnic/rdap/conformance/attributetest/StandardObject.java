@@ -13,6 +13,10 @@ import net.apnic.rdap.conformance.Utils;
 /**
  * <p>StandardObject class.</p>
  *
+ * Tests for all the attributes that may be present in a standard
+ * object (i.e. an instance of an RDAP object class). Cf.
+ * StandardResponse, which covers the top-level RDAP response.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */
@@ -34,8 +38,8 @@ public final class StandardObject implements AttributeTest {
                 new Events(),
                 new Status(),
                 /* This appears to be permitted at any level of the response,
-                * since the document refers to 'the containing object
-                * instance'. */
+                 * since the document refers to 'the containing object
+                 * instance'. */
                 new Port43(),
                 new PublicIds(),
                 new Entities(),

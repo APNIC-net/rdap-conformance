@@ -16,6 +16,9 @@ import net.apnic.rdap.conformance.valuetest.StringTest;
 /**
  * <p>ErrorResponse class.</p>
  *
+ * Also provides for confirming that the errorCode from the response
+ * body matches a particular status code.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */

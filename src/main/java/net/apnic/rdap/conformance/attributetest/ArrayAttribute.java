@@ -16,6 +16,10 @@ import net.apnic.rdap.conformance.Utils;
 /**
  * <p>ArrayAttribute class.</p>
  *
+ * Provides for testing that a particular attribute in a map has an
+ * array value, and that each element of that array (if present)
+ * satisfies a particular ValueTest or AttributeTest.
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */
