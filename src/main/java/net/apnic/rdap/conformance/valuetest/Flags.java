@@ -9,13 +9,19 @@ import net.apnic.rdap.conformance.ValueTest;
 /**
  * <p>Flags class.</p>
  *
+ * See RFC 4034 [2.1.1] and [2.2].
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.2
  */
 public final class Flags implements ValueTest {
+    private static final int NONE = 0;
+    private static final int ZSK  = 256;
+    private static final int KSK  = 257;
+
     private static IntegerSet integerSet =
         new IntegerSet(Sets.newHashSet(
-            0, 256, 257
+            NONE, ZSK, KSK
         ));
 
     /**
