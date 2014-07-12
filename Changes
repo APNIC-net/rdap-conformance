@@ -1,4 +1,9 @@
 Revision history for rdap-conformance.
 
-0.1     7 March 2014
+v0.2    12 July 2014
+        - Object structure validation.
+        - Basic search and redirect testing.
+        - Request rate limiting.
+
+v0.1    7 March 2014
         - Initial release.
