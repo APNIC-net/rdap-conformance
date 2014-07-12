@@ -22,7 +22,7 @@ import net.apnic.rdap.conformance.Utils;
  * <p>Redirect class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Redirect implements Test {
     private String urlPath;

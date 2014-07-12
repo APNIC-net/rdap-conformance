@@ -18,7 +18,7 @@ import java.util.Locale;
  * <p>Lang class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Lang implements AttributeTest {
     /**

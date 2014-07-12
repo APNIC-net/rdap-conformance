@@ -17,7 +17,7 @@ import net.apnic.rdap.conformance.attributetest.Domain;
  * <p>Standard class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Standard implements ObjectTest {
     private String domain = null;

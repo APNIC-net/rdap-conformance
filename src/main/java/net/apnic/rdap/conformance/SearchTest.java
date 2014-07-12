@@ -10,7 +10,7 @@ import java.io.Serializable;
  * confirm e.g. that the correct object has been returned.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public interface SearchTest extends AttributeTest, Serializable {
     /**

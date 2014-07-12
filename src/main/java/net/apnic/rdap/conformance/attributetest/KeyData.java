@@ -18,7 +18,7 @@ import net.apnic.rdap.conformance.valuetest.PublicKey;
  * <p>KeyData class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class KeyData implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();

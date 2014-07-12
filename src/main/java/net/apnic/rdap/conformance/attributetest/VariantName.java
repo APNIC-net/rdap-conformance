@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.Utils;
  * <p>VariantName class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class VariantName implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();

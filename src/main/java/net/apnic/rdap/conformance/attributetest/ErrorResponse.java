@@ -20,7 +20,7 @@ import net.apnic.rdap.conformance.valuetest.StringTest;
  * body matches a particular status code.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class ErrorResponse implements AttributeTest {
     private Set<String> knownAttributes = null;

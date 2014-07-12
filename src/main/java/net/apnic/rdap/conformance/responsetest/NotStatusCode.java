@@ -13,7 +13,7 @@ import net.apnic.rdap.conformance.ResponseTest;
  * <p>NotStatusCode class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class NotStatusCode implements ResponseTest {
     private int notExpectedCode;

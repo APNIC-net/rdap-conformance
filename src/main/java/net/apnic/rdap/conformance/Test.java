@@ -13,7 +13,7 @@ package net.apnic.rdap.conformance;
  * object, return boolean indicating success/failure.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public interface Test {
     /**

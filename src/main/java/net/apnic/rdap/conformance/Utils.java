@@ -29,7 +29,7 @@ import org.apache.http.client.config.RequestConfig;
  * objects.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Utils {
     private static final int TIMEOUT_MS = 5000;

@@ -20,7 +20,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * tests can be enabled, or unknown attributes properly determined.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class RdapConformance implements AttributeTest {
     /**

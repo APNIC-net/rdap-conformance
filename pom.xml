@@ -6,7 +6,7 @@
     <groupId>net.apnic.rdap</groupId>
     <artifactId>rdap-conformance</artifactId>
     <packaging>jar</packaging>
-    <version>0.2</version>
+    <version>0.3-SNAPSHOT</version>
     <name>rdap-conformance</name>
     <url>http://confluence.apnic.net</url>
     <description>RDAP conformance</description>

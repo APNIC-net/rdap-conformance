@@ -18,7 +18,7 @@ import com.google.common.util.concurrent.RateLimiter;
  * things.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Context {
     private HttpClient httpClient = null;

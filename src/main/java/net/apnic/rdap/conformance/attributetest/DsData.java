@@ -18,7 +18,7 @@ import net.apnic.rdap.conformance.valuetest.DigestType;
  * <p>DsData class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class DsData implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();

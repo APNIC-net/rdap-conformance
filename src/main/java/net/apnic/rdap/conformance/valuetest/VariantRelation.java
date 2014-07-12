@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.ValueTest;
  * <p>VariantRelation class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class VariantRelation implements ValueTest {
     private static StringSet stringSet =

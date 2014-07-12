@@ -16,7 +16,7 @@ import net.apnic.rdap.conformance.valuetest.MaxSigLife;
  * <p>SecureDNS class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class SecureDNS implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();

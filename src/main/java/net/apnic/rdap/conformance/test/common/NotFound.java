@@ -8,7 +8,7 @@ import org.apache.http.HttpStatus;
  * <p>NotFound class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class NotFound implements Test {
     private Test cbr = null;

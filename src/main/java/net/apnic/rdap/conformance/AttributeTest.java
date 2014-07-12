@@ -15,7 +15,7 @@ import java.util.Map;
  * aren't present in the union of the tests' known attributes.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public interface AttributeTest {
     /**

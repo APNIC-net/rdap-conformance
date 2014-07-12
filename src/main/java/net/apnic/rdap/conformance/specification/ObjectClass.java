@@ -7,7 +7,7 @@ import java.util.List;
  * <p>ObjectClass class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class ObjectClass {
     private boolean supported = false;

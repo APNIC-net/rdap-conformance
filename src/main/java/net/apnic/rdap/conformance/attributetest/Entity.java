@@ -24,7 +24,7 @@ import net.apnic.rdap.conformance.Utils;
  * <p>Entity class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Entity implements SearchTest {
     private boolean checkUnknown = false;

@@ -11,7 +11,7 @@ import net.apnic.rdap.conformance.Utils;
  * <p>IntegerSet class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class IntegerSet implements ValueTest {
     private Set<Integer> members = null;

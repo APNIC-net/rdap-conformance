@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * <p>Status class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Status implements AttributeTest {
     private static final Set<String> STATUSES =

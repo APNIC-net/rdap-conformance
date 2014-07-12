@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.ResponseTest;
  * <p>ContentType class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class ContentType implements ResponseTest {
     /**

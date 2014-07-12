@@ -20,7 +20,7 @@ import net.apnic.rdap.conformance.valuetest.IPv6Address;
  * <p>Nameserver class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Nameserver implements SearchTest {
     private String key = null;

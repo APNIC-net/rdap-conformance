@@ -11,7 +11,7 @@ import net.apnic.rdap.conformance.Utils;
  * See RFC 4034 [2.1.2].
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Protocol implements ValueTest {
     /**

@@ -15,7 +15,7 @@ import net.apnic.rdap.conformance.valuetest.StringTest;
  * <p>Notice class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Notice implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();

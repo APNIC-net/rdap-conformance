@@ -21,7 +21,7 @@ import com.vgrs.xcode.util.XcodeException;
  * <p>DomainNames class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class DomainNames implements SearchTest {
     private static final int DOMAIN_LABEL_MAX_LENGTH = 63;

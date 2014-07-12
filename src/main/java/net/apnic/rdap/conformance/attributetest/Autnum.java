@@ -20,7 +20,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * <p>Autnum class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Autnum implements AttributeTest {
     private String autnum = null;

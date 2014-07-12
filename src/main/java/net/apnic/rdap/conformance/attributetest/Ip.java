@@ -25,7 +25,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * <p>Ip class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Ip implements AttributeTest {
     private String ip = null;

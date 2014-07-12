@@ -17,7 +17,7 @@ import net.apnic.rdap.conformance.ResponseTest;
  * <p>StatusCode class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class StatusCode implements ResponseTest {
     private Set<Integer> expectedCodes = new HashSet<Integer>();

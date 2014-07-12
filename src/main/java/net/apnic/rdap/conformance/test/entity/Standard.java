@@ -18,7 +18,7 @@ import net.apnic.rdap.conformance.attributetest.Notices;
  * <p>Standard class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Standard implements Test {
     private String entity = "";

@@ -24,7 +24,7 @@ import net.apnic.rdap.conformance.specification.ObjectClassSearch;
  * stdout.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class Application {
     private static final int EX_USAGE = 64;

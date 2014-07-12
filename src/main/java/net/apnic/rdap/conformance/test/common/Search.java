@@ -21,7 +21,7 @@ import net.apnic.rdap.conformance.Utils;
  * <p>Search class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public class Search implements Test {
     private String urlPath;

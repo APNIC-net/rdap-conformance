@@ -10,7 +10,7 @@ import org.apache.http.HttpStatus;
  * <p>BadRequest class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.2
+ * @version 0.3-SNAPSHOT
  */
 public final class BadRequest implements Test {
     private Test cbr = null;
