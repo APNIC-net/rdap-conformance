@@ -107,21 +107,21 @@ For example:
                 "redirects": ["200.3.14.10"]
             },
             "domain": {
-                "supported":  true,
-                "exists":     ["203.in-addr.arpa"],
+                "supported": true,
+                "exists":    ["203.in-addr.arpa"],
                 "notExists": ["google.com"]
             },
             "nameserver": {
                 "supported": false
             },
             "entity": {
-                "supported":  true,
-                "exists":     ["TP137-AP"],
+                "supported": true,
+                "exists":    ["TP137-AP"],
                 "notExists": ["@@@@@@@@"],
                 "search": {
                     "supported": true,
                     "values": {
-                        "fn": [ "Test*" ],
+                        "fn":     [ "Test*" ],
                         "handle": [ "TP*" ]
                     }
                 }
@@ -141,6 +141,6 @@ See LICENSE.txt.
 Acknowledgments
 ---------------
 
-Viagénie (viagenie.ca) has conducted several live interoperability
-tests for the protocol, which were helpful in identifying specific
-behaviours that need to be tested.
+Viagénie (http://viagenie.ca) has conducted several live
+interoperability tests for the protocol, which were helpful in
+identifying specific behaviours that need to be tested.

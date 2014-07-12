@@ -260,8 +260,8 @@ public final class Entity implements SearchTest {
             context, proto, data, knownAttributes, checkUnknown,
             Arrays.asList(
                 new AsEventActor(),
-                new ArrayAttribute(new Ip(), "networks"), 
-                new ArrayAttribute(new Autnum(), "autnums"), 
+                new ArrayAttribute(new Ip(), "networks"),
+                new ArrayAttribute(new Autnum(), "autnums"),
                 new StandardObject()
             )
         );
