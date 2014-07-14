@@ -1,0 +1,45 @@
+{ 
+    "baseUrl": "http://rdap.dnslab.jp/.well-known/rdap",
+    "objectClasses": {
+        "ip": {
+            "supported": false
+        },
+        "domain": {
+            "supported": true,
+            "exists": ["example.dnslab", "xn--ickqs6k2dyb.dnslab", "エグザンプル.dnslab"],
+            "notExists": ["example.notexists.com"],
+            "search": {
+                "supported": true,
+                "values": {
+                    "name": ["example*.dnslab", "エグザンプ*"]
+                }
+            }
+        },
+        "nameserver": {
+            "supported": true,
+            "exists": ["ns01.example.dnslab", "ns02.example.dnslab"],
+            "search": {
+                "supported": true,
+                "values": {
+                    "name": ["ns0*.dnslab"],
+                    "ip": ["192.0.2.101"]
+                }
+            }
+        },
+        "entity": {
+            "supported": true,
+            "exists": ["100001-RR"],
+            "notExists": ["@@@@@@@@"],
+            "search": {
+                "supported": true,
+                "values": {
+                    "fn": ["Japan Registry*"],
+                    "handle": ["100001-*"]
+                }
+            }
+        },
+        "autnum": {
+            "supported": false
+        }
+    }
+}
