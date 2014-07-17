@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import com.google.gson.Gson;
 
@@ -397,5 +398,30 @@ public final class Utils {
             ret2 = ua.run(context, proto, data);
         }
         return (ret && ret2);
+    }
+
+    /**
+     * <p>matchesSearch</p>
+     *
+     * Returns a boolean indicating whether the string matches the
+     * RDAP search pattern.
+     *
+     * @param strPattern a string.
+     * @param value a string.
+     * @return a boolean.
+     */
+    public static boolean matchesSearch(final String strPattern,
+                                        final String value) {
+        /* At least some servers will add implicit ".*" to the
+         * beginning and the end of the pattern, so add those here
+         * too. This may become configurable, so that stricter servers
+         * can verify their behaviour.  Searches are presumed to be
+         * case-insensitive as well. */
+        String regexPattern = strPattern.replaceAll("\\*", ".*");
+        regexPattern = ".*" + regexPattern + ".*";
+        Pattern pattern = Pattern.compile(regexPattern,
+                                          Pattern.CASE_INSENSITIVE
+                                        | Pattern.UNICODE_CASE);
+        return pattern.matcher(value).matches();
     }
 }

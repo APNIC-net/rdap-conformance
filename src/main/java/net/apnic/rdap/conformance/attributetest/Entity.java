@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
@@ -98,19 +97,7 @@ public final class Entity implements SearchTest {
             r2.setStatus(Status.Success);
             if (searchContext) {
                 r2.setInfo("response handle matches search pattern");
-                String handlePattern = handle.replaceAll("\\*", ".*");
-                /* At least some servers will add implicit ".*" to the
-                 * beginning and the end of the pattern, so add those
-                 * here too. This may become configurable, so that
-                 * stricter servers can verify their behaviour.
-                 * Searches are presumed to be case-insensitive as
-                 * well. */
-                handlePattern = ".*" + handlePattern + ".*";
-                Pattern p =
-                    Pattern.compile(handlePattern,
-                                    Pattern.CASE_INSENSITIVE
-                                  | Pattern.UNICODE_CASE);
-                if (!p.matcher(responseHandle).matches()) {
+                if (!Utils.matchesSearch(handle, responseHandle)) {
                     r2.setStatus(Status.Warning);
                     r2.setInfo("response handle does not "
                                + "match search pattern");
@@ -240,14 +227,8 @@ public final class Entity implements SearchTest {
             } else {
                 r2.setStatus(Status.Success);
                 r2.setInfo("response name matches search pattern");
-                String fnPattern = fn.replaceAll("\\*", ".*");
-                fnPattern = ".*" + fnPattern + ".*";
-                Pattern p =
-                    Pattern.compile(fnPattern,
-                                    Pattern.CASE_INSENSITIVE
-                                  | Pattern.UNICODE_CASE);
                 String name = vcard.getFormattedName().getValue();
-                if (!p.matcher(name).matches()) {
+                if (!Utils.matchesSearch(fn, name)) {
                     r2.setStatus(Status.Warning);
                     r2.setInfo("response name does not "
                                + "match search pattern");

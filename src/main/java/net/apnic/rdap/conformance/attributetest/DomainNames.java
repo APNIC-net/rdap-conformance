@@ -35,7 +35,9 @@ public final class DomainNames implements SearchTest {
     /** {@inheritDoc} */
     public void setSearchDetails(final String argKey,
                                  final String argPattern) {
-        pattern = argPattern;
+        if (argKey.equals("name")) {
+            pattern = argPattern;
+        }
     }
 
     private int isValidLdhName(final String ldhName) {
