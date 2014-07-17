@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
+
+import com.google.common.util.concurrent.RateLimiter;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -30,6 +34,26 @@ public final class Application {
     private static final int EX_USAGE = 64;
     private static final int EX_NOINPUT = 66;
     private static final int EX_SOFTWARE = 70;
+
+    private static final TrustManager[] trustAllCerts =
+        new TrustManager[] {
+            new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(
+                    final X509Certificate[] chain,
+                    final String authType
+                ) { }
+                @Override
+                public void checkServerTrusted(
+                    final X509Certificate[] chain,
+                    final String authType
+                ) { }
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+            }
+        };
 
     private Application() { }
 
@@ -127,6 +151,29 @@ public final class Application {
         );
     }
 
+    private static Context createContext(Specification s,
+                                         RateLimiter rateLimiter) {
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts,
+                             new java.security.SecureRandom());
+        } catch (Exception e) {
+            System.err.println(e.toString());
+            System.exit(EX_SOFTWARE);
+        }
+
+        HttpClient hc = HttpClientBuilder.create()
+                                         .setSslcontext(sslContext)
+                                         .build();
+        Context c = new Context();
+        c.setHttpClient(hc);
+        c.setSpecification(s);
+        c.setRateLimiter(rateLimiter);
+
+        return c;
+    }
+
     /**
      * <p>main.</p>
      *
@@ -156,42 +203,11 @@ public final class Application {
             System.exit(EX_NOINPUT);
         }
 
-        final TrustManager[] trustAllCerts =
-            new TrustManager[] {
-                new X509TrustManager() {
-                    @Override
-                    public void checkClientTrusted(
-                        final X509Certificate[] chain,
-                        final String authType
-                    ) { }
-                    @Override
-                    public void checkServerTrusted(
-                        final X509Certificate[] chain,
-                        final String authType
-                    ) { }
-                    @Override
-                    public X509Certificate[] getAcceptedIssuers() {
-                        return null;
-                    }
-                }
-            };
-
-        SSLContext sslContext = null;
-        try {
-            sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts,
-                             new java.security.SecureRandom());
-        } catch (Exception e) {
-            System.err.println(e.toString());
-            System.exit(EX_SOFTWARE);
-        }
-
-        HttpClient hc = HttpClientBuilder.create()
-                                         .setSslcontext(sslContext)
-                                         .build();
-        Context c = new Context();
-        c.setHttpClient(hc);
-        c.setSpecification(s);
+        RateLimiter rateLimiter =
+            (s.getRequestsPerSecond() > 0)
+                ? RateLimiter.create(s.getRequestsPerSecond())
+                : null;
+        Context c = createContext(s, rateLimiter);
 
         List<String> objectTypes = new ArrayList<String>(
             Arrays.asList("ip", "nameserver", "autnum",
@@ -486,10 +502,22 @@ public final class Application {
             );
         }
 
-        for (Test t : tests) {
-            t.run(c);
+        /* todo: serialise access to stdout to avoid interleaving test
+         * results. */
+        final ExecutorService executorService =
+            Executors.newFixedThreadPool(s.getThreadCount());
+        for (final Test t : tests) {
+            final Context c2 = createContext(s, rateLimiter);
+            executorService.submit(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        t.run(c2);
+                        c2.flushResults();
+                    }
+                }
+            );
         }
-
-        c.flushResults();
+        executorService.shutdown();
     }
 }

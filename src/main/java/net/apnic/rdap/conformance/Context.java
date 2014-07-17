@@ -82,7 +82,6 @@ public final class Context {
      */
     public void addResult(final Result r) {
         results.add(r);
-        flushResults();
     }
 
     /**
@@ -127,11 +126,21 @@ public final class Context {
     }
 
     /**
+     * <p>Setter for the field <code>rateLimiter</code>.</p>
+     *
+     * @param rl a {@link com.google.common.util.concurrent.RateLimiter} object.
+     */
+    public void setRateLimiter(final RateLimiter rl) {
+        rateLimiter = rl;
+    }
+
+    /**
      * <p>flushResults.</p>
      */
     public void flushResults() {
         List<Result> ml = getResults();
         int size = ml.size();
+        System.out.println(size + ", " + index);
         int i;
         for (i = index; i < size; i++) {
             System.out.println(ml.get(i).toString());

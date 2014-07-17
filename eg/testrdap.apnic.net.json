@@ -1,5 +1,6 @@
 { 
     "baseUrl": "http://testrdap.apnic.net",
+    "threadCount": 4,
     "objectClasses": {
         "ip": {
             "supported": true,
