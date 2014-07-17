@@ -89,6 +89,28 @@ public final class Nameserver implements SearchTest {
             }
             knownAttributes.addAll(v4.getKnownAttributes());
             knownAttributes.addAll(v6.getKnownAttributes());
+
+            if ((key != null) && key.equals("ip")) {
+                boolean found = false;
+                try {
+                    List<String> addresses = new ArrayList<String>();
+                    addresses.addAll((List<String>) ipAddresses.get("v4"));
+                    addresses.addAll((List<String>) ipAddresses.get("v6"));
+                    for (String address : addresses) {
+                        if (Utils.matchesSearch(pattern, address)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                } catch (ClassCastException e) {
+                    found = false;
+                }
+                Result nr3 = new Result(nr);
+                nr3.addNode("ipAddresses");
+                nr3.setDetails(found, "found IP address matching pattern",
+                                      "no IP address matches pattern");
+                context.addResult(nr3);
+            }
         }
         knownAttributes.add("ipAddresses");
 
