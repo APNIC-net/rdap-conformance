@@ -502,10 +502,10 @@ public final class Application {
             );
         }
 
-        /* todo: serialise access to stdout to avoid interleaving test
-         * results. */
+        /* Eight is a completely arbitrary figure, here. todo later:
+         * this should be using asynchronous IO for the HTTP requests. */
         final ExecutorService executorService =
-            Executors.newFixedThreadPool(s.getThreadCount());
+            Executors.newFixedThreadPool(s.getAllowConcurrency() ? 8 : 1);
         for (final Test t : tests) {
             final Context c2 = createContext(s, rateLimiter);
             executorService.submit(
@@ -513,7 +513,9 @@ public final class Application {
                     @Override
                     public void run() {
                         t.run(c2);
-                        c2.flushResults();
+                        synchronized (System.out) {
+                            c2.flushResults();
+                        }
                     }
                 }
             );

@@ -66,6 +66,7 @@ the following structure:
     {
         "baseUrl": "{base-url}",
         "requestsPerSecond": "{requests-per-second}",
+        "allowConcurrency": "{allow-concurrency}",
         "objectClasses": {
             "{object-class}": {
                 "supported": {boolean},
@@ -89,6 +90,10 @@ the following structure:
 
 `requestsPerSecond` is an optional configuration entry. By default,
 there is no limit on the number of requests issued per second.
+
+`allowConcurrency` is an optional configuration entry. By default,
+concurrency is disabled. Result ordering may not be consistent when
+concurrency is enabled.
 
 Redirects are not applicable for the entity object class. Searches are
 only applicable for entities, domains and nameservers.
