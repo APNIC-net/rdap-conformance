@@ -207,7 +207,6 @@ public final class Application {
             (s.getRequestsPerSecond() > 0)
                 ? RateLimiter.create(s.getRequestsPerSecond())
                 : null;
-        Context c = createContext(s, rateLimiter);
 
         List<String> objectTypes = new ArrayList<String>(
             Arrays.asList("ip", "nameserver", "autnum",
@@ -221,23 +220,6 @@ public final class Application {
          * by implementers anyway. See e.g.
          * https://bugs.eclipse.org/bugs/show_bug.cgi?id=414636. */
         // runNonRdapTests(c, tests);
-
-        /* application/json content-type. This is deliberately using
-         * an invalid status code with inverted sense, because so long
-         * as the request is 'successful', it's fine. */
-        c.setContentType("application/json");
-        Result ctres = new Result();
-        ctres.setTestName("common.application-json");
-        ctres.setDocument("draft-ietf-weirds-using-http-08");
-        ctres.setReference("4.1");
-        tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                          0,
-                          "/domain/example.com",
-                          "common.application-json",
-                          true,
-                          ctres
-                  ));
-        c.setContentType(null);
 
         /* Unsupported query types. */
         for (String objectType : objectTypes) {
@@ -507,19 +489,50 @@ public final class Application {
         final ExecutorService executorService =
             Executors.newFixedThreadPool(s.getAllowConcurrency() ? 8 : 1);
         for (final Test t : tests) {
-            final Context c2 = createContext(s, rateLimiter);
+            final Context context = createContext(s, rateLimiter);
             executorService.submit(
                 new Runnable() {
                     @Override
                     public void run() {
-                        t.run(c2);
+                        t.run(context);
                         synchronized (System.out) {
-                            c2.flushResults();
+                            context.flushResults();
                         }
                     }
                 }
             );
         }
+
+        /* application/json content-type. This is deliberately using
+         * an invalid status code with inverted sense, because so long
+         * as the request is 'successful', it's fine. */
+        Result ctres = new Result();
+        ctres.setTestName("common.application-json");
+        ctres.setDocument("draft-ietf-weirds-using-http-08");
+        ctres.setReference("4.1");
+        final Test test =
+            new net.apnic.rdap.conformance.test.common.BasicRequest(
+                0,
+                "/domain/example.com",
+                "common.application-json",
+                true,
+                ctres
+            );
+        final Context context = createContext(s, rateLimiter);
+        executorService.submit(
+            new Runnable() {
+                @Override
+                public void run() {
+                    context.setContentType("application/json");
+                    test.run(context);
+                    context.setContentType(null);
+                    synchronized (System.out) {
+                        context.flushResults();
+                    }
+                }
+            }
+        );
+
         executorService.shutdown();
     }
 }
