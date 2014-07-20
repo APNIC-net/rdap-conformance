@@ -484,6 +484,8 @@ public final class Application {
             );
         }
 
+        tests.add(new net.apnic.rdap.conformance.test.help.Standard());
+
         /* Eight is a completely arbitrary figure, here. todo later:
          * this should be using asynchronous IO for the HTTP requests. */
         final ExecutorService executorService =
