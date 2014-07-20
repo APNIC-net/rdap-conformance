@@ -140,7 +140,6 @@ public final class Context {
     public void flushResults() {
         List<Result> ml = getResults();
         int size = ml.size();
-        System.out.println(size + ", " + index);
         int i;
         for (i = index; i < size; i++) {
             System.out.println(ml.get(i).toString());
