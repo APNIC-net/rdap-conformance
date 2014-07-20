@@ -14,7 +14,7 @@
             "search": {
                 "supported": true,
                 "values": {
-                    "name": ["20*", "202.in-addr.arpa"]
+                    "name": ["202.in-addr*", "202.in-addr.arpa"]
                 }
             }
         },
@@ -28,7 +28,7 @@
             "search": {
                 "supported": true,
                 "values": {
-                    "fn": [ "Test" ],
+                    "fn": [ "Test Person" ],
                     "handle": [ "TP13*" ]
                 }
             }
