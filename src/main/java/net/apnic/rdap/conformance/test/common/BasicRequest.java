@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.List;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
@@ -39,6 +40,8 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
     private String urlPath;
     private boolean invertStatusTest;
     private Result proto;
+    private Context context = null;
+    private HttpResponse httpResponse = null;
 
     /**
      * <p>Constructor for BasicRequest.</p>
@@ -86,7 +89,24 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
     }
 
     /** {@inheritDoc} */
-    public boolean run(final Context context) {
+    public void setContext(final Context c) {
+        context = c;
+    }
+
+    /** {@inheritDoc} */
+    public void setResponse(final HttpResponse hr) {
+        httpResponse = hr;
+    }
+
+    /** {@inheritDoc} */
+    public HttpRequest getRequest() {
+        String bu = context.getSpecification().getBaseUrl();
+        String path = bu + urlPath;
+        return Utils.httpGetRequest(context, path, true);
+    }
+
+    /** {@inheritDoc} */
+    public boolean run() {
         List<Result> results = context.getResults();
 
         String bu = context.getSpecification().getBaseUrl();
@@ -101,22 +121,6 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
         }
         Result r = new Result(proto);
         r.setCode("response");
-
-        HttpRequestBase request = null;
-        HttpResponse response = null;
-        try {
-            request = Utils.httpGetRequest(context, path, true);
-            response = context.executeRequest(request);
-        } catch (IOException e) {
-            r.setStatus(Status.Failure);
-            r.setInfo(e.toString());
-            results.add(r);
-            if (request != null) {
-                request.releaseConnection();
-            }
-            return false;
-        }
-
         r.setStatus(Status.Success);
         results.add(r);
 
@@ -124,55 +128,48 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
             (invertStatusTest)
                 ? new NotStatusCode(expectedStatus)
                 : new StatusCode(expectedStatus);
-        boolean scres = sc.run(context, proto, response);
+        boolean scres = sc.run(context, proto, httpResponse);
         if (!scres) {
-            request.releaseConnection();
             return false;
         }
 
-        Header cth = response.getEntity().getContentType();
+        Header cth = httpResponse.getEntity().getContentType();
         if (cth == null) {
             /* If there is no content-type, then there shouldn't be a body.
              * This is fine, since bodies are optional for error responses. */
-            request.releaseConnection();
             return true;
         }
 
         ResponseTest ct = new ContentType();
-        boolean ctres = ct.run(context, proto, response);
+        boolean ctres = ct.run(context, proto, httpResponse);
 
         if (!(scres && ctres)) {
-            request.releaseConnection();
             return false;
         }
 
         Map root = null;
         try {
-            InputStream is = response.getEntity().getContent();
+            InputStream is = httpResponse.getEntity().getContent();
             InputStreamReader isr = new InputStreamReader(is, "UTF-8");
             root = new Gson().fromJson(isr, Map.class);
         } catch (Exception e) {
             r = new Result(proto);
             r.setInfo(e.toString());
             results.add(r);
-            request.releaseConnection();
             return false;
         }
         if (root == null) {
-            request.releaseConnection();
             return ctres;
         }
 
         Set<String> keys = root.keySet();
         if (keys.size() == 0) {
-            request.releaseConnection();
             return ctres;
         }
 
         if ((expectedStatus >= HTTP_ERROR_CODE_LOWER_BOUND)
                 && (!invertStatusTest)) {
             AttributeTest ert = new ErrorResponse(expectedStatus);
-            request.releaseConnection();
             return ert.run(context, proto, root);
         } else {
             return ctres;

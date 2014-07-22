@@ -1,5 +1,6 @@
 package net.apnic.rdap.conformance.test.common;
 
+import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Test;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Result;
@@ -14,6 +15,7 @@ import org.apache.http.impl.io.DefaultHttpResponseParser;
 import org.apache.http.impl.io.SessionInputBufferImpl;
 import org.apache.http.impl.io.HttpTransportMetricsImpl;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpEntity;
 import com.google.gson.Gson;
 
@@ -29,6 +31,8 @@ public final class RawURIRequest implements Test {
     private String rawUri = null;
     private Result proto = null;
     private boolean expectedSuccess = false;
+    private Context context = null;
+    private HttpResponse httpResponse = null;
 
     /**
      * <p>Constructor for RawURIRequest.</p>
@@ -46,7 +50,23 @@ public final class RawURIRequest implements Test {
     }
 
     /** {@inheritDoc} */
-    public boolean run(final Context context) {
+    public void setContext(final Context c) {
+        context = c;
+    }
+
+    /** {@inheritDoc} */
+    public void setResponse(final HttpResponse hr) {
+        httpResponse = hr;
+    }
+
+    /** {@inheritDoc} */
+    public HttpRequest getRequest() {
+        String path = context.getSpecification().getBaseUrl() + "/help";
+        return Utils.httpGetRequest(context, path, true);
+    }
+
+    /** {@inheritDoc} */
+    public boolean run() {
         boolean success = false;
         String error = null;
         try {

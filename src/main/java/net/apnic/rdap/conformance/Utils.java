@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.google.gson.Gson;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
@@ -33,7 +34,7 @@ import org.apache.http.client.config.RequestConfig;
  * @version 0.3-SNAPSHOT
  */
 public final class Utils {
-    private static final int TIMEOUT_MS = 5000;
+    private static final int TIMEOUT_MS = 60000;
 
     private Utils() { }
 
@@ -63,6 +64,62 @@ public final class Utils {
     }
 
     /**
+     * <p>processResponse.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param httpResponse a {@link org.apache.http.HttpResponse} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     */
+    public static Map processResponse(final Context context,
+                                      final HttpResponse httpResponse,
+                                      final Result proto) {
+        Result r = new Result(proto);
+        r.setCode("response");
+        r.setStatus(Status.Success);
+        context.addResult(r);
+
+        ResponseTest sc = new StatusCode(HttpStatus.SC_OK);
+        boolean scres = sc.run(context, proto, httpResponse);
+        ResponseTest ct = new ContentType();
+        boolean ctres = ct.run(context, proto, httpResponse);
+        if (!(scres && ctres)) {
+            return null;
+        }
+
+        ResponseTest ac = new AccessControl();
+        ac.run(context, proto, httpResponse);
+
+        Map root = null;
+        try {
+            InputStream is = httpResponse.getEntity().getContent();
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+            root = new Gson().fromJson(isr, Map.class);
+        } catch (Exception e) {
+            r = new Result(proto);
+            r.setStatus(Status.Failure);
+            r.setInfo(e.toString());
+            context.addResult(r);
+            return null;
+        }
+        if (root == null) {
+            return null;
+        }
+
+        Set<String> keys = root.keySet();
+        if (keys.size() == 0) {
+            r = new Result(proto);
+            /* Technically not an error, but there's not much point in
+             * returning nothing. */
+            r.setStatus(Status.Failure);
+            r.setInfo("no data returned");
+            context.addResult(r);
+            return null;
+        }
+
+        return root;
+    }
+
+    /**
      * <p>standardRequest.</p>
      *
      * @param context a {@link net.apnic.rdap.conformance.Context} object.
@@ -73,8 +130,6 @@ public final class Utils {
     public static Map standardRequest(final Context context,
                                       final String path,
                                       final Result proto) {
-        List<Result> results = context.getResults();
-
         Result r = new Result(proto);
         r.setCode("response");
 
@@ -82,11 +137,13 @@ public final class Utils {
         HttpResponse response = null;
         try {
             request = httpGetRequest(context, path, true);
-            response = context.executeRequest(request);
-        } catch (IOException e) {
+            ListenableFuture<HttpResponse> fresponse =
+                context.executeRequest(request);
+            response = fresponse.get();
+        } catch (Exception e) {
             r.setStatus(Status.Failure);
             r.setInfo(e.toString());
-            results.add(r);
+            context.addResult(r);
             if (request != null) {
                 request.releaseConnection();
             }
@@ -94,7 +151,7 @@ public final class Utils {
         }
 
         r.setStatus(Status.Success);
-        results.add(r);
+        context.addResult(r);
 
         ResponseTest sc = new StatusCode(HttpStatus.SC_OK);
         boolean scres = sc.run(context, proto, response);
@@ -117,7 +174,7 @@ public final class Utils {
             r = new Result(proto);
             r.setStatus(Status.Failure);
             r.setInfo(e.toString());
-            results.add(r);
+            context.addResult(r);
             request.releaseConnection();
             return null;
         }
@@ -133,7 +190,7 @@ public final class Utils {
              * returning nothing. */
             r.setStatus(Status.Failure);
             r.setInfo("no data returned");
-            results.add(r);
+            context.addResult(r);
             request.releaseConnection();
             return null;
         }

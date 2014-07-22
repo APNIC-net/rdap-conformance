@@ -17,6 +17,9 @@ import net.apnic.rdap.conformance.attributetest.StandardResponse;
 import net.apnic.rdap.conformance.attributetest.ResultsTruncated;
 import net.apnic.rdap.conformance.Utils;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
+
 /**
  * <p>Search class.</p>
  *
@@ -31,6 +34,8 @@ public class Search implements Test {
     private String testName;
     private String searchResultsKey;
     private SearchTest searchTest;
+    private Context context = null;
+    private HttpResponse httpResponse = null;
 
     /**
      * <p>Constructor for Search.</p>
@@ -68,23 +73,33 @@ public class Search implements Test {
     }
 
     /** {@inheritDoc} */
-    public boolean run(final Context context) {
-        String bu = context.getSpecification().getBaseUrl();
-        String path = bu + urlPath;
+    public void setContext(final Context c) {
+        context = c;
+    }
 
+    /** {@inheritDoc} */
+    public void setResponse(final HttpResponse hr) {
+        httpResponse = hr;
+    }
+
+    /** {@inheritDoc} */
+    public HttpRequest getRequest() {
+        String path = context.getSpecification().getBaseUrl() + urlPath;
+        return Utils.httpGetRequest(context, path, true);
+    }
+
+    /** {@inheritDoc} */
+    public boolean run() {
+        String path = context.getSpecification().getBaseUrl() + urlPath;
         Result proto = new Result(Status.Notification, path,
                                   testName,
                                   "", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "9");
-        Result r = new Result(proto);
-        r.setCode("response");
-
-        Map root = Utils.standardRequest(context, path, r);
+        Map root = Utils.processResponse(context, httpResponse, proto);
         if (root == null) {
             return false;
         }
-
         Map<String, Object> data = Utils.castToMap(context, proto, root);
         if (data == null) {
             return false;

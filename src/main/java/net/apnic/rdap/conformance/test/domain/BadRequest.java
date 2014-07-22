@@ -5,6 +5,8 @@ import net.apnic.rdap.conformance.Test;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.test.common.BasicRequest;
 import org.apache.http.HttpStatus;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
 
 /**
  * <p>BadRequest class.</p>
@@ -33,7 +35,22 @@ public final class BadRequest implements Test {
     }
 
     /** {@inheritDoc} */
-    public boolean run(final Context context) {
-        return cbr.run(context);
+    public void setContext(final Context c) {
+        cbr.setContext(c);
+    }
+
+    /** {@inheritDoc} */
+    public void setResponse(final HttpResponse hr) {
+        cbr.setResponse(hr);
+    }
+
+    /** {@inheritDoc} */
+    public HttpRequest getRequest() {
+        return cbr.getRequest();
+    }
+
+    /** {@inheritDoc} */
+    public boolean run() {
+        return cbr.run();
     }
 }

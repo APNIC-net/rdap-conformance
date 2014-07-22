@@ -3,7 +3,10 @@ package net.apnic.rdap.conformance;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.Future;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import javax.net.ssl.SSLContext;
@@ -12,10 +15,13 @@ import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
 
 import com.google.common.util.concurrent.RateLimiter;
+import com.google.common.util.concurrent.ListenableFuture;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
 import net.apnic.rdap.conformance.specification.ObjectClass;
 import net.apnic.rdap.conformance.specification.ObjectClassSearch;
@@ -151,8 +157,12 @@ public final class Application {
         );
     }
 
+    private static List<CloseableHttpAsyncClient> chacs = new ArrayList<CloseableHttpAsyncClient>();
+
     private static Context createContext(Specification s,
-                                         RateLimiter rateLimiter) {
+                                         RateLimiter rateLimiter,
+                                         ExecutorService executorService,
+                                         AtomicInteger testsRunning) {
         SSLContext sslContext = null;
         try {
             sslContext = SSLContext.getInstance("SSL");
@@ -163,13 +173,19 @@ public final class Application {
             System.exit(EX_SOFTWARE);
         }
 
-        HttpClient hc = HttpClientBuilder.create()
-                                         .setSslcontext(sslContext)
-                                         .build();
+        CloseableHttpAsyncClient hc =
+            HttpAsyncClients.custom()
+                            .setSSLContext(sslContext)
+                            .build();
+        hc.start();
+        chacs.add(hc);
+
         Context c = new Context();
         c.setHttpClient(hc);
         c.setSpecification(s);
         c.setRateLimiter(rateLimiter);
+        c.setExecutorService(executorService);
+        c.setTestsRunning(testsRunning);
 
         return c;
     }
@@ -485,24 +501,14 @@ public final class Application {
         }
 
         tests.add(new net.apnic.rdap.conformance.test.help.Standard());
+        AtomicInteger testsRunning = new AtomicInteger(0);
 
-        /* Eight is a completely arbitrary figure, here. todo later:
-         * this should be using asynchronous IO for the HTTP requests. */
         final ExecutorService executorService =
-            Executors.newFixedThreadPool(s.getAllowConcurrency() ? 8 : 1);
+            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         for (final Test t : tests) {
-            final Context context = createContext(s, rateLimiter);
-            executorService.submit(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        t.run(context);
-                        synchronized (System.out) {
-                            context.flushResults();
-                        }
-                    }
-                }
-            );
+            final Context context =
+                createContext(s, rateLimiter, executorService, testsRunning);
+            context.submitTest(t);
         }
 
         /* application/json content-type. This is deliberately using
@@ -520,20 +526,21 @@ public final class Application {
                 true,
                 ctres
             );
-        final Context context = createContext(s, rateLimiter);
-        executorService.submit(
-            new Runnable() {
-                @Override
-                public void run() {
-                    context.setContentType("application/json");
-                    test.run(context);
-                    context.setContentType(null);
-                    synchronized (System.out) {
-                        context.flushResults();
-                    }
-                }
+        final Context context =
+            createContext(s, rateLimiter, executorService, testsRunning);
+        context.setContentType("application/json");
+        context.submitTest(test);
+
+        while (true) {
+            if (testsRunning.get() != 0) {
+                Thread.sleep(1000);
+            } else {
+                break;
             }
-        );
+        }
+        for (CloseableHttpAsyncClient chac : chacs) {
+            chac.close();
+        }
 
         executorService.shutdown();
     }

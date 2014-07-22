@@ -15,6 +15,7 @@ import java.util.Locale;
 import java.util.IllformedLocaleException;
 import com.google.common.net.MediaType;
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -115,54 +116,10 @@ public final class Link implements AttributeTest {
                         "embossed",
                         "speech");
 
-    private static final int TIMEOUT_MS = 5000;
-
     /**
      * <p>Constructor for Link.</p>
      */
     public Link() { }
-
-    private boolean urlIsFetchable(final Context context,
-                                   final Result proto,
-                                   final String key,
-                                   final String url) {
-        boolean success = true;
-        Result vnr = new Result(proto);
-        vnr.addNode(key);
-        int code = 0;
-        HttpGet request = null;
-        try {
-            request = new HttpGet(url);
-            RequestConfig config =
-                RequestConfig.custom()
-                             .setConnectionRequestTimeout(TIMEOUT_MS)
-                             .setConnectTimeout(TIMEOUT_MS)
-                             .setSocketTimeout(TIMEOUT_MS)
-                             .build();
-            request.setConfig(config);
-            HttpResponse response =
-                context.executeRequest(request);
-            code = response.getStatusLine().getStatusCode();
-        } catch (Exception e) {
-            vnr.setStatus(Status.Failure);
-            vnr.setInfo("unable to send request for URL: "
-                        + e.toString());
-            context.addResult(vnr);
-            success = false;
-        }
-        if (request != null) {
-            request.releaseConnection();
-        }
-        /* Previously, this treated >= 400 as a problem. Of course, if
-           an error response is being tested, that won't work. Ideally
-           this would check against the 'current' status code. */
-        if (success) {
-            vnr.setStatus(Status.Success);
-            vnr.setInfo("got response for URL (" + code + ")");
-            context.addResult(vnr);
-        }
-        return success;
-    }
 
     /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
@@ -177,16 +134,26 @@ public final class Link implements AttributeTest {
         boolean success = true;
         String value = Utils.getStringAttribute(context, nr, "value",
                                                 Status.Failure, data);
-        if ((value == null)
-                || (!urlIsFetchable(context, nr, "value", value))) {
+        if (value == null) {
             success = false;
+        } else {
+            Result nr2 = new Result(nr);
+            nr2.addNode("value");
+            context.submitTest(new net.apnic.rdap.conformance.test.common.Link(
+                value, nr2
+            ));
         }
 
         String href = Utils.getStringAttribute(context, nr, "href",
                                                Status.Failure, data);
-        if ((href == null)
-                || (!urlIsFetchable(context, nr, "href", href))) {
+        if (href == null) {
             success = false;
+        } else {
+            Result nr2 = new Result(nr);
+            nr2.addNode("href");
+            context.submitTest(new net.apnic.rdap.conformance.test.common.Link(
+                href, nr2
+            ));
         }
 
         String rel = Utils.getStringAttribute(context, nr, "rel",

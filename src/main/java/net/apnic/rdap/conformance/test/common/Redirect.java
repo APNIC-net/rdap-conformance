@@ -3,6 +3,7 @@ package net.apnic.rdap.conformance.test.common;
 import java.io.IOException;
 import java.util.List;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.HttpStatus;
 
@@ -28,6 +29,8 @@ public final class Redirect implements Test {
     private String urlPath;
     private String testName;
     private ObjectTest resultTest;
+    private Context context = null;
+    private HttpResponse httpResponse = null;
 
     /**
      * <p>Constructor for Redirect.</p>
@@ -65,11 +68,25 @@ public final class Redirect implements Test {
     }
 
     /** {@inheritDoc} */
-    public boolean run(final Context context) {
-        List<Result> results = context.getResults();
+    public void setContext(final Context c) {
+        context = c;
+    }
 
-        String bu = context.getSpecification().getBaseUrl();
-        String path = bu + urlPath;
+    /** {@inheritDoc} */
+    public void setResponse(final HttpResponse hr) {
+        httpResponse = hr;
+    }
+
+    /** {@inheritDoc} */
+    public HttpRequest getRequest() {
+        String path = context.getSpecification().getBaseUrl() + urlPath;
+        return Utils.httpGetRequest(context, path, true);
+    }
+
+    /** {@inheritDoc} */
+    public boolean run() {
+        List<Result> results = context.getResults();
+        String path = context.getSpecification().getBaseUrl() + urlPath;
 
         Result proto = new Result(Status.Notification, path,
                                   testName,
@@ -78,22 +95,6 @@ public final class Redirect implements Test {
                                   "5.2");
         Result r = new Result(proto);
         r.setCode("response");
-
-        HttpRequestBase request = null;
-        HttpResponse response = null;
-        try {
-            request = Utils.httpGetRequest(context, path, false);
-            response = context.executeRequest(request);
-        } catch (IOException e) {
-            r.setStatus(Status.Failure);
-            r.setInfo(e.toString());
-            results.add(r);
-            if (request != null) {
-                request.releaseConnection();
-            }
-            return false;
-        }
-
         r.setStatus(Status.Success);
         results.add(r);
 
@@ -104,17 +105,16 @@ public final class Redirect implements Test {
                                 HttpStatus.SC_MOVED_TEMPORARILY,
                                 HttpStatus.SC_SEE_OTHER)
             );
-        boolean scres = sc.run(context, proto, response);
-        request.releaseConnection();
+        boolean scres = sc.run(context, proto, httpResponse);
         if (!scres) {
             return false;
         }
 
         if (resultTest != null) {
-            String location = response.getFirstHeader("Location")
-                                      .getValue();
+            String location = httpResponse.getFirstHeader("Location")
+                                          .getValue();
             resultTest.setUrl(location);
-            return resultTest.run(context);
+            return resultTest.run();
         } else {
             return true;
         }

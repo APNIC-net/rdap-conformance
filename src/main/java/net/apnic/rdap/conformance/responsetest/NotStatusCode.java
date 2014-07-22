@@ -17,6 +17,7 @@ import net.apnic.rdap.conformance.ResponseTest;
  */
 public final class NotStatusCode implements ResponseTest {
     private int notExpectedCode;
+    private Context context;
 
     /**
      * <p>Constructor for NotStatusCode.</p>

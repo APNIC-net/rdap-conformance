@@ -12,6 +12,9 @@ import net.apnic.rdap.conformance.Test;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.Notices;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
+
 /**
  * <p>Standard class.</p>
  *
@@ -19,28 +22,40 @@ import net.apnic.rdap.conformance.attributetest.Notices;
  * @version 0.3-SNAPSHOT
  */
 public final class Standard implements Test {
+    private Context context = null;
+    private HttpResponse httpResponse = null;
+
     /**
      * <p>Constructor for Standard.</p>
      */
     public Standard() { }
 
     /** {@inheritDoc} */
-    public boolean run(final Context context) {
+    public void setContext(final Context c) {
+        context = c;
+    }
+
+    /** {@inheritDoc} */
+    public void setResponse(final HttpResponse hr) {
+        httpResponse = hr;
+    }
+
+    /** {@inheritDoc} */
+    public HttpRequest getRequest() {
+        String path = context.getSpecification().getBaseUrl() + "/help";
+        return Utils.httpGetRequest(context, path, true);
+    }
+
+    /** {@inheritDoc} */
+    public boolean run() {
         boolean ret = true;
-
-        String path =
-            context.getSpecification().getBaseUrl() + "/help";
-
+        String path = context.getSpecification().getBaseUrl() + "/help";
         Result proto = new Result(Result.Status.Notification, path,
                                   "help",
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "8");
-
-        proto.setCode("content");
-        Result r = new Result(proto);
-        r.setCode("response");
-        Map root = Utils.standardRequest(context, path, r);
+        Map root = Utils.processResponse(context, httpResponse, proto);
         if (root == null) {
             return false;
         }
@@ -49,7 +64,7 @@ public final class Standard implements Test {
             return false;
         }
 
-        Set<String> knownAttributes = new HashSet<String>(); 
+        Set<String> knownAttributes = new HashSet<String>();
         return Utils.runTestList(
             context, proto, data, knownAttributes, true,
             Arrays.asList(
