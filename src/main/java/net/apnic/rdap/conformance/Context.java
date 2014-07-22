@@ -17,6 +17,8 @@ import org.apache.http.HttpHost;
 import com.google.common.util.concurrent.RateLimiter;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.JdkFutureAdapters;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.FutureCallback;
 
 /**
  * <p>Context class.</p>
@@ -203,25 +205,28 @@ public final class Context {
                     HttpRequest httpRequest = test.getRequest();
                     final ListenableFuture<HttpResponse> future =
                         executeRequest(httpRequest);
-                    future.addListener(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                test.setResponse(future.get());
-                            } catch (Exception ioe) {
-                                /* todo: not right. */
-                                System.err.println(ioe.toString());
-                                test.setResponse(null);
+                    Futures.addCallback(future,
+                        new FutureCallback<HttpResponse>() {
+                            public void onSuccess(HttpResponse httpResponse) {
+                                test.setResponse(httpResponse);
+                                test.run();
+                                synchronized (System.out) {
+                                    context.flushResults();
+                                }
+                                testsRunning.getAndDecrement();
                             }
-                            test.run();
-                            synchronized (System.out) {
-                                context.flushResults();
+                            public void onFailure(Throwable t) {
+                                test.setError(t);
+                                test.run();
+                                synchronized (System.out) {
+                                    context.flushResults();
+                                }
+                                testsRunning.getAndDecrement();
                             }
-                            testsRunning.getAndDecrement();
                         }
-                    }, executorService2);
+                    );
                     } catch (Exception e) {
-                        System.err.println(e.toString());
+                        System.err.println("TRYSUBMIT: " + e.toString());
                     }
                 }
             }

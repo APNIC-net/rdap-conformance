@@ -16,6 +16,7 @@ import org.apache.http.HttpRequest;
  */
 public final class BadRequest implements Test {
     private Test cbr = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for BadRequest.</p>
@@ -42,6 +43,11 @@ public final class BadRequest implements Test {
     /** {@inheritDoc} */
     public void setResponse(final HttpResponse hr) {
         cbr.setResponse(hr);
+    }
+    
+    /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        cbr.setError(t);
     }
 
     /** {@inheritDoc} */

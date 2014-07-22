@@ -33,6 +33,7 @@ public class Link implements Test {
     private Result proto;
     private Context context = null;
     private HttpResponse httpResponse = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for Link.</p>
@@ -57,23 +58,29 @@ public class Link implements Test {
     }
 
     /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        throwable = t;
+    }
+
+    /** {@inheritDoc} */
     public HttpRequest getRequest() {
         return Utils.httpGetRequest(context, url, true);
     }
 
     /** {@inheritDoc} */
     public boolean run() {
-        Result r = new Result(proto);
-        r.setCode("response");
         if (httpResponse == null) {
-            r.setStatus(Status.Failure);
-        } else {
-            r.setStatus(Status.Success);
-        }
-        context.addResult(r);
-        if (httpResponse == null) {
+            proto.setCode("response");
+            proto.setStatus(Status.Failure);
+            proto.setInfo((throwable != null) ? throwable.toString() : "");
+            context.addResult(proto);
             return false;
         }
+
+        Result r = new Result(proto);
+        r.setCode("response");
+        r.setStatus(Status.Success);
+        context.addResult(r);
         ResponseTest sc = new NotStatusCode(0);
         boolean scres = sc.run(context, proto, httpResponse);
         if (!scres) {

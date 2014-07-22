@@ -28,6 +28,7 @@ public final class Standard implements ObjectTest {
     private String url = null;
     private Context context = null;
     private HttpResponse httpResponse = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for Standard.</p>
@@ -60,6 +61,11 @@ public final class Standard implements ObjectTest {
     }
 
     /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        throwable = t;
+    }
+
+    /** {@inheritDoc} */
     public HttpRequest getRequest() {
         String path =
             (url != null)
@@ -82,6 +88,14 @@ public final class Standard implements ObjectTest {
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "6.2");
+        if (httpResponse == null) {
+            proto.setCode("response");
+            proto.setStatus(Status.Failure);
+            proto.setInfo((throwable != null) ? throwable.toString() : "");
+            context.addResult(proto);
+            return false;
+        }
+
         Map root = Utils.processResponse(context, httpResponse, proto);
         if (root == null) {
             return false;

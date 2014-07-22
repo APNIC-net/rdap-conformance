@@ -24,6 +24,7 @@ import org.apache.http.HttpRequest;
 public final class Standard implements Test {
     private Context context = null;
     private HttpResponse httpResponse = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for Standard.</p>
@@ -41,6 +42,11 @@ public final class Standard implements Test {
     }
 
     /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        throwable = t;
+    }
+
+    /** {@inheritDoc} */
     public HttpRequest getRequest() {
         String path = context.getSpecification().getBaseUrl() + "/help";
         return Utils.httpGetRequest(context, path, true);
@@ -55,6 +61,13 @@ public final class Standard implements Test {
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "8");
+        if (httpResponse == null) {
+            proto.setCode("response");
+            proto.setStatus(Result.Status.Failure);
+            proto.setInfo((throwable != null) ? throwable.toString() : "");
+            context.addResult(proto);
+            return false;
+        }
         Map root = Utils.processResponse(context, httpResponse, proto);
         if (root == null) {
             return false;

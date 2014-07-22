@@ -27,6 +27,7 @@ public final class Standard implements Test {
     private String entity = "";
     private Context context = null;
     private HttpResponse httpResponse = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for Standard.</p>
@@ -48,6 +49,11 @@ public final class Standard implements Test {
     }
 
     /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        throwable = t;
+    }
+
+    /** {@inheritDoc} */
     public HttpRequest getRequest() {
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + "/entity/" + entity;
@@ -64,6 +70,13 @@ public final class Standard implements Test {
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "6.1");
+        if (httpResponse == null) {
+            proto.setCode("response");
+            proto.setStatus(Status.Failure);
+            proto.setInfo((throwable != null) ? throwable.toString() : "");
+            context.addResult(proto);
+            return false;
+        }
         Map root = Utils.processResponse(context, httpResponse, proto);
         if (root == null) {
             return false;

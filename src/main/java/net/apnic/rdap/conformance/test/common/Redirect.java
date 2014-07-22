@@ -31,6 +31,7 @@ public final class Redirect implements Test {
     private ObjectTest resultTest;
     private Context context = null;
     private HttpResponse httpResponse = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for Redirect.</p>
@@ -78,6 +79,11 @@ public final class Redirect implements Test {
     }
 
     /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        throwable = t;
+    }
+
+    /** {@inheritDoc} */
     public HttpRequest getRequest() {
         String path = context.getSpecification().getBaseUrl() + urlPath;
         return Utils.httpGetRequest(context, path, true);
@@ -93,6 +99,14 @@ public final class Redirect implements Test {
                                   "", "",
                                   "draft-ietf-weirds-using-http-08",
                                   "5.2");
+        if (httpResponse == null) {
+            proto.setCode("response");
+            proto.setStatus(Status.Failure);
+            proto.setInfo((throwable != null) ? throwable.toString() : "");
+            context.addResult(proto);
+            return false;
+        }
+
         Result r = new Result(proto);
         r.setCode("response");
         r.setStatus(Status.Success);

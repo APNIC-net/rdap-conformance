@@ -40,6 +40,11 @@ public final class NotFound implements Test {
     }
 
     /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        cbr.setError(t);
+    }
+
+    /** {@inheritDoc} */
     public HttpRequest getRequest() {
         return cbr.getRequest();
     }

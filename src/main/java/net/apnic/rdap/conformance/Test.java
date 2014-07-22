@@ -42,6 +42,13 @@ public interface Test {
     void setResponse(HttpResponse httpResponse);
 
     /**
+     * <p>setError.</p>
+     *
+     * @param throwable a {@link java.lang.Throwable} object.
+     */
+    void setError(Throwable throwable);
+
+    /**
      * <p>run.</p>
      */
     boolean run();

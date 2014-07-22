@@ -36,6 +36,7 @@ public class Search implements Test {
     private SearchTest searchTest;
     private Context context = null;
     private HttpResponse httpResponse = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for Search.</p>
@@ -83,6 +84,11 @@ public class Search implements Test {
     }
 
     /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        throwable = t;
+    }
+
+    /** {@inheritDoc} */
     public HttpRequest getRequest() {
         String path = context.getSpecification().getBaseUrl() + urlPath;
         return Utils.httpGetRequest(context, path, true);
@@ -96,6 +102,13 @@ public class Search implements Test {
                                   "", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "9");
+        if (httpResponse == null) {
+            proto.setCode("response");
+            proto.setStatus(Status.Failure);
+            proto.setInfo((throwable != null) ? throwable.toString() : "");
+            context.addResult(proto);
+            return false;
+        }
         Map root = Utils.processResponse(context, httpResponse, proto);
         if (root == null) {
             return false;

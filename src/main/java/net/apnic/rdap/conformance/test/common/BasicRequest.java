@@ -42,6 +42,7 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
     private Result proto;
     private Context context = null;
     private HttpResponse httpResponse = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for BasicRequest.</p>
@@ -99,6 +100,11 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
     }
 
     /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        throwable = t;
+    }
+
+    /** {@inheritDoc} */
     public HttpRequest getRequest() {
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + urlPath;
@@ -119,6 +125,15 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
             proto = new Result(proto);
             proto.setPath(path);
         }
+
+        if (httpResponse == null) {
+            proto.setCode("response");
+            proto.setStatus(Status.Failure);
+            proto.setInfo((throwable != null) ? throwable.toString() : "");
+            context.addResult(proto);
+            return false;
+        }
+
         Result r = new Result(proto);
         r.setCode("response");
         r.setStatus(Status.Success);

@@ -60,6 +60,10 @@ public final class RawURIRequest implements Test {
     }
 
     /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+    }
+
+    /** {@inheritDoc} */
     public HttpRequest getRequest() {
         String path = context.getSpecification().getBaseUrl() + "/help";
         return Utils.httpGetRequest(context, path, true);
