@@ -123,7 +123,7 @@ public final class Utils {
             proto.setStatus(Status.Failure);
             proto.setInfo((throwable != null) ? throwable.toString() : "");
             context.addResult(proto);
-            return false; 
+            return null;
         }
         Result r = new Result(proto);
         r.setCode("response");

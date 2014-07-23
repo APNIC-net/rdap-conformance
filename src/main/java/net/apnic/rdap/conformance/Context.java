@@ -72,7 +72,10 @@ public final class Context {
             HttpHost httphost = new HttpHost(url.getHost(), 80, "http");
             fresponse = httpClient.execute(httphost, httpRequest, null);
         } catch (Exception e) {
-            System.err.println("execute: " + e.toString());
+            System.err.println("Exception occurred during asynchronous HTTP request: " + e.toString());
+        }
+        if (fresponse == null) {
+            return null;
         }
         ListenableFuture<HttpResponse> hr = JdkFutureAdapters.listenInPoolThread(fresponse, executorService);
         return hr;
@@ -209,6 +212,10 @@ public final class Context {
                     }
                     final ListenableFuture<HttpResponse> future =
                         executeRequest(httpRequest);
+                    if (future == null) {
+                        testsRunning.getAndDecrement();
+                        return;
+                    }
                     Futures.addCallback(future,
                         new FutureCallback<HttpResponse>() {
                             public void onSuccess(HttpResponse httpResponse) {
