@@ -2,6 +2,7 @@ package net.apnic.rdap.conformance.test.common;
 
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
 
@@ -34,6 +35,7 @@ public class Link implements Test {
     private Context context = null;
     private HttpResponse httpResponse = null;
     private Throwable throwable = null;
+    private static Set<String> requests = new HashSet<String>();
 
     /**
      * <p>Constructor for Link.</p>
@@ -64,6 +66,10 @@ public class Link implements Test {
 
     /** {@inheritDoc} */
     public HttpRequest getRequest() {
+        if (requests.contains(url)) {
+            return null;
+        }
+        requests.add(url);
         return Utils.httpGetRequest(context, url, true);
     }
 

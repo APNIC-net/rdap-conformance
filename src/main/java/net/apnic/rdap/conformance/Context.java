@@ -203,6 +203,10 @@ public final class Context {
                 public void run() {
                     try {
                     final HttpRequest httpRequest = test.getRequest();
+                    if (httpRequest == null) {
+                        testsRunning.getAndDecrement();
+                        return;
+                    }
                     final ListenableFuture<HttpResponse> future =
                         executeRequest(httpRequest);
                     Futures.addCallback(future,

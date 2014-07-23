@@ -2,6 +2,7 @@ package net.apnic.rdap.conformance.test.common;
 
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
 
@@ -34,6 +35,7 @@ public class Head implements Test {
     private Context context = null;
     private HttpResponse httpResponse = null;
     private Throwable throwable = null;
+    private static Set<String> requests = new HashSet<String>();
 
     /**
      * <p>Constructor for Head.</p>
@@ -63,6 +65,10 @@ public class Head implements Test {
 
     /** {@inheritDoc} */
     public HttpRequest getRequest() {
+        if (requests.contains(url)) {
+            return null;
+        }
+        requests.add(url);
         return Utils.httpHeadRequest(context, url,
                                      !((statusCode >= 300) && (statusCode < 400)));
     }
