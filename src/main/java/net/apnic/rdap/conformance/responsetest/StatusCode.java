@@ -69,7 +69,7 @@ public final class StatusCode implements ResponseTest {
             nr.setStatus(Status.Failure);
             nr.setInfo("got " + code + " instead of "
                        + (hasMultiple
-                           ? ("one of " + Joiner.on(", ").join(expectedCodes))
+                           ? ("one of " + Joiner.on("/").join(expectedCodes))
                            : expectedCodes.iterator().next()));
             results.add(nr);
             return false;
