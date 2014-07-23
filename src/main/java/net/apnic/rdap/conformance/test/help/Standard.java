@@ -61,18 +61,9 @@ public final class Standard implements Test {
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "8");
-        if (httpResponse == null) {
-            proto.setCode("response");
-            proto.setStatus(Result.Status.Failure);
-            proto.setInfo((throwable != null) ? throwable.toString() : "");
-            context.addResult(proto);
-            return false;
-        }
-        Map root = Utils.processResponse(context, httpResponse, proto);
-        if (root == null) {
-            return false;
-        }
-        Map<String, Object> data = Utils.castToMap(context, proto, root);
+        Map<String, Object> data = 
+            Utils.processResponse(context, httpResponse, proto,
+                                  200, throwable);
         if (data == null) {
             return false;
         }

@@ -110,28 +110,19 @@ public class Search implements Test {
                                   "", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "9");
-        if (httpResponse == null) {
-            proto.setCode("response");
-            proto.setStatus(Status.Failure);
-            proto.setInfo((throwable != null) ? throwable.toString() : "");
-            context.addResult(proto);
-            return false;
-        }
-        Map root = Utils.processResponse(context, httpResponse, proto,
-                                         (expectedResultType == ExpectedResultType.NONE)
-                                            ? HttpStatus.SC_NOT_FOUND
-                                            : HttpStatus.SC_OK);
-        if (root == null) {
-            return false;
-        }
-        Map<String, Object> data = Utils.castToMap(context, proto, root);
+        Map<String, Object> data = 
+            Utils.processResponse(context, httpResponse, proto,
+                                  (expectedResultType == ExpectedResultType.NONE)
+                                      ? HttpStatus.SC_NOT_FOUND
+                                      : HttpStatus.SC_OK,
+                                  throwable);
         if (data == null) {
             return false;
         }
 
         HashSet<String> knownAttributes = new HashSet<String>();
         boolean res = Utils.runTestList(
-            context, proto, root, knownAttributes, true,
+            context, proto, (Map) data, knownAttributes, true,
             Arrays.asList(
                 new ArrayAttribute(searchTest, searchResultsKey),
                 new ResultsTruncated(),

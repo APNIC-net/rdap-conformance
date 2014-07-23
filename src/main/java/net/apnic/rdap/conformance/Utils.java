@@ -97,10 +97,11 @@ public final class Utils {
      * @param httpResponse a {@link org.apache.http.HttpResponse} object.
      * @param proto a {@link net.apnic.rdap.conformance.Result} object.
      */
-    public static Map processResponse(final Context context,
-                                      final HttpResponse httpResponse,
-                                      final Result proto) {
-        return processResponse(context, httpResponse, proto, HttpStatus.SC_OK);
+    public static Map<String, Object> processResponse(
+                final Context context,
+                final HttpResponse httpResponse,
+                final Result proto) {
+        return processResponse(context, httpResponse, proto, HttpStatus.SC_OK, null);
     }
 
     /**
@@ -109,12 +110,21 @@ public final class Utils {
      * @param context a {@link net.apnic.rdap.conformance.Context} object.
      * @param httpResponse a {@link org.apache.http.HttpResponse} object.
      * @param proto a {@link net.apnic.rdap.conformance.Result} object.
-     * @param statusCode an int..
+     * @param statusCode an int.
      */
-    public static Map processResponse(final Context context,
-                                      final HttpResponse httpResponse,
-                                      final Result proto,
-                                      final int statusCode) {
+    public static Map<String, Object> processResponse(
+                final Context context,
+                final HttpResponse httpResponse,
+                final Result proto,
+                final int statusCode,
+                Throwable throwable) {
+        if (httpResponse == null) {
+            proto.setCode("response");
+            proto.setStatus(Status.Failure);
+            proto.setInfo((throwable != null) ? throwable.toString() : "");
+            context.addResult(proto);
+            return false; 
+        }
         Result r = new Result(proto);
         r.setCode("response");
         r.setStatus(Status.Success);
@@ -158,7 +168,7 @@ public final class Utils {
             return null;
         }
 
-        return root;
+        return castToMap(context, proto, root);
     }
 
     /**

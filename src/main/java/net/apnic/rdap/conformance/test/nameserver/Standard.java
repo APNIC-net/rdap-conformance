@@ -88,26 +88,16 @@ public final class Standard implements ObjectTest {
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "6.2");
-        if (httpResponse == null) {
-            proto.setCode("response");
-            proto.setStatus(Status.Failure);
-            proto.setInfo((throwable != null) ? throwable.toString() : "");
-            context.addResult(proto);
-            return false;
-        }
-
-        Map root = Utils.processResponse(context, httpResponse, proto);
-        if (root == null) {
-            return false;
-        }
-        Map<String, Object> data = Utils.castToMap(context, proto, root);
+        Map<String, Object> data =
+            Utils.processResponse(context, httpResponse, proto,
+                                  200, throwable);
         if (data == null) {
             return false;
         }
 
         Set<String> knownAttributes = new HashSet<String>();
         return Utils.runTestList(
-            context, proto, root, knownAttributes, true,
+            context, proto, (Map) data, knownAttributes, true,
             Arrays.asList(
                 new Nameserver(false),
                 new RdapConformance(),
