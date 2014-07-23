@@ -13,7 +13,8 @@
             "search": {
                 "name": {
                     "supported": true,
-                    "exists": ["202.in-addr*", "202.in-addr.arpa"]
+                    "exists": ["202.in-addr*", "202.in-addr.arpa"],
+                    "notExists": ["1.2.3.202.in-addr*"]
                 }
             }
         },

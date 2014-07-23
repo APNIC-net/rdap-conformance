@@ -25,7 +25,6 @@ import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
 import net.apnic.rdap.conformance.specification.ObjectClass;
 import net.apnic.rdap.conformance.specification.ObjectClassSearch;
-import net.apnic.rdap.conformance.specification.ObjectClassParameterSearch;
 
 /**
  * <p>Application class.</p>
@@ -86,13 +85,12 @@ public final class Application {
                                        final String testName,
                                        final String searchKey)
             throws Exception {
-        ObjectClassSearch ocs = oc.getObjectClassSearch();
-        if (ocs != null) {
-            Map<String, ObjectClassParameterSearch> parameters =
-                ocs.getParameters();
-            for (Map.Entry<String, ObjectClassParameterSearch> entry : parameters.entrySet()) {
+        Map<String, ObjectClassSearch> mocps =
+            oc.getSearch();
+        if (mocps != null) {
+            for (Map.Entry<String, ObjectClassSearch> entry : mocps.entrySet()) {
                 String key = entry.getKey();
-                ObjectClassParameterSearch ocps = entry.getValue();
+                ObjectClassSearch ocps = entry.getValue();
                 if (ocps.getSupported()) {
                     for (String keyValue : ocps.getExists()) {
                         tests.add(
@@ -102,7 +100,34 @@ public final class Application {
                                 key,
                                 keyValue,
                                 testName,
-                                searchKey
+                                searchKey,
+                                net.apnic.rdap.conformance.test.common.Search.ExpectedResultType.SOME
+                            )
+                        );
+                    }
+                    for (String keyValue : ocps.getNotExists()) {
+                        tests.add(
+                            new net.apnic.rdap.conformance.test.common.Search(
+                                (SearchTest) SerializationUtils.clone(st),
+                                prefix,
+                                key,
+                                keyValue,
+                                testName,
+                                searchKey,
+                                net.apnic.rdap.conformance.test.common.Search.ExpectedResultType.NONE
+                            )
+                        );
+                    }
+                    for (String keyValue : ocps.getTruncated()) {
+                        tests.add(
+                            new net.apnic.rdap.conformance.test.common.Search(
+                                (SearchTest) SerializationUtils.clone(st),
+                                prefix,
+                                key,
+                                keyValue,
+                                testName,
+                                searchKey,
+                                net.apnic.rdap.conformance.test.common.Search.ExpectedResultType.TRUNCATED
                             )
                         );
                     }

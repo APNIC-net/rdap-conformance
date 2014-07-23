@@ -1,6 +1,7 @@
 package net.apnic.rdap.conformance.test.common;
 
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import net.apnic.rdap.conformance.Utils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpStatus;
 
 /**
  * <p>Search class.</p>
@@ -27,6 +29,8 @@ import org.apache.http.HttpRequest;
  * @version 0.3-SNAPSHOT
  */
 public class Search implements Test {
+    public enum ExpectedResultType { SOME, NONE, TRUNCATED };
+
     private String urlPath;
     private String prefix;
     private String key;
@@ -34,6 +38,7 @@ public class Search implements Test {
     private String testName;
     private String searchResultsKey;
     private SearchTest searchTest;
+    private ExpectedResultType expectedResultType;
     private Context context = null;
     private HttpResponse httpResponse = null;
     private Throwable throwable = null;
@@ -47,13 +52,16 @@ public class Search implements Test {
      * @param argPattern a {@link java.lang.String} object.
      * @param argTestName a {@link java.lang.String} object.
      * @param argSearchResultsKey a {@link java.lang.String} object.
+     * @param argExpectedResultType a {@link ExpectedResultType} object.
      */
     public Search(final SearchTest argSearchTest,
                   final String argPrefix,
                   final String argKey,
                   final String argPattern,
                   final String argTestName,
-                  final String argSearchResultsKey) {
+                  final String argSearchResultsKey,
+                  final ExpectedResultType argExpectedResultType) {
+        expectedResultType = argExpectedResultType;
         prefix = argPrefix;
         key = argKey;
         pattern = argPattern;
@@ -109,7 +117,10 @@ public class Search implements Test {
             context.addResult(proto);
             return false;
         }
-        Map root = Utils.processResponse(context, httpResponse, proto);
+        Map root = Utils.processResponse(context, httpResponse, proto,
+                                         (expectedResultType == ExpectedResultType.NONE)
+                                            ? HttpStatus.SC_NOT_FOUND
+                                            : HttpStatus.SC_OK);
         if (root == null) {
             return false;
         }
@@ -119,7 +130,7 @@ public class Search implements Test {
         }
 
         HashSet<String> knownAttributes = new HashSet<String>();
-        return Utils.runTestList(
+        boolean res = Utils.runTestList(
             context, proto, root, knownAttributes, true,
             Arrays.asList(
                 new ArrayAttribute(searchTest, searchResultsKey),
@@ -127,5 +138,46 @@ public class Search implements Test {
                 new StandardResponse()
             )
         );
+       
+        List<Object> results = null;
+        try {
+            results = (List<Object>) data.get(searchResultsKey);
+        } catch (ClassCastException ce) {
+            return false;
+        }
+
+        Object ob = data.get("resultsTruncated");
+        Boolean b = (ob != null) ? ((Boolean) ob) : false;
+
+        Result r = new Result(proto);
+        r.setCode("response");
+        if (expectedResultType == ExpectedResultType.SOME) {
+            if (results.size() > 0) {
+                r.setStatus(Status.Success);
+                r.setInfo("got one or more results for search");
+            } else {
+                r.setStatus(Status.Failure);
+                r.setInfo("did not get any results for search");
+            }
+        } else if (expectedResultType == ExpectedResultType.NONE) {
+            if (results.size() == 0) {
+                r.setStatus(Status.Success);
+                r.setInfo("got no results for search");
+            } else {
+                r.setStatus(Status.Failure);
+                r.setInfo("did not get no results for search");
+            }
+        } else if (expectedResultType == ExpectedResultType.TRUNCATED) {
+            if ((b != null) && b) {
+                r.setStatus(Status.Success);
+                r.setInfo("results have been truncated");
+            } else {
+                r.setStatus(Status.Failure);
+                r.setInfo("results have not been truncated");
+            }
+        }
+        context.addResult(r);
+
+        return res;
     }
 }

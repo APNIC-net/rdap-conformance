@@ -100,12 +100,27 @@ public final class Utils {
     public static Map processResponse(final Context context,
                                       final HttpResponse httpResponse,
                                       final Result proto) {
+        return processResponse(context, httpResponse, proto, HttpStatus.SC_OK);
+    }
+
+    /**
+     * <p>processResponse.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param httpResponse a {@link org.apache.http.HttpResponse} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param statusCode an int..
+     */
+    public static Map processResponse(final Context context,
+                                      final HttpResponse httpResponse,
+                                      final Result proto,
+                                      final int statusCode) {
         Result r = new Result(proto);
         r.setCode("response");
         r.setStatus(Status.Success);
         context.addResult(r);
 
-        ResponseTest sc = new StatusCode(HttpStatus.SC_OK);
+        ResponseTest sc = new StatusCode(statusCode);
         boolean scres = sc.run(context, proto, httpResponse);
         ResponseTest ct = new ContentType();
         boolean ctres = ct.run(context, proto, httpResponse);
