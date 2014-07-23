@@ -138,7 +138,7 @@ public class Search implements Test {
                 new StandardResponse()
             )
         );
-       
+
         List<Object> results = null;
         try {
             results = (List<Object>) data.get(searchResultsKey);

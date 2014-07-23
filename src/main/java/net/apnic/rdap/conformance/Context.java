@@ -68,7 +68,7 @@ public final class Context {
         acquireRequestPermit();
         Future<HttpResponse> fresponse = null;
         try {
-            URL url = new URL(specification.getBaseUrl());
+            URL url = new URL(httpRequest.getRequestLine().getUri());
             HttpHost httphost = new HttpHost(url.getHost(), 80, "http");
             fresponse = httpClient.execute(httphost, httpRequest, null);
         } catch (Exception e) {

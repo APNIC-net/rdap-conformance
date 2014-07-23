@@ -86,7 +86,7 @@ public final class Redirect implements Test {
     /** {@inheritDoc} */
     public HttpRequest getRequest() {
         String path = context.getSpecification().getBaseUrl() + urlPath;
-        return Utils.httpGetRequest(context, path, true);
+        return Utils.httpGetRequest(context, path, false);
     }
 
     /** {@inheritDoc} */
@@ -128,9 +128,8 @@ public final class Redirect implements Test {
             String location = httpResponse.getFirstHeader("Location")
                                           .getValue();
             resultTest.setUrl(location);
-            return resultTest.run();
-        } else {
-            return true;
+            context.submitTest(resultTest);
         }
+        return true;
     }
 }

@@ -63,7 +63,8 @@ public class Head implements Test {
 
     /** {@inheritDoc} */
     public HttpRequest getRequest() {
-        return Utils.httpHeadRequest(context, url, true);
+        return Utils.httpHeadRequest(context, url,
+                                     !((statusCode >= 300) && (statusCode < 400)));
     }
 
     /** {@inheritDoc} */
