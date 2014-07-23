@@ -23,7 +23,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * @version 0.3-SNAPSHOT
  */
 public final class Autnum implements AttributeTest {
-    private String autnum = null;
+    private BigInteger autnum = null;
     private Set<String> knownAttributes = new HashSet<String>();
 
     /**
@@ -37,7 +37,13 @@ public final class Autnum implements AttributeTest {
      * @param autnum a {@link java.lang.String} object.
      */
     public Autnum(final String autnum) {
-        this.autnum = autnum;
+        if (autnum != null) {
+            try {
+                this.autnum = new BigInteger(autnum);
+            } catch (Exception e) {
+                System.err.println(e.toString());
+            }
+        }
     }
 
     private BigInteger processAutnum(final Context context,
@@ -96,6 +102,18 @@ public final class Autnum implements AttributeTest {
                 r.setInfo("startAutnum more than endAutnum");
             }
             context.addResult(r);
+
+            if (autnum != null) {
+                Result r2 = new Result(proto);
+                r2.addNode("startAutnum");
+                r2.setStatus(Result.Status.Success);
+                r2.setInfo("startAutnum and endAutnum bound argument autnum");
+                if (!((startAddress.compareTo(autnum) <= 0) && (endAddress.compareTo(autnum) >= 0))) {
+                    r2.setStatus(Result.Status.Failure);
+                    r2.setInfo("startAutnum and endAutnum do not bound argument autnum");
+                }
+                context.addResult(r2);
+            }
         }
 
         knownAttributes = Sets.newHashSet("startAutnum",
