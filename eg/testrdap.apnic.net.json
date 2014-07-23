@@ -11,9 +11,9 @@
             "exists": ["203.in-addr.arpa", "187.2.103.in-addr.arpa"],
             "notExists": ["google.com"],
             "search": {
-                "supported": true,
-                "values": {
-                    "name": ["202.in-addr*", "202.in-addr.arpa"]
+                "name": {
+                    "supported": true,
+                    "exists": ["202.in-addr*", "202.in-addr.arpa"]
                 }
             }
         },
@@ -25,10 +25,13 @@
             "exists": ["TP137-AP"],
             "notExists": ["@@@@@@@@"],
             "search": {
-                "supported": true,
-                "values": {
-                    "fn": [ "Test Person" ],
-                    "handle": [ "TP13*" ]
+                "fn": {
+                    "supported": true,
+                    "exists": ["Test Person"]
+                },
+                "handle": {
+                    "supported": true,
+                    "exists": ["TP13*"]
                 }
             }
         },

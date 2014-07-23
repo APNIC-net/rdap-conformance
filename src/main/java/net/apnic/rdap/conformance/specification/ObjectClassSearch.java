@@ -12,8 +12,8 @@ import java.util.HashMap;
  */
 public final class ObjectClassSearch {
     private boolean supported = false;
-    private Map<String, List<String>> values =
-        new HashMap<String, List<String>>();
+    private Map<String, ObjectClassParameterSearch> parameters =
+        new HashMap<String, ObjectClassParameterSearch>();
 
     /**
      * <p>Constructor for ObjectClassSearch.</p>
@@ -21,20 +21,11 @@ public final class ObjectClassSearch {
     public ObjectClassSearch() { }
 
     /**
-     * <p>isSupported.</p>
-     *
-     * @return a boolean.
-     */
-    public boolean isSupported() {
-        return supported;
-    }
-
-    /**
-     * <p>Getter for the field <code>values</code>.</p>
+     * <p>Getter for the field <code>parameters</code>.</p>
      *
      * @return a {@link java.util.Map} object.
      */
-    public Map<String, List<String>> getValues() {
-        return values;
+    public Map<String, ObjectClassParameterSearch> getParameters() {
+        return parameters;
     }
 }

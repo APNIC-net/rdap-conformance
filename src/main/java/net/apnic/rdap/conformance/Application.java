@@ -25,6 +25,7 @@ import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
 import net.apnic.rdap.conformance.specification.ObjectClass;
 import net.apnic.rdap.conformance.specification.ObjectClassSearch;
+import net.apnic.rdap.conformance.specification.ObjectClassParameterSearch;
 
 /**
  * <p>Application class.</p>
@@ -86,22 +87,25 @@ public final class Application {
                                        final String searchKey)
             throws Exception {
         ObjectClassSearch ocs = oc.getObjectClassSearch();
-        if ((ocs != null) && (ocs.isSupported())) {
-            Map<String, List<String>> values = ocs.getValues();
-            for (Map.Entry<String, List<String>> entry : values.entrySet()) {
+        if (ocs != null) {
+            Map<String, ObjectClassParameterSearch> parameters =
+                ocs.getParameters();
+            for (Map.Entry<String, ObjectClassParameterSearch> entry : parameters.entrySet()) {
                 String key = entry.getKey();
-                List<String> keyValues = entry.getValue();
-                for (String keyValue : keyValues) {
-                    tests.add(
-                        new net.apnic.rdap.conformance.test.common.Search(
-                            (SearchTest) SerializationUtils.clone(st),
-                            prefix,
-                            key,
-                            keyValue,
-                            testName,
-                            searchKey
-                        )
-                    );
+                ObjectClassParameterSearch ocps = entry.getValue();
+                if (ocps.getSupported()) {
+                    for (String keyValue : ocps.getExists()) {
+                        tests.add(
+                            new net.apnic.rdap.conformance.test.common.Search(
+                                (SearchTest) SerializationUtils.clone(st),
+                                prefix,
+                                key,
+                                keyValue,
+                                testName,
+                                searchKey
+                            )
+                        );
+                    }
                 }
             }
         }
