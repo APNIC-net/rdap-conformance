@@ -1,22 +1,14 @@
 package net.apnic.rdap.conformance.test.common;
 
-import java.net.URLEncoder;
-import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Arrays;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
 
 import net.apnic.rdap.conformance.Test;
 import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
-import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
-import net.apnic.rdap.conformance.attributetest.StandardResponse;
-import net.apnic.rdap.conformance.attributetest.ResultsTruncated;
 import net.apnic.rdap.conformance.ResponseTest;
-import net.apnic.rdap.conformance.responsetest.StatusCode;
 import net.apnic.rdap.conformance.responsetest.NotStatusCode;
 import net.apnic.rdap.conformance.Utils;
 

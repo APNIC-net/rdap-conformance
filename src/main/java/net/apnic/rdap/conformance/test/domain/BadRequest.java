@@ -16,7 +16,6 @@ import org.apache.http.HttpRequest;
  */
 public final class BadRequest implements Test {
     private Test cbr = null;
-    private Throwable throwable = null;
 
     /**
      * <p>Constructor for BadRequest.</p>

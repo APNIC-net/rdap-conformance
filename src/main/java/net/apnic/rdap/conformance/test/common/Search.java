@@ -13,7 +13,6 @@ import net.apnic.rdap.conformance.Test;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
-import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
 import net.apnic.rdap.conformance.attributetest.ResultsTruncated;
 import net.apnic.rdap.conformance.Utils;

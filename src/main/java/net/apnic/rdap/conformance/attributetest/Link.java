@@ -15,11 +15,6 @@ import java.util.Locale;
 import java.util.IllformedLocaleException;
 import com.google.common.net.MediaType;
 import com.google.common.collect.Sets;
-import com.google.common.util.concurrent.ListenableFuture;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.config.RequestConfig;
 
 /**
  * <p>Link class.</p>

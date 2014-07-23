@@ -6,14 +6,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
-import java.util.List;
 
 import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.AttributeTest;
 
 /**

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.Future;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;

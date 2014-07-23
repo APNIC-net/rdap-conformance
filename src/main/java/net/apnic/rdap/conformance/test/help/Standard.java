@@ -54,7 +54,6 @@ public final class Standard implements Test {
 
     /** {@inheritDoc} */
     public boolean run() {
-        boolean ret = true;
         String path = context.getSpecification().getBaseUrl() + "/help";
         Result proto = new Result(Result.Status.Notification, path,
                                   "help",

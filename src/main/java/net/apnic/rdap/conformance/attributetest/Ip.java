@@ -15,10 +15,6 @@ import com.google.common.collect.Sets;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.ObjectTest;
-import net.apnic.rdap.conformance.attributetest.Country;
-import net.apnic.rdap.conformance.attributetest.ScalarAttribute;
-import net.apnic.rdap.conformance.attributetest.StandardResponse;
 import net.apnic.rdap.conformance.AttributeTest;
 
 /**

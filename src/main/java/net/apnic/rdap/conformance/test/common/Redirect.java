@@ -1,10 +1,8 @@
 package net.apnic.rdap.conformance.test.common;
 
-import java.io.IOException;
 import java.util.List;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.HttpStatus;
 
 import com.google.common.collect.Sets;

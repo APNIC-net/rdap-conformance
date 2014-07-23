@@ -71,8 +71,6 @@ public final class Standard implements ObjectTest {
 
     /** {@inheritDoc} */
     public boolean run() {
-        boolean ret = true;
-
         String path =
             (url != null)
                 ? url
