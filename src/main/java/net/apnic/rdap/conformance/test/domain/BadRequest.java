@@ -44,7 +44,7 @@ public final class BadRequest implements Test {
     public void setResponse(final HttpResponse hr) {
         cbr.setResponse(hr);
     }
-    
+
     /** {@inheritDoc} */
     public void setError(final Throwable t) {
         cbr.setError(t);

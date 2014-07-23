@@ -20,6 +20,7 @@ import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 
@@ -38,6 +39,27 @@ public final class Utils {
 
     private Utils() { }
 
+    private static HttpRequestBase httpRequest(
+                final Context context,
+                final String path,
+                final boolean followRedirects,
+                final String method) {
+        HttpRequestBase request =
+            (method.equals("get"))
+                ? new HttpGet(path)
+                : new HttpHead(path);
+        request.setHeader("Accept", context.getContentType());
+        RequestConfig config =
+            RequestConfig.custom()
+                         .setConnectionRequestTimeout(TIMEOUT_MS)
+                         .setConnectTimeout(TIMEOUT_MS)
+                         .setSocketTimeout(TIMEOUT_MS)
+                         .setRedirectsEnabled(followRedirects)
+                         .build();
+        request.setConfig(config);
+        return request;
+    }
+
     /**
      * <p>httpGetRequest.</p>
      *
@@ -50,17 +72,22 @@ public final class Utils {
                 final Context context,
                 final String path,
                 final boolean followRedirects) {
-        HttpGet request = new HttpGet(path);
-        request.setHeader("Accept", context.getContentType());
-        RequestConfig config =
-            RequestConfig.custom()
-                         .setConnectionRequestTimeout(TIMEOUT_MS)
-                         .setConnectTimeout(TIMEOUT_MS)
-                         .setSocketTimeout(TIMEOUT_MS)
-                         .setRedirectsEnabled(followRedirects)
-                         .build();
-        request.setConfig(config);
-        return request;
+        return httpRequest(context, path, followRedirects, "get");
+    }
+
+    /**
+     * <p>httpHeadRequest.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param path a {@link java.lang.String} object.
+     * @param followRedirects a boolean.
+     * @return a {@link org.apache.http.client.methods.HttpRequestBase} object.
+     */
+    public static HttpRequestBase httpHeadRequest(
+                final Context context,
+                final String path,
+                final boolean followRedirects) {
+        return httpRequest(context, path, followRedirects, "head");
     }
 
     /**

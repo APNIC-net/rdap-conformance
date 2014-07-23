@@ -202,7 +202,7 @@ public final class Context {
                 @Override
                 public void run() {
                     try {
-                    HttpRequest httpRequest = test.getRequest();
+                    final HttpRequest httpRequest = test.getRequest();
                     final ListenableFuture<HttpResponse> future =
                         executeRequest(httpRequest);
                     Futures.addCallback(future,
@@ -214,6 +214,14 @@ public final class Context {
                                     context.flushResults();
                                 }
                                 testsRunning.getAndDecrement();
+                                if (!(test instanceof net.apnic.rdap.conformance.test.common.Head)) {
+                                    context.submitTest(
+                                        new net.apnic.rdap.conformance.test.common.Head(
+                                            httpRequest.getRequestLine().getUri(),
+                                            httpResponse.getStatusLine().getStatusCode()
+                                        )
+                                    );
+                                }
                             }
                             public void onFailure(Throwable t) {
                                 test.setError(t);
