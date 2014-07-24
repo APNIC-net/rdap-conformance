@@ -129,7 +129,7 @@ public final class Ip implements AttributeTest {
             BigInteger start = addressStringToBigInteger(startAddress);
             BigInteger end   = addressStringToBigInteger(endAddress);
             if ((start.compareTo(BigInteger.valueOf(-1)) == 0)
-                || (end.compareTo(BigInteger.valueOf(-1)) == 0)) {
+               || (end.compareTo(BigInteger.valueOf(-1)) == 0)) {
                 return false;
             }
             ret = (start.compareTo(end) <= 0);
@@ -146,6 +146,100 @@ public final class Ip implements AttributeTest {
             res.setInfo("start address is greater than end address");
         }
         context.addResult(res);
+
+        if (ip != null) {
+            int slash = ip.indexOf('/');
+            if (version == 4) {
+                long start = addressStringToLong(startAddress);
+                long end   = addressStringToLong(endAddress);
+                if (slash == -1) {
+                    long iplong = addressStringToLong(ip);
+                    if (iplong != -1) {
+                        Result res2 = new Result(proto);
+                        res.addNode("startAddress");
+                        if ((iplong >= start) && (iplong <= end)) {
+                            res2.setStatus(Result.Status.Success);
+                            res2.setInfo("startAddress and endAddress bound " +
+                                         "argument ip");
+                        } else {
+                            res2.setStatus(Result.Status.Failure);
+                            res2.setInfo("startAddress and endAddress do not bound " +
+                                         "argument ip");
+                        }
+                        context.addResult(res2);
+                    }
+                } else {
+                    String addr = ip.substring(0, slash);
+                    long iplong = addressStringToLong(addr);
+                    if (iplong != -1) {
+                        String prefix = ip.substring(slash + 1);
+                        int prefixlen = Integer.valueOf(prefix);
+                        long lastip =
+                            (iplong + (1 << (32 - prefixlen))) - 1;
+                        Result res3 = new Result(proto);
+                        res.addNode("startAddress");
+                        if ((iplong >= start)
+                                && (iplong <= end)
+                                && (lastip >= start)
+                                && (lastip <= end)) {
+                            res3.setStatus(Result.Status.Success);
+                            res3.setInfo("startAddress and endAddress bound " +
+                                         "argument ip range");
+                        } else {
+                            res3.setStatus(Result.Status.Failure);
+                            res3.setInfo("startAddress and endAddress do not bound " +
+                                         "argument ip range");
+                        }
+                        context.addResult(res3);
+                    }
+                }
+            } else {
+                BigInteger start = addressStringToBigInteger(startAddress);
+                BigInteger end   = addressStringToBigInteger(endAddress);
+                if (slash == -1) {
+                    BigInteger iplong = addressStringToBigInteger(ip);
+                    if (!(iplong.compareTo(BigInteger.valueOf(-1)) == 0)) {
+                        Result res2 = new Result(proto);
+                        res.addNode("startAddress");
+                        if ((iplong.compareTo(start) >= 0) && (iplong.compareTo(end) <= 0)) {
+                            res2.setStatus(Result.Status.Success);
+                            res2.setInfo("startAddress and endAddress bound " +
+                                         "argument ip");
+                        } else {
+                            res2.setStatus(Result.Status.Failure);
+                            res2.setInfo("startAddress and endAddress do not bound " +
+                                         "argument ip");
+                        }
+                        context.addResult(res2);
+                    }
+                } else {
+                    String addr = ip.substring(0, slash);
+                    BigInteger iplong = addressStringToBigInteger(addr);
+                    if (!(iplong.compareTo(BigInteger.valueOf(-1)) == 0)) {
+                        String prefix = ip.substring(slash + 1);
+                        int prefixlen = Integer.valueOf(prefix);
+                        BigInteger size = BigInteger.valueOf(1);
+                        BigInteger lastip = iplong.add(size.shiftLeft(128 - prefixlen))
+                                                  .subtract(BigInteger.valueOf(1));
+                        Result res3 = new Result(proto);
+                        res.addNode("startAddress");
+                        if ((iplong.compareTo(start) >= 0)
+                                && (iplong.compareTo(end) <= 0)
+                                && (lastip.compareTo(start) >= 0)
+                                && (lastip.compareTo(end) <= 0)) {
+                            res3.setStatus(Result.Status.Success);
+                            res3.setInfo("startAddress and endAddress bound " +
+                                         "argument ip range");
+                        } else {
+                            res3.setStatus(Result.Status.Failure);
+                            res3.setInfo("startAddress and endAddress do not bound " +
+                                         "argument ip range");
+                        }
+                        context.addResult(res3);
+                    }
+                }
+            }
+        }
 
         return ret;
     }

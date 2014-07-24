@@ -60,7 +60,7 @@ public final class Standard implements Test {
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "8");
-        Map<String, Object> data = 
+        Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
                                   200, throwable);
         if (data == null) {

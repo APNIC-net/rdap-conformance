@@ -109,7 +109,7 @@ public class Search implements Test {
                                   "", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "9");
-        Map<String, Object> data = 
+        Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
                                   (expectedResultType == ExpectedResultType.NONE)
                                       ? HttpStatus.SC_NOT_FOUND
