@@ -236,6 +236,7 @@ public final class Entity implements SearchTest {
                 new AsEventActor(),
                 new ArrayAttribute(new Ip(), "networks"),
                 new ArrayAttribute(new Autnum(), "autnums"),
+                new ResultsTruncated(),
                 new StandardObject()
             )
         );
