@@ -32,12 +32,12 @@ public final class Autnum implements AttributeTest {
     /**
      * <p>Constructor for Autnum.</p>
      *
-     * @param autnum a {@link java.lang.String} object.
+     * @param argAutnum a {@link java.lang.String} object.
      */
-    public Autnum(final String autnum) {
-        if (autnum != null) {
+    public Autnum(final String argAutnum) {
+        if (argAutnum != null) {
             try {
-                this.autnum = new BigInteger(autnum);
+                this.autnum = new BigInteger(argAutnum);
             } catch (Exception e) {
                 System.err.println(e.toString());
             }
@@ -106,9 +106,11 @@ public final class Autnum implements AttributeTest {
                 r2.addNode("startAutnum");
                 r2.setStatus(Result.Status.Success);
                 r2.setInfo("startAutnum and endAutnum bound argument autnum");
-                if (!((startAddress.compareTo(autnum) <= 0) && (endAddress.compareTo(autnum) >= 0))) {
+                if (!((startAddress.compareTo(autnum) <= 0) 
+                     && (endAddress.compareTo(autnum) >= 0))) {
                     r2.setStatus(Result.Status.Failure);
-                    r2.setInfo("startAutnum and endAutnum do not bound argument autnum");
+                    r2.setInfo("startAutnum and endAutnum do not bound "
+                               + "argument autnum");
                 }
                 context.addResult(r2);
             }

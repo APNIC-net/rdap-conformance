@@ -21,7 +21,7 @@ import org.apache.http.HttpRequest;
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.3-SNAPSHOT
  */
-public class Link implements Test {
+final public class Link implements Test {
     private String url;
     private Result proto;
     private Context context = null;

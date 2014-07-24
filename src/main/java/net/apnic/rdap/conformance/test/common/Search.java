@@ -27,7 +27,7 @@ import org.apache.http.HttpStatus;
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.3-SNAPSHOT
  */
-public class Search implements Test {
+final public class Search implements Test {
     public enum ExpectedResultType { SOME, NONE, TRUNCATED };
 
     private String urlPath;

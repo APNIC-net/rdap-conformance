@@ -163,14 +163,7 @@ public final class DomainNames implements SearchTest {
         }
         Result iv = new Result(nr);
         iv.addNode("unicodeName");
-        if (ldhNameCheck != null) {
-            iv.setInfo("valid");
-            iv.setStatus(Status.Success);
-        } else {
-            iv.setInfo("invalid: " + error);
-            iv.setStatus(Status.Failure);
-            res = false;
-        }
+        iv.setDetails((ldhNameCheck != null), "valid", "invalid: " + error);
         context.addResult(iv);
 
         if (ldhNameCheck != null) {
@@ -180,17 +173,8 @@ public final class DomainNames implements SearchTest {
             if (ldhNameCanon.charAt(ldhNameCanon.length() - 1) != '.') {
                 ldhNameCanon += ".";
             }
-            if (ldhNameCheck.charAt(ldhNameCheck.length() - 1) != '.') {
-                ldhNameCheck += ".";
-            }
-            if (ldhNameCheck.equals(ldhNameCanon)) {
-                ms.setInfo("matches ldhName");
-                ms.setStatus(Status.Success);
-            } else {
-                ms.setInfo("does not match ldhName");
-                ms.setStatus(Status.Failure);
-                res = false;
-            }
+            ms.setDetails((ldhNameCheck.equals(ldhNameCanon)),
+                          "matches ldhName", "does not match ldhName");
             context.addResult(ms);
         }
 

@@ -202,13 +202,8 @@ public final class Entity implements SearchTest {
                     vcard.validate(vcard.getVersion());
                 String validationWarnings = vws.toString();
                 nrv2 = new Result(nrv);
-                if (validationWarnings.length() == 0) {
-                    nrv2.setStatus(Status.Success);
-                    nrv2.setInfo("valid");
-                } else {
-                    nrv2.setStatus(Status.Failure);
-                    nrv2.setInfo("invalid: " + validationWarnings);
-                }
+                nrv2.setDetails((validationWarnings.length() == 0),
+                                "valid", "invalid: " + validationWarnings);
             }
             context.addResult(nrv);
             if (nrv2 != null) {
@@ -225,14 +220,12 @@ public final class Entity implements SearchTest {
                 r2.setInfo("no vcard or name in response so unable to "
                            + "check search pattern");
             } else {
-                r2.setStatus(Status.Success);
-                r2.setInfo("response name matches search pattern");
                 String name = vcard.getFormattedName().getValue();
-                if (!Utils.matchesSearch(fn, name)) {
-                    r2.setStatus(Status.Warning);
-                    r2.setInfo("response name does not "
-                               + "match search pattern");
-                }
+                r2.setDetails(Utils.matchesSearch(fn, name),
+                              Status.Success,
+                              "response name matches search pattern",
+                              Status.Warning,
+                              "response name does not match search pattern");
             }
             context.addResult(r2);
         }

@@ -14,7 +14,7 @@ import org.apache.http.HttpRequest;
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.3-SNAPSHOT
  */
-public class BadRequest implements Test {
+final public class BadRequest implements Test {
     private Test cbr = null;
 
     /**

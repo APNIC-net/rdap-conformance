@@ -50,6 +50,8 @@ public interface Test {
 
     /**
      * <p>run.</p>
+     *
+     * @return a boolean.
      */
     boolean run();
 }

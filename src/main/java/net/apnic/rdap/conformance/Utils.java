@@ -95,12 +95,14 @@ public final class Utils {
      * @param context a {@link net.apnic.rdap.conformance.Context} object.
      * @param httpResponse a {@link org.apache.http.HttpResponse} object.
      * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @return a {@link java.util.Map} object.
      */
     public static Map<String, Object> processResponse(
                 final Context context,
                 final HttpResponse httpResponse,
                 final Result proto) {
-        return processResponse(context, httpResponse, proto, HttpStatus.SC_OK, null);
+        return processResponse(context, httpResponse, proto, 
+                               HttpStatus.SC_OK, null);
     }
 
     /**
@@ -116,7 +118,7 @@ public final class Utils {
                 final HttpResponse httpResponse,
                 final Result proto,
                 final int statusCode,
-                Throwable throwable) {
+                final Throwable throwable) {
         if (httpResponse == null) {
             proto.setCode("response");
             proto.setStatus(Status.Failure);

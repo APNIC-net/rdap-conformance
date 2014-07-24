@@ -63,8 +63,8 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
         proto = argProto;
 
         if (testName == null) {
-            testName = "common." +
-                        (argInvertStatusTest ? "not-" : "")
+            testName = "common."
+                        + (argInvertStatusTest ? "not-" : "")
                         + ((expectedStatus == HttpStatus.SC_NOT_FOUND)
                             ? "not-found"
                             : expectedStatus);

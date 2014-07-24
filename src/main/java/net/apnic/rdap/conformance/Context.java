@@ -30,6 +30,8 @@ import com.google.common.util.concurrent.FutureCallback;
  * @version 0.3-SNAPSHOT
  */
 public final class Context {
+    private static final int HTTP_PORT = 80;
+
     private CloseableHttpAsyncClient httpClient = null;
     private Specification specification = null;
     private List<Result> results = new ArrayList<Result>();
@@ -62,21 +64,24 @@ public final class Context {
      * @return a {@link org.apache.http.HttpResponse} object.
      * @throws java.io.IOException if any.
      */
-    public ListenableFuture<HttpResponse> executeRequest(final HttpRequest httpRequest)
+    public ListenableFuture<HttpResponse> executeRequest(
+                final HttpRequest httpRequest)
             throws IOException {
         acquireRequestPermit();
-        Future<HttpResponse> fresponse = null;
+        Future<HttpResponse> response = null;
         try {
             URL url = new URL(httpRequest.getRequestLine().getUri());
-            HttpHost httphost = new HttpHost(url.getHost(), 80, "http");
-            fresponse = httpClient.execute(httphost, httpRequest, null);
+            HttpHost httphost = new HttpHost(url.getHost(), HTTP_PORT, "http");
+            response = httpClient.execute(httphost, httpRequest, null);
         } catch (Exception e) {
-            System.err.println("Exception occurred during asynchronous HTTP request: " + e.toString());
+            System.err.println("Exception occurred during asynchronous "
+                               + "HTTP request: " + e.toString());
         }
-        if (fresponse == null) {
+        if (response == null) {
             return null;
         }
-        ListenableFuture<HttpResponse> hr = JdkFutureAdapters.listenInPoolThread(fresponse, executorService);
+        ListenableFuture<HttpResponse> hr = 
+            JdkFutureAdapters.listenInPoolThread(response, executorService);
         return hr;
     }
 
@@ -192,59 +197,64 @@ public final class Context {
      *
      * Runs the test within this context's executor service.
      *
-     * @param t a {@link net.apnic.rdap.conformance.Test} object.
+     * @param test a {@link net.apnic.rdap.conformance.Test} object.
+     * @return a {@link java.util.concurrent.Future} object.
      */
     public Future submitTest(final Test test) {
-        testsRunning.getAndIncrement();
-        final Context context = this;
-        test.setContext(context);
         final ExecutorService executorService2 = executorService;
+        final Context context = this;
+
+        testsRunning.getAndIncrement();
+        test.setContext(context);
+
         return executorService2.submit(
             new Runnable() {
                 @Override
                 public void run() {
                     try {
-                    final HttpRequest httpRequest = test.getRequest();
-                    if (httpRequest == null) {
-                        testsRunning.getAndDecrement();
-                        return;
-                    }
-                    final ListenableFuture<HttpResponse> future =
-                        executeRequest(httpRequest);
-                    if (future == null) {
-                        testsRunning.getAndDecrement();
-                        return;
-                    }
-                    Futures.addCallback(future,
-                        new FutureCallback<HttpResponse>() {
-                            public void onSuccess(HttpResponse httpResponse) {
-                                test.setResponse(httpResponse);
-                                test.run();
-                                synchronized (System.out) {
-                                    context.flushResults();
-                                }
-                                testsRunning.getAndDecrement();
-                                if (!(test instanceof net.apnic.rdap.conformance.test.common.Head)) {
-                                    context.submitTest(
-                                        new net.apnic.rdap.conformance.test.common.Head(
-                                            httpRequest.getRequestLine().getUri(),
-                                            httpResponse.getStatusLine().getStatusCode()
-                                        )
-                                    );
-                                }
-                            }
-                            public void onFailure(Throwable t) {
-                                test.setError(t);
-                                test.run();
-                                synchronized (System.out) {
-                                    context.flushResults();
-                                }
-                                testsRunning.getAndDecrement();
-                            }
+                        final HttpRequest httpRequest = test.getRequest();
+                        if (httpRequest == null) {
+                            testsRunning.getAndDecrement();
+                            return;
                         }
-                    );
+                        final ListenableFuture<HttpResponse> future =
+                            executeRequest(httpRequest);
+                        if (future == null) {
+                            testsRunning.getAndDecrement();
+                            return;
+                        }
+                        Futures.addCallback(
+                            future,
+                            new FutureCallback<HttpResponse>() {
+                                public void onSuccess(final HttpResponse httpResponse) {
+                                    test.setResponse(httpResponse);
+                                    test.run();
+                                    synchronized (System.out) {
+                                        context.flushResults();
+                                    }
+                                    if (!(test instanceof net.apnic.rdap.conformance.test.common.Head)) {
+                                        context.submitTest(
+                                            new net.apnic.rdap.conformance.test.common.Head(
+                                                httpRequest.getRequestLine().getUri(),
+                                                httpResponse.getStatusLine().getStatusCode()
+                                            )
+                                        );
+                                    }
+                                    testsRunning.getAndDecrement();
+                                }
+                                public void onFailure(final Throwable t) {
+                                    test.setError(t);
+                                    test.run();
+                                    synchronized (System.out) {
+                                        context.flushResults();
+                                    }
+                                    testsRunning.getAndDecrement();
+                                }
+                            }
+                        );
                     } catch (Exception e) {
-                        System.err.println("TRYSUBMIT: " + e.toString());
+                        System.err.println("Error during test submission: " +
+                                           e.toString());
                     }
                 }
             }

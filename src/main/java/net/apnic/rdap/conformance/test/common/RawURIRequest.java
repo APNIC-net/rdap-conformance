@@ -32,7 +32,6 @@ public final class RawURIRequest implements Test {
     private Result proto = null;
     private boolean expectedSuccess = false;
     private Context context = null;
-    private HttpResponse httpResponse = null;
 
     /**
      * <p>Constructor for RawURIRequest.</p>
@@ -56,7 +55,6 @@ public final class RawURIRequest implements Test {
 
     /** {@inheritDoc} */
     public void setResponse(final HttpResponse hr) {
-        httpResponse = hr;
     }
 
     /** {@inheritDoc} */

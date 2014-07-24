@@ -159,12 +159,12 @@ public final class Ip implements AttributeTest {
                         res.addNode("startAddress");
                         if ((iplong >= start) && (iplong <= end)) {
                             res2.setStatus(Result.Status.Success);
-                            res2.setInfo("startAddress and endAddress bound " +
-                                         "argument ip");
+                            res2.setInfo("startAddress and endAddress bound "
+                                         + "argument ip");
                         } else {
                             res2.setStatus(Result.Status.Failure);
-                            res2.setInfo("startAddress and endAddress do not bound " +
-                                         "argument ip");
+                            res2.setInfo("startAddress and endAddress do not bound "
+                                         + "argument ip");
                         }
                         context.addResult(res2);
                     }
@@ -183,12 +183,12 @@ public final class Ip implements AttributeTest {
                                 && (lastip >= start)
                                 && (lastip <= end)) {
                             res3.setStatus(Result.Status.Success);
-                            res3.setInfo("startAddress and endAddress bound " +
-                                         "argument ip range");
+                            res3.setInfo("startAddress and endAddress bound "
+                                         + "argument ip range");
                         } else {
                             res3.setStatus(Result.Status.Failure);
-                            res3.setInfo("startAddress and endAddress do not bound " +
-                                         "argument ip range");
+                            res3.setInfo("startAddress and endAddress do not bound "
+                                         + "argument ip range");
                         }
                         context.addResult(res3);
                     }
@@ -203,12 +203,12 @@ public final class Ip implements AttributeTest {
                         res.addNode("startAddress");
                         if ((iplong.compareTo(start) >= 0) && (iplong.compareTo(end) <= 0)) {
                             res2.setStatus(Result.Status.Success);
-                            res2.setInfo("startAddress and endAddress bound " +
-                                         "argument ip");
+                            res2.setInfo("startAddress and endAddress bound "
+                                         + "argument ip");
                         } else {
                             res2.setStatus(Result.Status.Failure);
-                            res2.setInfo("startAddress and endAddress do not bound " +
-                                         "argument ip");
+                            res2.setInfo("startAddress and endAddress do not bound "
+                                         + "argument ip");
                         }
                         context.addResult(res2);
                     }
@@ -228,12 +228,12 @@ public final class Ip implements AttributeTest {
                                 && (lastip.compareTo(start) >= 0)
                                 && (lastip.compareTo(end) <= 0)) {
                             res3.setStatus(Result.Status.Success);
-                            res3.setInfo("startAddress and endAddress bound " +
-                                         "argument ip range");
+                            res3.setInfo("startAddress and endAddress bound "
+                                         + "argument ip range");
                         } else {
                             res3.setStatus(Result.Status.Failure);
-                            res3.setInfo("startAddress and endAddress do not bound " +
-                                         "argument ip range");
+                            res3.setInfo("startAddress and endAddress do not bound "
+                                         + "argument ip range");
                         }
                         context.addResult(res3);
                     }

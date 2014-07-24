@@ -11,6 +11,7 @@ import net.apnic.rdap.conformance.attributetest.Ip;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpStatus;
 
 /**
  * <p>Standard class.</p>
@@ -83,7 +84,7 @@ public final class Standard implements ObjectTest {
                                   "6.4");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
-                                  200, throwable);
+                                  HttpStatus.SC_OK, throwable);
         if (data == null) {
             return false;
         }

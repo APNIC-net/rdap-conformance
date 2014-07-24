@@ -20,7 +20,7 @@ import org.apache.http.HttpRequest;
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.3-SNAPSHOT
  */
-public class Head implements Test {
+final public class Head implements Test {
     private String url;
     private int statusCode;
     private Context context = null;
@@ -32,6 +32,7 @@ public class Head implements Test {
      * <p>Constructor for Head.</p>
      *
      * @param argUrl a {@link java.lang.String} object.
+     * @param argStatusCode an int.
      */
     public Head(final String argUrl,
                 final int argStatusCode) {
@@ -61,7 +62,8 @@ public class Head implements Test {
         }
         requests.add(url);
         return Utils.httpHeadRequest(context, url,
-                                     !((statusCode >= 300) && (statusCode < 400)));
+                                     !((statusCode >= 300) 
+                                        && (statusCode < 400)));
     }
 
     /** {@inheritDoc} */
