@@ -111,10 +111,7 @@ final public class Search implements Test {
                                   "9");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
-                                  (expectedResultType == ExpectedResultType.NONE)
-                                      ? HttpStatus.SC_NOT_FOUND
-                                      : HttpStatus.SC_OK,
-                                  throwable);
+                                  HttpStatus.SC_OK, throwable);
         if (data == null) {
             return false;
         }
