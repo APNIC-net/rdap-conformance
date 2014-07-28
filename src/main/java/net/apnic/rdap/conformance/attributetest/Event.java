@@ -15,6 +15,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.valuetest.EventAction;
+import net.apnic.rdap.conformance.valuetest.Date;
 
 /**
  * <p>Event class.</p>
@@ -53,30 +54,9 @@ public final class Event implements AttributeTest {
             new ScalarAttribute("eventAction", new EventAction());
         boolean evtres = evt.run(context, nr, data);
 
-        DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
-
-        boolean evdres = true;
-        String eventDate =
-            Utils.getStringAttribute(context, nr, "eventDate",
-                                     Status.Failure, data);
-        if (eventDate == null) {
-            evdres = false;
-        } else {
-            Result edvr = new Result(nr);
-            edvr.addNode("eventDate");
-            edvr.setReference("4");
-            DateTime dth = parser.parseDateTime(eventDate);
-            if (dth != null) {
-                edvr.setInfo("valid");
-                edvr.setStatus(Status.Success);
-                results.add(edvr);
-            } else {
-                edvr.setInfo("invalid");
-                edvr.setStatus(Status.Failure);
-                results.add(edvr);
-                evdres = false;
-            }
-        }
+        AttributeTest evd =
+            new ScalarAttribute("eventDate", new Date());
+        boolean evdres = evd.run(context, nr, data);
 
         boolean eacres = true;
         String eventActor =
