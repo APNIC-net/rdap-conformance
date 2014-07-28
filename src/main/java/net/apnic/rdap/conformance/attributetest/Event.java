@@ -25,17 +25,6 @@ import net.apnic.rdap.conformance.valuetest.EventAction;
 public final class Event implements AttributeTest {
     private boolean allowActor = true;
 
-    private static final Set<String> EVENT_ACTIONS =
-        Sets.newHashSet("registration",
-                        "reregistration",
-                        "last changed",
-                        "expiration",
-                        "deletion",
-                        "reinstantiation",
-                        "transfer",
-                        "locked",
-                        "unlocked");
-
     /**
      * <p>Constructor for Event.</p>
      *
