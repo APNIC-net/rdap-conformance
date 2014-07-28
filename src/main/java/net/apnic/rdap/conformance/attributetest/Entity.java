@@ -18,6 +18,7 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
+import net.apnic.rdap.conformance.valuetest.Role;
 
 /**
  * <p>Entity class.</p>
@@ -31,19 +32,6 @@ public final class Entity implements SearchTest {
     private String handle = null;
     private String fn = null;
     private Set<String> knownAttributes = null;
-
-    private static final Set<String> ROLES =
-        Sets.newHashSet("registrant",
-                        "technical",
-                        "administrative",
-                        "abuse",
-                        "billing",
-                        "registrar",
-                        "reseller",
-                        "sponsor",
-                        "proxy",
-                        "notifications",
-                        "noc");
 
     /**
      * <p>Constructor for Entity.</p>
@@ -111,48 +99,6 @@ public final class Entity implements SearchTest {
                 }
             }
             context.addResult(r2);
-        }
-
-        Result hr = new Result(nr);
-        hr.setStatus(Status.Success);
-        hr.addNode("roles");
-        hr.setInfo("present");
-        Object responseRoles = data.get("roles");
-        if (responseRoles == null) {
-            hr.setStatus(Status.Notification);
-            hr.setInfo("not present");
-        }
-        context.addResult(hr);
-        if (responseRoles != null) {
-            Result ilr = new Result(nr);
-            ilr.setStatus(Status.Success);
-            ilr.addNode("roles");
-            ilr.setInfo("is an array");
-            List<String> responseRolesList = null;
-            try {
-                responseRolesList = (List<String>) responseRoles;
-            } catch (ClassCastException e) {
-                ilr.setStatus(Status.Failure);
-                ilr.setInfo("is not an array");
-            }
-            context.addResult(ilr);
-            if (responseRolesList != null) {
-                int i = 0;
-                for (String role : responseRolesList) {
-                    Result rr = new Result(nr);
-                    rr.addNode("roles");
-                    rr.addNode(Integer.toString(i));
-                    rr.setInfo("registered");
-                    rr.setStatus(Status.Success);
-                    rr.setReference("11.2.3");
-                    if (!ROLES.contains(role)) {
-                        rr.setInfo("unregistered: " + role);
-                        rr.setStatus(Status.Failure);
-                    }
-                    context.addResult(rr);
-                    i++;
-                }
-            }
         }
 
         boolean vret = true;
@@ -236,6 +182,7 @@ public final class Entity implements SearchTest {
                 new AsEventActor(),
                 new ArrayAttribute(new Ip(), "networks"),
                 new ArrayAttribute(new Autnum(), "autnums"),
+                new ArrayAttribute(new Role(), "roles"),
                 new ResultsTruncated(),
                 new StandardObject()
             )
