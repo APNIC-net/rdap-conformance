@@ -10,6 +10,7 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
+import net.apnic.rdap.conformance.valuetest.LinkRelation;
 
 import java.util.Locale;
 import java.util.IllformedLocaleException;
@@ -23,79 +24,6 @@ import com.google.common.collect.Sets;
  * @version 0.3-SNAPSHOT
  */
 public final class Link implements AttributeTest {
-    private static final Set<String> LINK_RELATIONS =
-        Sets.newHashSet("about",
-                        "alternate",
-                        "appendix",
-                        "archives",
-                        "author",
-                        "bookmark",
-                        "canonical",
-                        "chapter",
-                        "collection",
-                        "contents",
-                        "copyright",
-                        "create-form",
-                        "current",
-                        "describedby",
-                        "describes",
-                        "disclosure",
-                        "duplicate",
-                        "edit",
-                        "edit-form",
-                        "edit-media",
-                        "enclosure",
-                        "first",
-                        "glossary",
-                        "help",
-                        "hosts",
-                        "hub",
-                        "icon",
-                        "index",
-                        "item",
-                        "last",
-                        "latest-version",
-                        "license",
-                        "lrdd",
-                        "memento",
-                        "monitor",
-                        "monitor-group",
-                        "next",
-                        "next-archive",
-                        "nofollow",
-                        "noreferrer",
-                        "original",
-                        "payment",
-                        "predecessor-version",
-                        "prefetch",
-                        "prev",
-                        "preview",
-                        "previous",
-                        "prev-archive",
-                        "privacy-policy",
-                        "profile",
-                        "identifiers",
-                        "related",
-                        "replies",
-                        "search",
-                        "section",
-                        "self",
-                        "service",
-                        "start",
-                        "stylesheet",
-                        "subsection",
-                        "successor-version",
-                        "tag",
-                        "terms-of-service",
-                        "timegate",
-                        "timemap",
-                        "type",
-                        "up",
-                        "version-history",
-                        "via",
-                        "working-copy",
-                        "working-copy-of");
-
     /* The first nine are defined by HTML 4.01, and the last two by
      * CSS 2. */
     private static final Set<String> MEDIA_TYPES =
@@ -151,21 +79,10 @@ public final class Link implements AttributeTest {
             ));
         }
 
-        String rel = Utils.getStringAttribute(context, nr, "rel",
-                                              Status.Failure, data);
-        if (rel == null) {
+        AttributeTest rel = new ScalarAttribute("rel", new LinkRelation());
+        boolean relres = rel.run(context, nr, data);
+        if (!relres) {
             success = false;
-        } else {
-            Result valid = new Result(nr);
-            if (LINK_RELATIONS.contains(rel)) {
-                valid.setInfo("valid");
-                valid.setStatus(Status.Success);
-            } else {
-                valid.setInfo("invalid: " + rel);
-                valid.setStatus(Status.Failure);
-                success = false;
-            }
-            results.add(valid);
         }
 
         if (data.get("hreflang") != null) {
