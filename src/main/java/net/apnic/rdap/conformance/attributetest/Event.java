@@ -2,12 +2,11 @@ package net.apnic.rdap.conformance.attributetest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.Arrays;
 
 import com.google.common.collect.Sets;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
@@ -25,6 +24,7 @@ import net.apnic.rdap.conformance.valuetest.Date;
  */
 public final class Event implements AttributeTest {
     private boolean allowActor = true;
+    private Set<String> knownAttributes = new HashSet<String>();
 
     /**
      * <p>Constructor for Event.</p>
@@ -50,14 +50,6 @@ public final class Event implements AttributeTest {
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("5.5");
 
-        AttributeTest evt =
-            new ScalarAttribute("eventAction", new EventAction());
-        boolean evtres = evt.run(context, nr, data);
-
-        AttributeTest evd =
-            new ScalarAttribute("eventDate", new Date());
-        boolean evdres = evd.run(context, nr, data);
-
         boolean eacres = true;
         String eventActor =
             Utils.getStringAttribute(context, nr, "eventActor",
@@ -71,10 +63,15 @@ public final class Event implements AttributeTest {
             eacres = false;
         }
 
-        AttributeTest lst = new Links();
-        boolean lstres = lst.run(context, proto, data);
+        knownAttributes.add("eventActor");
 
-        return (evtres && evdres && eacres && lstres);
+        return (Utils.runTestList(
+            context, nr, data, knownAttributes, true,
+            Arrays.<AttributeTest>asList(
+                new ScalarAttribute("eventAction", new EventAction()),
+                new ScalarAttribute("eventDate", new Date()),
+                new Links()
+            )) && eacres);
     }
 
     /**
@@ -83,7 +80,6 @@ public final class Event implements AttributeTest {
      * @return a {@link java.util.Set} object.
      */
     public Set<String> getKnownAttributes() {
-        return Sets.newHashSet("eventActor", "eventDate",
-                               "eventAction");
+        return knownAttributes;
     }
 }
