@@ -106,7 +106,7 @@ public final class Autnum implements AttributeTest {
                 r2.addNode("startAutnum");
                 r2.setStatus(Result.Status.Success);
                 r2.setInfo("startAutnum and endAutnum bound argument autnum");
-                if (!((startAddress.compareTo(autnum) <= 0) 
+                if (!((startAddress.compareTo(autnum) <= 0)
                      && (endAddress.compareTo(autnum) >= 0))) {
                     r2.setStatus(Result.Status.Failure);
                     r2.setInfo("startAutnum and endAutnum do not bound "

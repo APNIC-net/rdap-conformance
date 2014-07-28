@@ -80,7 +80,7 @@ public final class Context {
         if (response == null) {
             return null;
         }
-        ListenableFuture<HttpResponse> hr = 
+        ListenableFuture<HttpResponse> hr =
             JdkFutureAdapters.listenInPoolThread(response, executorService);
         return hr;
     }

@@ -62,7 +62,7 @@ final public class Head implements Test {
         }
         requests.add(url);
         return Utils.httpHeadRequest(context, url,
-                                     !((statusCode >= 300) 
+                                     !((statusCode >= 300)
                                         && (statusCode < 400)));
     }
 

@@ -16,7 +16,7 @@ public final class ObjectClass {
     private List<String> exists = new ArrayList<String>();
     private List<String> notExists = new ArrayList<String>();
     private List<String> redirects = new ArrayList<String>();
-    private Map<String, ObjectClassSearch> search = 
+    private Map<String, ObjectClassSearch> search =
         new HashMap<String, ObjectClassSearch>();
 
     private ObjectClass() { }

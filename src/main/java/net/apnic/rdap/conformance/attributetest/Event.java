@@ -14,6 +14,7 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.valuetest.EventAction;
 
 /**
  * <p>Event class.</p>
@@ -59,27 +60,9 @@ public final class Event implements AttributeTest {
         nr.setDocument("draft-ietf-weirds-json-response-07");
         nr.setReference("5.5");
 
-        boolean evtres = true;
-        String eventAction =
-            Utils.getStringAttribute(context, nr, "eventAction",
-                                     Status.Failure, data);
-        if (eventAction == null) {
-            evtres = false;
-        } else {
-            Result evr = new Result(nr);
-            evr.addNode("eventAction");
-            evr.setReference("11.2.2");
-            if (EVENT_ACTIONS.contains(eventAction)) {
-                evr.setInfo("registered");
-                evr.setStatus(Status.Success);
-                results.add(evr);
-            } else {
-                evr.setInfo("unregistered: " + eventAction);
-                evr.setStatus(Status.Failure);
-                results.add(evr);
-                evtres = false;
-            }
-        }
+        AttributeTest evt =
+            new ScalarAttribute("eventAction", new EventAction());
+        boolean evtres = evt.run(context, nr, data);
 
         DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
 

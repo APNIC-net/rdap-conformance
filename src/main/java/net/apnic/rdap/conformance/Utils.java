@@ -101,7 +101,7 @@ public final class Utils {
                 final Context context,
                 final HttpResponse httpResponse,
                 final Result proto) {
-        return processResponse(context, httpResponse, proto, 
+        return processResponse(context, httpResponse, proto,
                                HttpStatus.SC_OK, null);
     }
 
