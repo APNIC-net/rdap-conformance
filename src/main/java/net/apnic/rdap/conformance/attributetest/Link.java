@@ -11,10 +11,10 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.valuetest.LinkRelation;
+import net.apnic.rdap.conformance.valuetest.MediaType;
 
 import java.util.Locale;
 import java.util.IllformedLocaleException;
-import com.google.common.net.MediaType;
 import com.google.common.collect.Sets;
 
 /**
@@ -24,21 +24,6 @@ import com.google.common.collect.Sets;
  * @version 0.3-SNAPSHOT
  */
 public final class Link implements AttributeTest {
-    /* The first nine are defined by HTML 4.01, and the last two by
-     * CSS 2. */
-    private static final Set<String> MEDIA_TYPES =
-        Sets.newHashSet("aural",
-                        "braille",
-                        "handheld",
-                        "print",
-                        "projection",
-                        "screen",
-                        "tty",
-                        "tv",
-                        "all",
-                        "embossed",
-                        "speech");
-
     /**
      * <p>Constructor for Link.</p>
      */
@@ -135,21 +120,10 @@ public final class Link implements AttributeTest {
         Utils.getStringAttribute(context, nr, "title",
                                  Status.Notification, data);
 
-        String media = Utils.getStringAttribute(context, nr, "media",
-                                                Status.Notification, data);
-        if (media != null) {
-            Result mtr = new Result(nr);
-            mtr.addNode("media");
-            mtr.setStatus(Status.Success);
-            mtr.setInfo("registered");
-            if (!MEDIA_TYPES.contains(media)) {
-                /* It's not impossible that the media type is one
-                 * that has been registered in the meantime, which
-                 * is why this is only a warning. */
-                mtr.setStatus(Status.Warning);
-                mtr.setInfo("unregistered: " + media);
-            }
-            results.add(mtr);
+        AttributeTest med = new ScalarAttribute("media", new MediaType());
+        boolean medres = med.run(context, nr, data);
+        if (!medres) {
+            success = false;
         }
 
         String type = Utils.getStringAttribute(context, nr, "type",
@@ -160,7 +134,7 @@ public final class Link implements AttributeTest {
             tvr.setStatus(Status.Success);
             tvr.setInfo("valid");
             try {
-                MediaType.parse(type);
+                com.google.common.net.MediaType.parse(type);
             } catch (IllegalArgumentException e) {
                 tvr.setInfo(e.toString());
                 tvr.setStatus(Status.Failure);
