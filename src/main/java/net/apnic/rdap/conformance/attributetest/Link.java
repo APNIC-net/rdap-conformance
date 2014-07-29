@@ -12,6 +12,7 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.valuetest.LinkRelation;
 import net.apnic.rdap.conformance.valuetest.MediaType;
+import net.apnic.rdap.conformance.valuetest.ContentType;
 
 import java.util.Locale;
 import java.util.IllformedLocaleException;
@@ -126,20 +127,10 @@ public final class Link implements AttributeTest {
             success = false;
         }
 
-        String type = Utils.getStringAttribute(context, nr, "type",
-                                               Status.Notification, data);
-        if (type != null) {
-            Result tvr = new Result(nr);
-            tvr.addNode("type");
-            tvr.setStatus(Status.Success);
-            tvr.setInfo("valid");
-            try {
-                com.google.common.net.MediaType.parse(type);
-            } catch (IllegalArgumentException e) {
-                tvr.setInfo(e.toString());
-                tvr.setStatus(Status.Failure);
-            }
-            results.add(tvr);
+        AttributeTest typ = new ScalarAttribute("type", new ContentType());
+        boolean typres = typ.run(context, nr, data);
+        if (!typres) {
+            success = false;
         }
 
         AttributeTest ua = new UnknownAttributes(getKnownAttributes());
