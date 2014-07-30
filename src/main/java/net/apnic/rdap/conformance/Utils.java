@@ -513,13 +513,15 @@ public final class Utils {
      */
     public static boolean matchesSearch(final String strPattern,
                                         final String value) {
-        /* At least some servers will add implicit ".*" to the
-         * beginning and the end of the pattern, so add those here
-         * too. This may become configurable, so that stricter servers
-         * can verify their behaviour.  Searches are presumed to be
-         * case-insensitive as well. */
+        /* Previously, this added implicit ".*" segments at the
+         * beginning and the end of the pattern, since at least some
+         * servers were operating in that way. However, rdap-query now
+         * has the following: 'search patterns include implied
+         * beginning and end of string regular expression markers ...
+         * [a searh pattern of] "example*.com" ... would be translated
+         * into a POSIX regular expression as "^example.*\.com$"'.
+         * Consequently, the ".*" segments are no longer added. */
         String regexPattern = strPattern.replaceAll("\\*", ".*");
-        regexPattern = ".*" + regexPattern + ".*";
         Pattern pattern = Pattern.compile(regexPattern,
                                           Pattern.CASE_INSENSITIVE
                                         | Pattern.UNICODE_CASE);
