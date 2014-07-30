@@ -85,7 +85,7 @@ public final class Standard implements ObjectTest {
                     + "/nameserver/" + nameserver;
 
         Result proto = new Result(Status.Notification, path,
-                                  "domain.standard",
+                                  "nameserver.standard",
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "6.2");
