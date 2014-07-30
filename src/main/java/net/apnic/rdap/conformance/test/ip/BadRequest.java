@@ -22,7 +22,7 @@ final public class BadRequest implements Test {
      */
     public BadRequest() {
         Result proto = new Result();
-        proto.setDocument("draft-ietf-weirds-rdap-query-10");
+        proto.setDocument("draft-ietf-weirds-rdap-query-11");
         proto.setReference("3.1.1");
         proto.setTestName("ip.bad-request");
         cbr = new BasicRequest(

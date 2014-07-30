@@ -363,7 +363,7 @@ public final class Application {
                 "/entity/1.2.3.4",
                 null,
                 true,
-                getDocRefProto("draft-ietf-weirds-rdap-query-10", "3.1.5",
+                getDocRefProto("draft-ietf-weirds-rdap-query-11", "3.1.5",
                                "entity.not-bad-request")
             )
         );
@@ -422,7 +422,7 @@ public final class Application {
                 "/domain/example.com",
                 null,
                 true,
-                getDocRefProto("draft-ietf-weirds-rdap-query-10", "3.1.3",
+                getDocRefProto("draft-ietf-weirds-rdap-query-11", "3.1.3",
                                "domain.not-bad-request")
             )
         );
@@ -433,7 +433,7 @@ public final class Application {
                 "/domain/202.in-addr.arpa",
                 null,
                 true,
-                getDocRefProto("draft-ietf-weirds-rdap-query-10", "3.1.3",
+                getDocRefProto("draft-ietf-weirds-rdap-query-11", "3.1.3",
                                "domain.not-bad-request")
             )
         );

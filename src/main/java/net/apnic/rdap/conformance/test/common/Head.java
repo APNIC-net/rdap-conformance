@@ -71,7 +71,7 @@ final public class Head implements Test {
         Result proto = new Result(Status.Notification, url,
                                   "head.standard",
                                   "response", "",
-                                  "draft-ietf-weirds-rdap-query-10",
+                                  "draft-ietf-weirds-rdap-query-11",
                                   "2");
 
         if (httpResponse == null) {
