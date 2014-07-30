@@ -487,6 +487,9 @@ public final class Application {
         c.setRateLimiter(rateLimiter);
         c.setExecutorService(executorService);
         c.setTestsRunning(testsRunning);
+        if (s.getAcceptContentType() != null) {
+            c.setContentType(s.getAcceptContentType());
+        }
 
         return c;
     }
@@ -532,6 +535,22 @@ public final class Application {
          * by implementers anyway. See e.g.
          * https://bugs.eclipse.org/bugs/show_bug.cgi?id=414636. */
         // addNonRdapTests(c, tests);
+
+        /* Certain servers do not return a valid response when the
+         * application/rdap+json content type is set in the Accept
+         * header, but are still able to return valid JSON. Rather
+         * than not testing the responses at all, allow for the
+         * supported content type to be set in the configuration, and
+         * add a result at the beginning indicating this failure. */
+        if (s.getAcceptContentType() != null) {
+            Result ctres = new Result();
+            ctres.setTestName("common.rdap-specific-content-type");
+            ctres.setDocument("draft-ietf-weirds-using-http-08");
+            ctres.setReference("4.1");
+            ctres.setStatus(Result.Status.Failure);
+            ctres.setInfo("not supported by server in accept header");
+            System.out.println(ctres.toString());
+        }
 
         addUnsupportedQueryTypeTests(s, tests);
         addIpTests(s, tests);

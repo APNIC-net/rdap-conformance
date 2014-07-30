@@ -71,7 +71,13 @@ public final class Context {
         Future<HttpResponse> response = null;
         try {
             URL url = new URL(httpRequest.getRequestLine().getUri());
-            HttpHost httphost = new HttpHost(url.getHost(), HTTP_PORT, "http");
+            HttpHost httphost =
+                new HttpHost(url.getHost(),
+                             ((url.getPort() == -1)
+                                 ? url.getDefaultPort()
+                                 : url.getPort()),
+                             (url.toString().startsWith("https")
+                                 ? "https" : "http"));
             response = httpClient.execute(httphost, httpRequest, null);
         } catch (Exception e) {
             System.err.println("Exception occurred during asynchronous "

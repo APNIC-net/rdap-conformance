@@ -21,6 +21,7 @@ import net.apnic.rdap.conformance.specification.ObjectClass;
 public final class Specification {
     private String baseUrl = null;
     private double requestsPerSecond = 0;
+    private String acceptContentType = null;
     private Map<String, ObjectClass> objectClasses = null;
 
     private Specification() { }
@@ -87,5 +88,14 @@ public final class Specification {
      */
     public double getRequestsPerSecond() {
         return requestsPerSecond;
+    }
+
+    /**
+     * <p>Getter for the field <code>acceptContentType</code>.</p>
+     *
+     * @return a string.
+     */
+    public String getAcceptContentType() {
+        return acceptContentType;
     }
 }

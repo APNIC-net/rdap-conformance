@@ -135,10 +135,6 @@ public final class Utils {
         boolean scres = sc.run(context, proto, httpResponse);
         ResponseTest ct = new ContentType();
         boolean ctres = ct.run(context, proto, httpResponse);
-        if (!(scres && ctres)) {
-            return null;
-        }
-
         ResponseTest ac = new AccessControl();
         ac.run(context, proto, httpResponse);
 
@@ -210,11 +206,6 @@ public final class Utils {
         boolean scres = sc.run(context, proto, response);
         ResponseTest ct = new ContentType();
         boolean ctres = ct.run(context, proto, response);
-        if (!(scres && ctres)) {
-            request.releaseConnection();
-            return null;
-        }
-
         ResponseTest ac = new AccessControl();
         ac.run(context, proto, response);
 
