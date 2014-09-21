@@ -9,6 +9,10 @@ import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.attributetest.Autnum;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpStatus;
+
 /**
  * <p>Standard class.</p>
  *
@@ -18,6 +22,9 @@ import net.apnic.rdap.conformance.attributetest.Autnum;
 public final class Standard implements ObjectTest {
     private String autnum = null;
     private String url = null;
+    private Context context = null;
+    private HttpResponse httpResponse = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for Standard.</p>
@@ -40,7 +47,32 @@ public final class Standard implements ObjectTest {
     }
 
     /** {@inheritDoc} */
-    public boolean run(final Context context) {
+    public void setContext(final Context c) {
+        context = c;
+    }
+
+    /** {@inheritDoc} */
+    public void setResponse(final HttpResponse hr) {
+        httpResponse = hr;
+    }
+
+    /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        throwable = t;
+    }
+
+    /** {@inheritDoc} */
+    public HttpRequest getRequest() {
+        String path =
+            (url != null)
+                ? url
+                : context.getSpecification().getBaseUrl()
+                    + "/autnum/" + autnum;
+        return Utils.httpGetRequest(context, path, true);
+    }
+
+    /** {@inheritDoc} */
+    public boolean run() {
         String path =
             (url != null)
                 ? url
@@ -52,13 +84,9 @@ public final class Standard implements ObjectTest {
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "6.5");
-        Result r = new Result(proto);
-        r.setCode("response");
-        Map root = Utils.standardRequest(context, path, r);
-        if (root == null) {
-            return false;
-        }
-        Map<String, Object> data = Utils.castToMap(context, proto, root);
+        Map<String, Object> data =
+            Utils.processResponse(context, httpResponse, proto,
+                                  HttpStatus.SC_OK, throwable);
         if (data == null) {
             return false;
         }

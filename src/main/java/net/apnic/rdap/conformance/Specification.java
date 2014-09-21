@@ -21,7 +21,7 @@ import net.apnic.rdap.conformance.specification.ObjectClass;
 public final class Specification {
     private String baseUrl = null;
     private double requestsPerSecond = 0;
-    private int threadCount = 1;
+    private String acceptContentType = null;
     private Map<String, ObjectClass> objectClasses = null;
 
     private Specification() { }
@@ -91,11 +91,11 @@ public final class Specification {
     }
 
     /**
-     * <p>Getter for the field <code>threadCount</code>.</p>
+     * <p>Getter for the field <code>acceptContentType</code>.</p>
      *
-     * @return an int.
+     * @return a string.
      */
-    public int getThreadCount() {
-        return (int) threadCount;
+    public String getAcceptContentType() {
+        return acceptContentType;
     }
 }

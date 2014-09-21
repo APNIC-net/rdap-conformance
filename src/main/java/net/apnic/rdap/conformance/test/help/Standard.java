@@ -1,17 +1,16 @@
-package net.apnic.rdap.conformance.test.domain;
+package net.apnic.rdap.conformance.test.help;
 
-import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.Arrays;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
-import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
-import net.apnic.rdap.conformance.ObjectTest;
-import net.apnic.rdap.conformance.attributetest.StandardResponse;
-import net.apnic.rdap.conformance.attributetest.Domain;
+import net.apnic.rdap.conformance.Test;
+import net.apnic.rdap.conformance.attributetest.RdapConformance;
+import net.apnic.rdap.conformance.attributetest.Notices;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
@@ -23,9 +22,7 @@ import org.apache.http.HttpStatus;
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.3-SNAPSHOT
  */
-public final class Standard implements ObjectTest {
-    private String domain = null;
-    private String url = null;
+public final class Standard implements Test {
     private Context context = null;
     private HttpResponse httpResponse = null;
     private Throwable throwable = null;
@@ -34,21 +31,6 @@ public final class Standard implements ObjectTest {
      * <p>Constructor for Standard.</p>
      */
     public Standard() { }
-
-    /**
-     * <p>Constructor for Standard.</p>
-     *
-     * @param domain a {@link java.lang.String} object.
-     */
-    public Standard(final String domain) {
-        this.domain = domain;
-    }
-
-    /** {@inheritDoc} */
-    public void setUrl(final String url) {
-        domain = null;
-        this.url = url;
-    }
 
     /** {@inheritDoc} */
     public void setContext(final Context c) {
@@ -67,27 +49,18 @@ public final class Standard implements ObjectTest {
 
     /** {@inheritDoc} */
     public HttpRequest getRequest() {
-        String path =
-            (url != null)
-                ? url
-                : context.getSpecification().getBaseUrl()
-                    + "/domain/" + domain;
+        String path = context.getSpecification().getBaseUrl() + "/help";
         return Utils.httpGetRequest(context, path, true);
     }
 
     /** {@inheritDoc} */
     public boolean run() {
-        String path =
-            (url != null)
-                ? url
-                : context.getSpecification().getBaseUrl()
-                    + "/domain/" + domain;
-
-        Result proto = new Result(Status.Notification, path,
-                                  "domain.standard",
+        String path = context.getSpecification().getBaseUrl() + "/help";
+        Result proto = new Result(Result.Status.Notification, path,
+                                  "help",
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
-                                  "6.3");
+                                  "8");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
                                   HttpStatus.SC_OK, throwable);
@@ -99,8 +72,8 @@ public final class Standard implements ObjectTest {
         return Utils.runTestList(
             context, proto, data, knownAttributes, true,
             Arrays.asList(
-                new Domain(false),
-                new StandardResponse()
+                new RdapConformance(),
+                new Notices()
             )
         );
     }

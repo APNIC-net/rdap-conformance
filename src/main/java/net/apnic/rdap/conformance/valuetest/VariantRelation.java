@@ -1,9 +1,5 @@
 package net.apnic.rdap.conformance.valuetest;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Sets;
 
 import net.apnic.rdap.conformance.Result;

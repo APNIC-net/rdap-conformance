@@ -1,0 +1,27 @@
+{ 
+    "baseUrl": "https://whois.uniregistry.net/rdap",
+    "acceptContentType": "application/json",
+    "objectClasses": {
+        "ip": {
+            "supported": false
+        },
+        "autnum": {
+            "supported": false
+        },
+        "domain": {
+            "supported": true,
+            "exists": ["nic.link"],
+            "notExists": ["google.com"]
+        },
+        "nameserver": {
+            "supported": true,
+            "exists": ["a.ns.uniregistry.net"],
+            "notExists": ["google.com"]
+        },
+        "entity": {
+            "supported": true,
+            "exists": ["uniregistry"],
+            "notExists": ["@@@@@@@@"]
+        }
+    }
+}

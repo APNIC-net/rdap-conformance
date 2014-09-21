@@ -10,15 +10,13 @@ import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
+import net.apnic.rdap.conformance.valuetest.LinkRelation;
+import net.apnic.rdap.conformance.valuetest.MediaType;
+import net.apnic.rdap.conformance.valuetest.ContentType;
 
 import java.util.Locale;
 import java.util.IllformedLocaleException;
-import com.google.common.net.MediaType;
 import com.google.common.collect.Sets;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.config.RequestConfig;
 
 /**
  * <p>Link class.</p>
@@ -27,142 +25,10 @@ import org.apache.http.client.config.RequestConfig;
  * @version 0.3-SNAPSHOT
  */
 public final class Link implements AttributeTest {
-    private static final Set<String> LINK_RELATIONS =
-        Sets.newHashSet("about",
-                        "alternate",
-                        "appendix",
-                        "archives",
-                        "author",
-                        "bookmark",
-                        "canonical",
-                        "chapter",
-                        "collection",
-                        "contents",
-                        "copyright",
-                        "create-form",
-                        "current",
-                        "describedby",
-                        "describes",
-                        "disclosure",
-                        "duplicate",
-                        "edit",
-                        "edit-form",
-                        "edit-media",
-                        "enclosure",
-                        "first",
-                        "glossary",
-                        "help",
-                        "hosts",
-                        "hub",
-                        "icon",
-                        "index",
-                        "item",
-                        "last",
-                        "latest-version",
-                        "license",
-                        "lrdd",
-                        "memento",
-                        "monitor",
-                        "monitor-group",
-                        "next",
-                        "next-archive",
-                        "nofollow",
-                        "noreferrer",
-                        "original",
-                        "payment",
-                        "predecessor-version",
-                        "prefetch",
-                        "prev",
-                        "preview",
-                        "previous",
-                        "prev-archive",
-                        "privacy-policy",
-                        "profile",
-                        "identifiers",
-                        "related",
-                        "replies",
-                        "search",
-                        "section",
-                        "self",
-                        "service",
-                        "start",
-                        "stylesheet",
-                        "subsection",
-                        "successor-version",
-                        "tag",
-                        "terms-of-service",
-                        "timegate",
-                        "timemap",
-                        "type",
-                        "up",
-                        "version-history",
-                        "via",
-                        "working-copy",
-                        "working-copy-of");
-
-    /* The first nine are defined by HTML 4.01, and the last two by
-     * CSS 2. */
-    private static final Set<String> MEDIA_TYPES =
-        Sets.newHashSet("aural",
-                        "braille",
-                        "handheld",
-                        "print",
-                        "projection",
-                        "screen",
-                        "tty",
-                        "tv",
-                        "all",
-                        "embossed",
-                        "speech");
-
-    private static final int TIMEOUT_MS = 5000;
-
     /**
      * <p>Constructor for Link.</p>
      */
     public Link() { }
-
-    private boolean urlIsFetchable(final Context context,
-                                   final Result proto,
-                                   final String key,
-                                   final String url) {
-        boolean success = true;
-        Result vnr = new Result(proto);
-        vnr.addNode(key);
-        int code = 0;
-        HttpGet request = null;
-        try {
-            request = new HttpGet(url);
-            RequestConfig config =
-                RequestConfig.custom()
-                             .setConnectionRequestTimeout(TIMEOUT_MS)
-                             .setConnectTimeout(TIMEOUT_MS)
-                             .setSocketTimeout(TIMEOUT_MS)
-                             .build();
-            request.setConfig(config);
-            HttpResponse response =
-                context.executeRequest(request);
-            code = response.getStatusLine().getStatusCode();
-        } catch (Exception e) {
-            vnr.setStatus(Status.Failure);
-            vnr.setInfo("unable to send request for URL: "
-                        + e.toString());
-            context.addResult(vnr);
-            success = false;
-        }
-        if (request != null) {
-            request.releaseConnection();
-        }
-        /* Previously, this treated >= 400 as a problem. Of course, if
-           an error response is being tested, that won't work. Ideally
-           this would check against the 'current' status code. */
-        if (success) {
-            vnr.setStatus(Status.Success);
-            vnr.setInfo("got response for URL (" + code + ")");
-            context.addResult(vnr);
-        }
-        return success;
-    }
 
     /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
@@ -177,33 +43,32 @@ public final class Link implements AttributeTest {
         boolean success = true;
         String value = Utils.getStringAttribute(context, nr, "value",
                                                 Status.Failure, data);
-        if ((value == null)
-                || (!urlIsFetchable(context, nr, "value", value))) {
+        if (value == null) {
             success = false;
+        } else {
+            Result nr2 = new Result(nr);
+            nr2.addNode("value");
+            context.submitTest(new net.apnic.rdap.conformance.test.common.Link(
+                value, nr2
+            ));
         }
 
         String href = Utils.getStringAttribute(context, nr, "href",
                                                Status.Failure, data);
-        if ((href == null)
-                || (!urlIsFetchable(context, nr, "href", href))) {
-            success = false;
-        }
-
-        String rel = Utils.getStringAttribute(context, nr, "rel",
-                                              Status.Failure, data);
-        if (rel == null) {
+        if (href == null) {
             success = false;
         } else {
-            Result valid = new Result(nr);
-            if (LINK_RELATIONS.contains(rel)) {
-                valid.setInfo("valid");
-                valid.setStatus(Status.Success);
-            } else {
-                valid.setInfo("invalid: " + rel);
-                valid.setStatus(Status.Failure);
-                success = false;
-            }
-            results.add(valid);
+            Result nr2 = new Result(nr);
+            nr2.addNode("href");
+            context.submitTest(new net.apnic.rdap.conformance.test.common.Link(
+                href, nr2
+            ));
+        }
+
+        AttributeTest rel = new ScalarAttribute("rel", new LinkRelation());
+        boolean relres = rel.run(context, nr, data);
+        if (!relres) {
+            success = false;
         }
 
         if (data.get("hreflang") != null) {
@@ -256,37 +121,16 @@ public final class Link implements AttributeTest {
         Utils.getStringAttribute(context, nr, "title",
                                  Status.Notification, data);
 
-        String media = Utils.getStringAttribute(context, nr, "media",
-                                                Status.Notification, data);
-        if (media != null) {
-            Result mtr = new Result(nr);
-            mtr.addNode("media");
-            mtr.setStatus(Status.Success);
-            mtr.setInfo("registered");
-            if (!MEDIA_TYPES.contains(media)) {
-                /* It's not impossible that the media type is one
-                 * that has been registered in the meantime, which
-                 * is why this is only a warning. */
-                mtr.setStatus(Status.Warning);
-                mtr.setInfo("unregistered: " + media);
-            }
-            results.add(mtr);
+        AttributeTest med = new ScalarAttribute("media", new MediaType());
+        boolean medres = med.run(context, nr, data);
+        if (!medres) {
+            success = false;
         }
 
-        String type = Utils.getStringAttribute(context, nr, "type",
-                                               Status.Notification, data);
-        if (type != null) {
-            Result tvr = new Result(nr);
-            tvr.addNode("type");
-            tvr.setStatus(Status.Success);
-            tvr.setInfo("valid");
-            try {
-                MediaType.parse(type);
-            } catch (IllegalArgumentException e) {
-                tvr.setInfo(e.toString());
-                tvr.setStatus(Status.Failure);
-            }
-            results.add(tvr);
+        AttributeTest typ = new ScalarAttribute("type", new ContentType());
+        boolean typres = typ.run(context, nr, data);
+        if (!typres) {
+            success = false;
         }
 
         AttributeTest ua = new UnknownAttributes(getKnownAttributes());

@@ -3,6 +3,8 @@ package net.apnic.rdap.conformance.test.common;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.Test;
 import org.apache.http.HttpStatus;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
 
 /**
  * <p>NotFound class.</p>
@@ -28,7 +30,27 @@ public final class NotFound implements Test {
     }
 
     /** {@inheritDoc} */
-    public boolean run(final Context context) {
-        return cbr.run(context);
+    public void setContext(final Context c) {
+        cbr.setContext(c);
+    }
+
+    /** {@inheritDoc} */
+    public void setResponse(final HttpResponse hr) {
+        cbr.setResponse(hr);
+    }
+
+    /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        cbr.setError(t);
+    }
+
+    /** {@inheritDoc} */
+    public HttpRequest getRequest() {
+        return cbr.getRequest();
+    }
+
+    /** {@inheritDoc} */
+    public boolean run() {
+        return cbr.run();
     }
 }

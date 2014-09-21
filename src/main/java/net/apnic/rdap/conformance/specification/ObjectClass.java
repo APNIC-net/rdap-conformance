@@ -2,6 +2,8 @@ package net.apnic.rdap.conformance.specification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>ObjectClass class.</p>
@@ -14,7 +16,8 @@ public final class ObjectClass {
     private List<String> exists = new ArrayList<String>();
     private List<String> notExists = new ArrayList<String>();
     private List<String> redirects = new ArrayList<String>();
-    private ObjectClassSearch search = new ObjectClassSearch();
+    private Map<String, ObjectClassSearch> search =
+        new HashMap<String, ObjectClassSearch>();
 
     private ObjectClass() { }
 
@@ -55,11 +58,11 @@ public final class ObjectClass {
     }
 
     /**
-     * <p>getObjectClassSearch.</p>
+     * <p>Getter for the field <code>search</code>.</p>
      *
-     * @return a {@link net.apnic.rdap.conformance.specification.ObjectClassSearch} object.
+     * @return a {@link java.util.Map} object.
      */
-    public ObjectClassSearch getObjectClassSearch() {
+    public Map<String, ObjectClassSearch> getSearch() {
         return search;
     }
 }

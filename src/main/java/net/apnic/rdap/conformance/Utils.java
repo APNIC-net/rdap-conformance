@@ -1,6 +1,5 @@
 package net.apnic.rdap.conformance;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.google.gson.Gson;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import net.apnic.rdap.conformance.Result.Status;
 import net.apnic.rdap.conformance.responsetest.StatusCode;
@@ -19,6 +19,7 @@ import net.apnic.rdap.conformance.attributetest.UnknownAttributes;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
 
@@ -33,23 +34,19 @@ import org.apache.http.client.config.RequestConfig;
  * @version 0.3-SNAPSHOT
  */
 public final class Utils {
-    private static final int TIMEOUT_MS = 5000;
+    private static final int TIMEOUT_MS = 60000;
 
     private Utils() { }
 
-    /**
-     * <p>httpGetRequest.</p>
-     *
-     * @param context a {@link net.apnic.rdap.conformance.Context} object.
-     * @param path a {@link java.lang.String} object.
-     * @param followRedirects a boolean.
-     * @return a {@link org.apache.http.client.methods.HttpRequestBase} object.
-     */
-    public static HttpRequestBase httpGetRequest(
+    private static HttpRequestBase httpRequest(
                 final Context context,
                 final String path,
-                final boolean followRedirects) {
-        HttpGet request = new HttpGet(path);
+                final boolean followRedirects,
+                final String method) {
+        HttpRequestBase request =
+            (method.equals("get"))
+                ? new HttpGet(path)
+                : new HttpHead(path);
         request.setHeader("Accept", context.getContentType());
         RequestConfig config =
             RequestConfig.custom()
@@ -63,6 +60,115 @@ public final class Utils {
     }
 
     /**
+     * <p>httpGetRequest.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param path a {@link java.lang.String} object.
+     * @param followRedirects a boolean.
+     * @return a {@link org.apache.http.client.methods.HttpRequestBase} object.
+     */
+    public static HttpRequestBase httpGetRequest(
+                final Context context,
+                final String path,
+                final boolean followRedirects) {
+        return httpRequest(context, path, followRedirects, "get");
+    }
+
+    /**
+     * <p>httpHeadRequest.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param path a {@link java.lang.String} object.
+     * @param followRedirects a boolean.
+     * @return a {@link org.apache.http.client.methods.HttpRequestBase} object.
+     */
+    public static HttpRequestBase httpHeadRequest(
+                final Context context,
+                final String path,
+                final boolean followRedirects) {
+        return httpRequest(context, path, followRedirects, "head");
+    }
+
+    /**
+     * <p>processResponse.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param httpResponse a {@link org.apache.http.HttpResponse} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @return a {@link java.util.Map} object.
+     */
+    public static Map<String, Object> processResponse(
+                final Context context,
+                final HttpResponse httpResponse,
+                final Result proto) {
+        return processResponse(context, httpResponse, proto,
+                               HttpStatus.SC_OK, null);
+    }
+
+    /**
+     * <p>processResponse.</p>
+     *
+     * @param context a {@link net.apnic.rdap.conformance.Context} object.
+     * @param httpResponse a {@link org.apache.http.HttpResponse} object.
+     * @param proto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param statusCode an int.
+     */
+    public static Map<String, Object> processResponse(
+                final Context context,
+                final HttpResponse httpResponse,
+                final Result proto,
+                final int statusCode,
+                final Throwable throwable) {
+        if (httpResponse == null) {
+            proto.setCode("response");
+            proto.setStatus(Status.Failure);
+            proto.setInfo((throwable != null) ? throwable.toString() : "");
+            context.addResult(proto);
+            return null;
+        }
+        Result r = new Result(proto);
+        r.setCode("response");
+        r.setStatus(Status.Success);
+        context.addResult(r);
+
+        ResponseTest sc = new StatusCode(statusCode);
+        boolean scres = sc.run(context, proto, httpResponse);
+        ResponseTest ct = new ContentType();
+        boolean ctres = ct.run(context, proto, httpResponse);
+        ResponseTest ac = new AccessControl();
+        ac.run(context, proto, httpResponse);
+
+        Map root = null;
+        try {
+            InputStream is = httpResponse.getEntity().getContent();
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+            root = new Gson().fromJson(isr, Map.class);
+        } catch (Exception e) {
+            r = new Result(proto);
+            r.setStatus(Status.Failure);
+            r.setInfo(e.toString());
+            context.addResult(r);
+            return null;
+        }
+        if (root == null) {
+            return null;
+        }
+
+        Set<String> keys = root.keySet();
+        if (keys.size() == 0) {
+            r = new Result(proto);
+            /* Technically not an error, but there's not much point in
+             * returning nothing. */
+            r.setStatus(Status.Failure);
+            r.setInfo("no data returned");
+            context.addResult(r);
+            return null;
+        }
+
+        return castToMap(context, proto, root);
+    }
+
+    /**
      * <p>standardRequest.</p>
      *
      * @param context a {@link net.apnic.rdap.conformance.Context} object.
@@ -73,8 +179,6 @@ public final class Utils {
     public static Map standardRequest(final Context context,
                                       final String path,
                                       final Result proto) {
-        List<Result> results = context.getResults();
-
         Result r = new Result(proto);
         r.setCode("response");
 
@@ -82,11 +186,13 @@ public final class Utils {
         HttpResponse response = null;
         try {
             request = httpGetRequest(context, path, true);
-            response = context.executeRequest(request);
-        } catch (IOException e) {
+            ListenableFuture<HttpResponse> fresponse =
+                context.executeRequest(request);
+            response = fresponse.get();
+        } catch (Exception e) {
             r.setStatus(Status.Failure);
             r.setInfo(e.toString());
-            results.add(r);
+            context.addResult(r);
             if (request != null) {
                 request.releaseConnection();
             }
@@ -94,17 +200,12 @@ public final class Utils {
         }
 
         r.setStatus(Status.Success);
-        results.add(r);
+        context.addResult(r);
 
         ResponseTest sc = new StatusCode(HttpStatus.SC_OK);
         boolean scres = sc.run(context, proto, response);
         ResponseTest ct = new ContentType();
         boolean ctres = ct.run(context, proto, response);
-        if (!(scres && ctres)) {
-            request.releaseConnection();
-            return null;
-        }
-
         ResponseTest ac = new AccessControl();
         ac.run(context, proto, response);
 
@@ -117,7 +218,7 @@ public final class Utils {
             r = new Result(proto);
             r.setStatus(Status.Failure);
             r.setInfo(e.toString());
-            results.add(r);
+            context.addResult(r);
             request.releaseConnection();
             return null;
         }
@@ -133,7 +234,7 @@ public final class Utils {
              * returning nothing. */
             r.setStatus(Status.Failure);
             r.setInfo("no data returned");
-            results.add(r);
+            context.addResult(r);
             request.releaseConnection();
             return null;
         }
@@ -412,13 +513,15 @@ public final class Utils {
      */
     public static boolean matchesSearch(final String strPattern,
                                         final String value) {
-        /* At least some servers will add implicit ".*" to the
-         * beginning and the end of the pattern, so add those here
-         * too. This may become configurable, so that stricter servers
-         * can verify their behaviour.  Searches are presumed to be
-         * case-insensitive as well. */
+        /* Previously, this added implicit ".*" segments at the
+         * beginning and the end of the pattern, since at least some
+         * servers were operating in that way. However, rdap-query now
+         * has the following: 'search patterns include implied
+         * beginning and end of string regular expression markers ...
+         * [a searh pattern of] "example*.com" ... would be translated
+         * into a POSIX regular expression as "^example.*\.com$"'.
+         * Consequently, the ".*" segments are no longer added. */
         String regexPattern = strPattern.replaceAll("\\*", ".*");
-        regexPattern = ".*" + regexPattern + ".*";
         Pattern pattern = Pattern.compile(regexPattern,
                                           Pattern.CASE_INSENSITIVE
                                         | Pattern.UNICODE_CASE);

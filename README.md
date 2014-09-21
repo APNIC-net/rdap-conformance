@@ -55,7 +55,7 @@ elements are as follows:
   the text.
 
 The output format and elements are subject to change in later
-releases.
+releases. Result ordering is not guaranteed to be consistent.
 
 Configuration
 -------------

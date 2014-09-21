@@ -71,15 +71,19 @@ public final class ScalarAttribute implements AttributeTest {
                                           Status.Notification, data);
         boolean res = (value != null);
 
+        Result nr2 = new Result(proto);
+        nr2.setCode("content");
+        nr2.addNode(attributeName);
+
         if (valueTest != null) {
-            return (res && valueTest.run(context, nr, value));
+            return (res && valueTest.run(context, nr2, value));
         } else if (attributeTest != null) {
             Map<String, Object> subdata =
-                Utils.castToMap(context, nr, value);
+                Utils.castToMap(context, nr2, value);
             if (subdata == null) {
                 return false;
             } else {
-                return (res && attributeTest.run(context, nr, subdata));
+                return (res && attributeTest.run(context, nr2, subdata));
             }
         }
 

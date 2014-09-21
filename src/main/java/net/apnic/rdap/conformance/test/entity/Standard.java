@@ -14,6 +14,10 @@ import net.apnic.rdap.conformance.attributetest.Entity;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.Notices;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpStatus;
+
 /**
  * <p>Standard class.</p>
  *
@@ -22,6 +26,9 @@ import net.apnic.rdap.conformance.attributetest.Notices;
  */
 public final class Standard implements Test {
     private String entity = "";
+    private Context context = null;
+    private HttpResponse httpResponse = null;
+    private Throwable throwable = null;
 
     /**
      * <p>Constructor for Standard.</p>
@@ -33,7 +40,29 @@ public final class Standard implements Test {
     }
 
     /** {@inheritDoc} */
-    public boolean run(final Context context) {
+    public void setContext(final Context c) {
+        context = c;
+    }
+
+    /** {@inheritDoc} */
+    public void setResponse(final HttpResponse hr) {
+        httpResponse = hr;
+    }
+
+    /** {@inheritDoc} */
+    public void setError(final Throwable t) {
+        throwable = t;
+    }
+
+    /** {@inheritDoc} */
+    public HttpRequest getRequest() {
+        String bu = context.getSpecification().getBaseUrl();
+        String path = bu + "/entity/" + entity;
+        return Utils.httpGetRequest(context, path, true);
+    }
+
+    /** {@inheritDoc} */
+    public boolean run() {
         String bu = context.getSpecification().getBaseUrl();
         String path = bu + "/entity/" + entity;
 
@@ -42,21 +71,16 @@ public final class Standard implements Test {
                                   "content", "",
                                   "draft-ietf-weirds-json-response-07",
                                   "6.1");
-        Result r = new Result(proto);
-        r.setCode("response");
-        Map root = Utils.standardRequest(context, path, r);
-        if (root == null) {
-            return false;
-        }
-
-        Map<String, Object> data = Utils.castToMap(context, proto, root);
+        Map<String, Object> data =
+            Utils.processResponse(context, httpResponse, proto,
+                                  HttpStatus.SC_OK, throwable);
         if (data == null) {
             return false;
         }
 
         Set<String> knownAttributes = new HashSet<String>();
         return Utils.runTestList(
-            context, proto, root, knownAttributes, true,
+            context, proto, (Map) data, knownAttributes, true,
             Arrays.asList(
                 new Entity(entity, false),
                 new RdapConformance(),

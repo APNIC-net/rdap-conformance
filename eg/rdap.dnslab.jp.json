@@ -9,9 +9,9 @@
             "exists": ["example.dnslab", "xn--ickqs6k2dyb.dnslab", "エグザンプル.dnslab"],
             "notExists": ["example.notexists.com"],
             "search": {
-                "supported": true,
-                "values": {
-                    "name": ["example*.dnslab", "エグザンプ*"]
+                "name": {
+                    "supported": true,
+                    "exists": ["example*.dnslab", "エグザンプ*"]
                 }
             }
         },
@@ -19,10 +19,13 @@
             "supported": true,
             "exists": ["ns01.example.dnslab", "ns02.example.dnslab"],
             "search": {
-                "supported": true,
-                "values": {
-                    "name": ["ns0*.dnslab"],
-                    "ip": ["192.0.2.101"]
+                "name": {
+                    "supported": true,
+                    "exists": ["ns0*.dnslab"]
+                },
+                "ip": {
+                    "supported": true,
+                    "exists": ["192.0.2.101"]
                 }
             }
         },
@@ -31,10 +34,13 @@
             "exists": ["100001-RR"],
             "notExists": ["@@@@@@@@"],
             "search": {
-                "supported": true,
-                "values": {
-                    "fn": ["Japan Registry*"],
-                    "handle": ["100001-*"]
+                "fn": {
+                    "supported": true,
+                    "exists": ["Japan Registry*"]
+                },
+                "handle": {
+                    "supported": true,
+                    "exists": ["100001-*"]
                 }
             }
         },

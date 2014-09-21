@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import javax.net.ssl.SSLContext;
@@ -13,12 +14,16 @@ import java.security.cert.X509Certificate;
 
 import com.google.common.util.concurrent.RateLimiter;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
 import net.apnic.rdap.conformance.specification.ObjectClass;
 import net.apnic.rdap.conformance.specification.ObjectClassSearch;
+import net.apnic.rdap.conformance.test.common.Search;
+import net.apnic.rdap.conformance.test.common.NotFound;
+import net.apnic.rdap.conformance.test.common.Redirect;
+import net.apnic.rdap.conformance.test.common.BasicRequest;
 
 /**
  * <p>Application class.</p>
@@ -35,7 +40,17 @@ public final class Application {
     private static final int EX_NOINPUT = 66;
     private static final int EX_SOFTWARE = 70;
 
-    private static final TrustManager[] trustAllCerts =
+    private static final int TESTS_RUNNING_CHECK_DELAY_MS = 1000;
+
+    private static final List<String> OBJECT_TYPES =
+        Arrays.asList("ip", "nameserver", "autnum",
+                      "entity", "domain");
+
+    private static final Result EXTRA_QUERY_PARAM =
+        getDocRefProto("draft-ietf-weirds-using-http-08", "4.2",
+                       "common.extra-query-parameter");
+
+    private static final TrustManager[] TRUST_MANAGER =
         new TrustManager[] {
             new X509TrustManager() {
                 @Override
@@ -72,28 +87,46 @@ public final class Application {
         return jarName;
     }
 
-    private static void runSearchTests(final List<Test> tests,
+    private static void addSearchTests(final List<Test> tests,
                                        final ObjectClass oc,
                                        final SearchTest st,
                                        final String prefix,
                                        final String testName,
                                        final String searchKey)
             throws Exception {
-        ObjectClassSearch ocs = oc.getObjectClassSearch();
-        if ((ocs != null) && (ocs.isSupported())) {
-            Map<String, List<String>> values = ocs.getValues();
-            for (Map.Entry<String, List<String>> entry : values.entrySet()) {
-                String key = entry.getKey();
-                List<String> keyValues = entry.getValue();
-                for (String keyValue : keyValues) {
+        Map<String, ObjectClassSearch> mocs = oc.getSearch();
+        if (mocs == null) {
+            return;
+        }
+
+        for (Map.Entry<String, ObjectClassSearch> entry : mocs.entrySet()) {
+            String key = entry.getKey();
+            ObjectClassSearch ocps = entry.getValue();
+            if (ocps.getSupported()) {
+                for (String keyValue : ocps.getExists()) {
                     tests.add(
-                        new net.apnic.rdap.conformance.test.common.Search(
+                        new Search(
                             (SearchTest) SerializationUtils.clone(st),
-                            prefix,
-                            key,
-                            keyValue,
-                            testName,
-                            searchKey
+                            prefix, key, keyValue, testName, searchKey,
+                            Search.ExpectedResultType.SOME
+                        )
+                    );
+                }
+                for (String keyValue : ocps.getNotExists()) {
+                    tests.add(
+                        new Search(
+                            (SearchTest) SerializationUtils.clone(st),
+                            prefix, key, keyValue, testName, searchKey,
+                            Search.ExpectedResultType.NONE
+                        )
+                    );
+                }
+                for (String keyValue : ocps.getTruncated()) {
+                    tests.add(
+                        new Search(
+                            (SearchTest) SerializationUtils.clone(st),
+                            prefix, key, keyValue, testName, searchKey,
+                            Search.ExpectedResultType.TRUNCATED
                         )
                     );
                 }
@@ -101,10 +134,9 @@ public final class Application {
         }
     }
 
-    private static Result getDocRefProto(String document,
-                                         String reference,
-                                         String testName)
-    {
+    private static Result getDocRefProto(final String document,
+                                         final String reference,
+                                         final String testName) {
         Result proto = new Result();
         proto.setDocument(document);
         proto.setReference(reference);
@@ -112,8 +144,8 @@ public final class Application {
         return proto;
     }
 
-    private static void runNonRdapTests(Context c, List<Test> tests)
-    {
+    private static void addNonRdapTests(final Context c,
+                                        final List<Test> tests) {
         /* Relative URI in the HTTP request. */
         Result relative = new Result();
         relative.setTestName("common.bad-uri-relative");
@@ -151,25 +183,313 @@ public final class Application {
         );
     }
 
-    private static Context createContext(Specification s,
-                                         RateLimiter rateLimiter) {
+    private static void addUnsupportedQueryTypeTests(final Specification s,
+                                                     final List<Test> tests) {
+        for (String objectType : OBJECT_TYPES) {
+            Result unsupported = new Result();
+            unsupported.setTestName("common.unsupported");
+            unsupported.setDocument("draft-ietf-weirds-using-http-08");
+            unsupported.setReference("5.4");
+            ObjectClass oc = s.getObjectClass(objectType);
+            if ((oc == null)
+                    || (!s.getObjectClass(objectType).isSupported())) {
+                tests.add(
+                    new BasicRequest(
+                        HttpStatus.SC_BAD_REQUEST,
+                        "/" + objectType + "/1.2.3.4",
+                        "common.unsupported",
+                        false,
+                        unsupported
+                    ));
+            }
+        }
+    }
+
+    private static void addIpTests(final Specification s,
+                                   final List<Test> tests) {
+        ObjectClass ocIp = s.getObjectClass("ip");
+        if ((ocIp == null) || !ocIp.isSupported()) {
+            return;
+        }
+
+        tests.add(new net.apnic.rdap.conformance.test.ip.BadRequest());
+        List<String> exists = ocIp.getExists();
+        for (String e : exists) {
+            tests.add(new net.apnic.rdap.conformance.test.ip.Standard(e));
+        }
+        List<String> notExists = ocIp.getNotExists();
+        for (String e : notExists) {
+            tests.add(new NotFound("/ip/" + e));
+        }
+        List<String> redirects = ocIp.getRedirects();
+        for (String e : redirects) {
+            tests.add(
+                new Redirect(
+                    new net.apnic.rdap.conformance.test.ip.Standard(),
+                    "/ip/" + e, "ip.redirect"
+                )
+            );
+        }
+        /* Unescaped square brackets in the URI. */
+        Result unescaped = new Result();
+        unescaped.setTestName("ip.bad-uri-unescaped");
+        tests.add(
+            new net.apnic.rdap.conformance.test.common.RawURIRequest(
+                "/ip/[::]",
+                unescaped,
+                false
+            )
+        );
+        /* Extra query parameter. */
+        tests.add(
+            new BasicRequest(
+                HttpStatus.SC_BAD_REQUEST,
+                "/ip/1.2.3.4?asdf=zxcv",
+                "ip.extra-query-parameter",
+                true,
+                EXTRA_QUERY_PARAM
+            )
+        );
+    }
+
+    private static void addAutnumTests(final Specification s,
+                                       final List<Test> tests) {
+        ObjectClass ocAn = s.getObjectClass("autnum");
+        if ((ocAn == null) || !ocAn.isSupported()) {
+            return;
+        }
+
+        tests.add(new net.apnic.rdap.conformance.test.autnum.BadRequest());
+        List<String> exists = ocAn.getExists();
+        for (String e : exists) {
+            tests.add(
+                new net.apnic.rdap.conformance.test.autnum.Standard(e)
+            );
+        }
+        List<String> notExists = ocAn.getNotExists();
+        for (String e : notExists) {
+            tests.add(new NotFound("/autnum/" + e));
+        }
+        ObjectTest std =
+            new net.apnic.rdap.conformance.test.autnum.Standard();
+        List<String> redirects = ocAn.getRedirects();
+        for (String e : redirects) {
+            tests.add(new Redirect(std, "/autnum/" + e, "autnum.redirect"));
+        }
+        /* Extra query parameter. */
+        tests.add(
+            new BasicRequest(
+                HttpStatus.SC_BAD_REQUEST,
+                "/autnum/1234?asdf=zxcv",
+                "autnum.extra-query-parameter",
+                true,
+                EXTRA_QUERY_PARAM
+            )
+        );
+    }
+
+    private static void addNameserverTests(final Specification s,
+                                           final List<Test> tests)
+            throws Exception {
+        ObjectClass ocNs = s.getObjectClass("nameserver");
+        if ((ocNs == null) || !ocNs.isSupported()) {
+            return;
+        }
+
+        tests.add(
+            new net.apnic.rdap.conformance.test.nameserver.BadRequest()
+        );
+        List<String> exists = ocNs.getExists();
+        for (String e : exists) {
+            tests.add(
+                new net.apnic.rdap.conformance.test.nameserver.Standard(e)
+            );
+        }
+        List<String> notExists = ocNs.getNotExists();
+        for (String e : notExists) {
+            tests.add(new NotFound("/nameserver/" + e));
+        }
+        ObjectTest std =
+            new net.apnic.rdap.conformance.test.nameserver.Standard();
+        List<String> redirects = ocNs.getRedirects();
+        for (String e : redirects) {
+            tests.add(
+                new Redirect(std, "/nameserver/" + e, "nameserver.redirect")
+            );
+        }
+        /* Extra query parameter. */
+        tests.add(
+            new BasicRequest(
+                HttpStatus.SC_BAD_REQUEST,
+                "/nameserver/example.com?asdf=zxcv",
+                "nameserver.extra-query-parameter",
+                true,
+                EXTRA_QUERY_PARAM
+            )
+        );
+        addSearchTests(
+            tests,
+            ocNs,
+            new net.apnic.rdap.conformance.attributetest.Nameserver(true),
+            "nameservers",
+            "nameserver.search",
+            "nameserverSearchResults"
+        );
+    }
+
+    private static void addEntityTests(final Specification s,
+                                       final List<Test> tests)
+            throws Exception {
+        ObjectClass ocEn = s.getObjectClass("entity");
+        if ((ocEn == null) || !ocEn.isSupported()) {
+            return;
+        }
+
+        List<String> exists = ocEn.getExists();
+        for (String e : exists) {
+            tests.add(
+                new net.apnic.rdap.conformance.test.entity.Standard(e)
+            );
+        }
+        List<String> notExists = ocEn.getNotExists();
+        for (String e : notExists) {
+            tests.add(new NotFound("/entity/" + e));
+        }
+        /* That the entity handle happens to be an IP address should
+           not cause a 400 to be returned. */
+        tests.add(
+            new BasicRequest(
+                HttpStatus.SC_BAD_REQUEST,
+                "/entity/1.2.3.4",
+                null,
+                true,
+                getDocRefProto("draft-ietf-weirds-rdap-query-11", "3.1.5",
+                               "entity.not-bad-request")
+            )
+        );
+        /* Extra query parameter. */
+        tests.add(
+            new BasicRequest(
+                HttpStatus.SC_BAD_REQUEST,
+                "/entity/asdf?asdf=zxcv",
+                "entity.extra-query-parameter",
+                true,
+                EXTRA_QUERY_PARAM
+            )
+        );
+        addSearchTests(
+            tests,
+            ocEn,
+            new net.apnic.rdap.conformance.attributetest.Entity(),
+            "entities",
+            "entity.search",
+            "entitySearchResults"
+        );
+    }
+
+    private static void addDomainTests(final Specification s,
+                                       final List<Test> tests)
+            throws Exception {
+        ObjectClass ocDom = s.getObjectClass("domain");
+        if ((ocDom == null) || !ocDom.isSupported()) {
+            return;
+        }
+        tests.add(new net.apnic.rdap.conformance.test.domain.BadRequest());
+        List<String> exists = ocDom.getExists();
+        for (String e : exists) {
+            tests.add(new
+                net.apnic.rdap.conformance.test.domain.Standard(e)
+            );
+        }
+        List<String> notExists = ocDom.getNotExists();
+        for (String e : notExists) {
+            tests.add(new NotFound("/domain/" + e));
+        }
+        List<String> redirects = ocDom.getRedirects();
+        for (String e : redirects) {
+            tests.add(
+                new Redirect(
+                    new net.apnic.rdap.conformance.test.domain.Standard(),
+                    "/domain/" + e, "domain.redirect"
+                )
+            );
+        }
+        /* Number registries should not return 400 on forward
+         * domains. */
+        tests.add(
+            new BasicRequest(
+                HttpStatus.SC_BAD_REQUEST,
+                "/domain/example.com",
+                null,
+                true,
+                getDocRefProto("draft-ietf-weirds-rdap-query-11", "3.1.3",
+                               "domain.not-bad-request")
+            )
+        );
+        /* As above, but for name registries and reverse domains. */
+        tests.add(
+            new BasicRequest(
+                HttpStatus.SC_BAD_REQUEST,
+                "/domain/202.in-addr.arpa",
+                null,
+                true,
+                getDocRefProto("draft-ietf-weirds-rdap-query-11", "3.1.3",
+                               "domain.not-bad-request")
+            )
+        );
+        /* Extra query parameter. */
+        tests.add(
+            new BasicRequest(
+                HttpStatus.SC_BAD_REQUEST,
+                "/domain/example.com?asdf=zxcv",
+                "domain.extra-query-parameter",
+                true,
+                EXTRA_QUERY_PARAM
+            )
+        );
+        addSearchTests(
+            tests,
+            ocDom,
+            new net.apnic.rdap.conformance.attributetest.Domain(true),
+            "domains",
+            "domain.search",
+            "domainSearchResults"
+        );
+    }
+
+    private static List<CloseableHttpAsyncClient> chacs =
+        new ArrayList<CloseableHttpAsyncClient>();
+
+    private static Context createContext(final Specification s,
+                                         final RateLimiter rateLimiter,
+                                         final ExecutorService executorService,
+                                         final AtomicInteger testsRunning) {
         SSLContext sslContext = null;
         try {
             sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, trustAllCerts,
-                             new java.security.SecureRandom());
+            sslContext.init(null, TRUST_MANAGER,
+                            new java.security.SecureRandom());
         } catch (Exception e) {
             System.err.println(e.toString());
             System.exit(EX_SOFTWARE);
         }
 
-        HttpClient hc = HttpClientBuilder.create()
-                                         .setSslcontext(sslContext)
-                                         .build();
+        CloseableHttpAsyncClient hc =
+            HttpAsyncClients.custom()
+                            .setSSLContext(sslContext)
+                            .build();
+        hc.start();
+        chacs.add(hc);
+
         Context c = new Context();
         c.setHttpClient(hc);
         c.setSpecification(s);
         c.setRateLimiter(rateLimiter);
+        c.setExecutorService(executorService);
+        c.setTestsRunning(testsRunning);
+        if (s.getAcceptContentType() != null) {
+            c.setContentType(s.getAcceptContentType());
+        }
 
         return c;
     }
@@ -207,12 +527,6 @@ public final class Application {
             (s.getRequestsPerSecond() > 0)
                 ? RateLimiter.create(s.getRequestsPerSecond())
                 : null;
-        Context c = createContext(s, rateLimiter);
-
-        List<String> objectTypes = new ArrayList<String>(
-            Arrays.asList("ip", "nameserver", "autnum",
-                          "entity", "domain")
-        );
 
         List<Test> tests = new ArrayList();
 
@@ -220,304 +534,74 @@ public final class Application {
          * are fairly niche, and in many cases can't easily be fixed
          * by implementers anyway. See e.g.
          * https://bugs.eclipse.org/bugs/show_bug.cgi?id=414636. */
-        // runNonRdapTests(c, tests);
+        // addNonRdapTests(c, tests);
+
+        /* Certain servers do not return a valid response when the
+         * application/rdap+json content type is set in the Accept
+         * header, but are still able to return valid JSON. Rather
+         * than not testing the responses at all, allow for the
+         * supported content type to be set in the configuration, and
+         * add a result at the beginning indicating this failure. */
+        if (s.getAcceptContentType() != null) {
+            Result ctres = new Result();
+            ctres.setTestName("common.rdap-specific-content-type");
+            ctres.setDocument("draft-ietf-weirds-using-http-08");
+            ctres.setReference("4.1");
+            ctres.setStatus(Result.Status.Failure);
+            ctres.setInfo("not supported by server in accept header");
+            System.out.println(ctres.toString());
+        }
+
+        addUnsupportedQueryTypeTests(s, tests);
+        addIpTests(s, tests);
+        addAutnumTests(s, tests);
+        addNameserverTests(s, tests);
+        addEntityTests(s, tests);
+        addDomainTests(s, tests);
+
+        tests.add(new net.apnic.rdap.conformance.test.help.Standard());
+        AtomicInteger testsRunning = new AtomicInteger(0);
+
+        final ExecutorService executorService =
+            Executors.newFixedThreadPool(Runtime.getRuntime()
+                                                .availableProcessors());
+        for (final Test t : tests) {
+            final Context context =
+                createContext(s, rateLimiter, executorService, testsRunning);
+            context.submitTest(t);
+        }
 
         /* application/json content-type. This is deliberately using
          * an invalid status code with inverted sense, because so long
          * as the request is 'successful', it's fine. */
-        c.setContentType("application/json");
         Result ctres = new Result();
         ctres.setTestName("common.application-json");
         ctres.setDocument("draft-ietf-weirds-using-http-08");
         ctres.setReference("4.1");
-        tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                          0,
-                          "/domain/example.com",
-                          "common.application-json",
-                          true,
-                          ctres
-                  ));
-        c.setContentType(null);
+        final Test test =
+            new BasicRequest(
+                0,
+                "/domain/example.com",
+                "common.application-json",
+                true,
+                ctres
+            );
+        final Context context =
+            createContext(s, rateLimiter, executorService, testsRunning);
+        context.setContentType("application/json");
+        context.submitTest(test);
 
-        /* Unsupported query types. */
-        for (String objectType : objectTypes) {
-            Result unsupported = new Result();
-            unsupported.setTestName("common.unsupported");
-            unsupported.setDocument("draft-ietf-weirds-using-http-08");
-            unsupported.setReference("5.4");
-            ObjectClass oc = s.getObjectClass(objectType);
-            if ((oc == null)
-                    || (!s.getObjectClass(objectType).isSupported())) {
-                tests.add(
-                    new net.apnic.rdap.conformance.test.common.BasicRequest(
-                        HttpStatus.SC_BAD_REQUEST,
-                        "/" + objectType + "/1.2.3.4",
-                        "common.unsupported",
-                        false,
-                        unsupported
-                    ));
+        while (true) {
+            if (testsRunning.get() != 0) {
+                Thread.sleep(TESTS_RUNNING_CHECK_DELAY_MS);
+            } else {
+                break;
             }
         }
-
-        Result extraQueryParam =
-            getDocRefProto("draft-ietf-weirds-using-http-08", "4.2",
-                           "common.extra-query-parameter");
-
-        ObjectClass ocIp = s.getObjectClass("ip");
-        if ((ocIp != null) && (ocIp.isSupported())) {
-            tests.add(new net.apnic.rdap.conformance.test.ip.BadRequest());
-            List<String> exists = ocIp.getExists();
-            for (String e : exists) {
-                tests.add(new net.apnic.rdap.conformance.test.ip.Standard(e));
-            }
-            List<String> notExists = ocIp.getNotExists();
-            for (String e : notExists) {
-                tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "/ip/" + e
-                          ));
-            }
-            List<String> redirects = ocIp.getRedirects();
-            for (String e : redirects) {
-                tests.add(new net.apnic.rdap.conformance.test.common.Redirect(
-                            new net.apnic.rdap.conformance.test.ip.Standard(),
-                            "/ip/" + e, "ip.redirect"
-                          ));
-            }
-            /* Unescaped square brackets in the URI. */
-            Result unescaped = new Result();
-            unescaped.setTestName("ip.bad-uri-unescaped");
-            tests.add(
-                new net.apnic.rdap.conformance.test.common.RawURIRequest(
-                    "/ip/[::]",
-                    unescaped,
-                    false
-                )
-            );
-            /* Extra query parameter. */
-            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                              HttpStatus.SC_BAD_REQUEST,
-                              "/ip/1.2.3.4?asdf=zxcv",
-                              "ip.extra-query-parameter",
-                              true,
-                              extraQueryParam
-                      ));
+        for (CloseableHttpAsyncClient chac : chacs) {
+            chac.close();
         }
 
-        ObjectClass ocAn = s.getObjectClass("autnum");
-        if ((ocAn != null) && (ocAn.isSupported())) {
-            tests.add(new net.apnic.rdap.conformance.test.autnum.BadRequest());
-            List<String> exists = ocAn.getExists();
-            for (String e : exists) {
-                tests.add(
-                    new net.apnic.rdap.conformance.test.autnum.Standard(e)
-                );
-            }
-            List<String> notExists = ocAn.getNotExists();
-            for (String e : notExists) {
-                tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "/autnum/" + e
-                          ));
-            }
-            ObjectTest std =
-                new net.apnic.rdap.conformance.test.autnum.Standard();
-            List<String> redirects = ocAn.getRedirects();
-            for (String e : redirects) {
-                tests.add(
-                    new net.apnic.rdap.conformance.test.common.Redirect(
-                        std,
-                        "/autnum/" + e, "autnum.redirect"
-                    )
-                );
-            }
-            /* Extra query parameter. */
-            tests.add(new net.apnic.rdap.conformance.test.common.BasicRequest(
-                              HttpStatus.SC_BAD_REQUEST,
-                              "/autnum/1234?asdf=zxcv",
-                              "autnum.extra-query-parameter",
-                              true,
-                              extraQueryParam
-                      ));
-        }
-
-        ObjectClass ocNs = s.getObjectClass("nameserver");
-        if ((ocNs != null) && (ocNs.isSupported())) {
-            tests.add(
-                new net.apnic.rdap.conformance.test.nameserver.BadRequest()
-            );
-            List<String> exists = ocNs.getExists();
-            for (String e : exists) {
-                tests.add(
-                    new net.apnic.rdap.conformance.test.nameserver.Standard(e)
-                );
-            }
-            List<String> notExists = ocNs.getNotExists();
-            for (String e : notExists) {
-                tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                            "/nameserver/" + e
-                          ));
-            }
-            ObjectTest std =
-                new net.apnic.rdap.conformance.test.nameserver.Standard();
-            List<String> redirects = ocNs.getRedirects();
-            for (String e : redirects) {
-                tests.add(
-                    new net.apnic.rdap.conformance.test.common.Redirect(
-                        std,
-                        "/nameserver/" + e, "nameserver.redirect"
-                    )
-                );
-            }
-            /* Extra query parameter. */
-            tests.add(
-                new net.apnic.rdap.conformance.test.common.BasicRequest(
-                        HttpStatus.SC_BAD_REQUEST,
-                        "/nameserver/example.com?asdf=zxcv",
-                        "nameserver.extra-query-parameter",
-                        true,
-                        extraQueryParam
-                )
-            );
-            runSearchTests(
-                tests,
-                ocNs,
-                new net.apnic.rdap.conformance.attributetest.Nameserver(true),
-                "nameservers",
-                "nameserver.search",
-                "nameserverSearchResults"
-            );
-        }
-
-        ObjectClass ocEn = s.getObjectClass("entity");
-        if ((ocEn != null) && (ocEn.isSupported())) {
-            List<String> exists = ocEn.getExists();
-            for (String e : exists) {
-                tests.add(
-                    new net.apnic.rdap.conformance.test.entity.Standard(e)
-                );
-            }
-            List<String> notExists = ocEn.getNotExists();
-            for (String e : notExists) {
-                tests.add(new net.apnic.rdap.conformance.test.common.NotFound(
-                           "/entity/" + e
-                          ));
-            }
-            /* That the entity handle happens to be an IP address should
-               not cause a 400 to be returned. */
-            tests.add(
-                new net.apnic.rdap.conformance.test.common.BasicRequest(
-                    HttpStatus.SC_BAD_REQUEST,
-                    "/entity/1.2.3.4",
-                    null,
-                    true,
-                    getDocRefProto("draft-ietf-weirds-rdap-query-10", "3.1.5",
-                                   "entity.not-bad-request")
-                )
-            );
-            /* Extra query parameter. */
-            tests.add(
-                new net.apnic.rdap.conformance.test.common.BasicRequest(
-                    HttpStatus.SC_BAD_REQUEST,
-                    "/entity/asdf?asdf=zxcv",
-                    "entity.extra-query-parameter",
-                    true,
-                    extraQueryParam
-                )
-            );
-            runSearchTests(
-                tests,
-                ocEn,
-                new net.apnic.rdap.conformance.attributetest.Entity(),
-                "entities",
-                "entity.search",
-                "entitySearchResults"
-            );
-        }
-
-        ObjectClass ocDom = s.getObjectClass("domain");
-        if ((ocDom != null) && (ocDom.isSupported())) {
-            tests.add(new net.apnic.rdap.conformance.test.domain.BadRequest());
-            List<String> exists = ocDom.getExists();
-            for (String e : exists) {
-                tests.add(new
-                    net.apnic.rdap.conformance.test.domain.Standard(e)
-                );
-            }
-            List<String> notExists = ocDom.getNotExists();
-            for (String e : notExists) {
-                tests.add(
-                    new net.apnic.rdap.conformance.test.common.NotFound(
-                        "/domain/" + e
-                    )
-                );
-            }
-            List<String> redirects = ocDom.getRedirects();
-            for (String e : redirects) {
-                tests.add(
-                    new net.apnic.rdap.conformance.test.common.Redirect(
-                        new net.apnic.rdap.conformance.test.domain.Standard(),
-                        "/domain/" + e, "domain.redirect"
-                    )
-                );
-            }
-            /* Number registries should not return 400 on forward
-             * domains. */
-            tests.add(
-                new net.apnic.rdap.conformance.test.common.BasicRequest(
-                    HttpStatus.SC_BAD_REQUEST,
-                    "/domain/example.com",
-                    null,
-                    true,
-                    getDocRefProto("draft-ietf-weirds-rdap-query-10", "3.1.3",
-                                   "domain.not-bad-request")
-                )
-            );
-            /* As above, but for name registries and reverse domains. */
-            tests.add(
-                new net.apnic.rdap.conformance.test.common.BasicRequest(
-                    HttpStatus.SC_BAD_REQUEST,
-                    "/domain/202.in-addr.arpa",
-                    null,
-                    true,
-                    getDocRefProto("draft-ietf-weirds-rdap-query-10", "3.1.3",
-                                   "domain.not-bad-request")
-                )
-            );
-            /* Extra query parameter. */
-            tests.add(
-                new net.apnic.rdap.conformance.test.common.BasicRequest(
-                    HttpStatus.SC_BAD_REQUEST,
-                    "/domain/example.com?asdf=zxcv",
-                    "domain.extra-query-parameter",
-                    true,
-                    extraQueryParam
-                )
-            );
-            runSearchTests(
-                tests,
-                ocDom,
-                new net.apnic.rdap.conformance.attributetest.Domain(true),
-                "domains",
-                "domain.search",
-                "domainSearchResults"
-            );
-        }
-
-        /* todo: serialise access to stdout to avoid interleaving test
-         * results. */
-        final ExecutorService executorService =
-            Executors.newFixedThreadPool(s.getThreadCount());
-        for (final Test t : tests) {
-            final Context c2 = createContext(s, rateLimiter);
-            executorService.submit(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        t.run(c2);
-                        c2.flushResults();
-                    }
-                }
-            );
-        }
         executorService.shutdown();
     }
 }
