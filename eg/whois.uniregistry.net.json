@@ -1,0 +1,22 @@
+{ 
+    "baseUrl": "https://whois.uniregistry.net/rdap",
+    "objectClasses": {
+        "ip": {
+            "supported": false
+        },
+        "domain": {
+            "supported": true,
+            "exists": ["nic.link"],
+            "notExists": ["nic2.link"]
+        },
+        "nameserver": {
+            "supported": false
+        },
+        "entity": {
+            "supported": false
+        },
+        "autnum": {
+            "supported": false
+        }
+    }
+}
