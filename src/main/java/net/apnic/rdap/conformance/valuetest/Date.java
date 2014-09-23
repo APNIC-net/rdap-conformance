@@ -42,11 +42,19 @@ public final class Date implements ValueTest {
             return false;
         }
 
-        DateTime dth = parser.parseDateTime(date);
+        DateTime dth = null;
+        String error = null;
+        try {
+            dth = parser.parseDateTime(date);
+        } catch (IllegalArgumentException iae) {
+            error = iae.toString();
+        }
         Result nr2 = new Result(nr);
         res = nr2.setDetails((dth != null),
                              "valid",
-                             "invalid");
+                             "invalid"
+                             + ((error != null) ? (": " + error)
+                                                : ""));
         context.addResult(nr2);
         return res;
     }
