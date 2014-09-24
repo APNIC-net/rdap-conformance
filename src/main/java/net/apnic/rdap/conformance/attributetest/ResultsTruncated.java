@@ -15,6 +15,10 @@ import net.apnic.rdap.conformance.valuetest.BooleanValue;
 /**
  * <p>ResultsTruncated class.</p>
  *
+ * This was present in the -07 draft, but removed in the -08 draft.
+ * (The class will be left in place until the document is finalised,
+ * though it's very unlikely that it will be restored.)
+ *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.3-SNAPSHOT
  */

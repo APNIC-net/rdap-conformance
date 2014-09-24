@@ -72,7 +72,7 @@ public final class DomainNames implements SearchTest {
          * section 4 is likely to be the most helpful part of the
          * document in the event of failure anyway. */
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("4");
 
         boolean res = true;

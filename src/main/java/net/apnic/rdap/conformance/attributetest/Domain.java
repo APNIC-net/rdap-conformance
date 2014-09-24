@@ -57,7 +57,7 @@ public final class Domain implements SearchTest {
                 new ScalarAttribute("handle"),
                 domainNames,
                 new ArrayAttribute(new Variant(), "variants"),
-                new ArrayAttribute(new Nameserver(true), "nameServers"),
+                new ArrayAttribute(new Nameserver(true), "nameservers"),
                 new ScalarAttribute("secureDNS", new SecureDNS()),
                 new ScalarAttribute("network", new Ip()),
                 new StandardObject()

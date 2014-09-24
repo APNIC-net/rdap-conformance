@@ -14,7 +14,6 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.attributetest.ArrayAttribute;
 import net.apnic.rdap.conformance.attributetest.StandardResponse;
-import net.apnic.rdap.conformance.attributetest.ResultsTruncated;
 import net.apnic.rdap.conformance.Utils;
 
 import org.apache.http.HttpResponse;
@@ -107,7 +106,7 @@ final public class Search implements Test {
         Result proto = new Result(Status.Notification, path,
                                   testName,
                                   "", "",
-                                  "draft-ietf-weirds-json-response-07",
+                                  "draft-ietf-weirds-json-response-09",
                                   "9");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
@@ -121,7 +120,6 @@ final public class Search implements Test {
             context, proto, (Map) data, knownAttributes, true,
             Arrays.asList(
                 new ArrayAttribute(searchTest, searchResultsKey),
-                new ResultsTruncated(),
                 new StandardResponse()
             )
         );
@@ -132,9 +130,6 @@ final public class Search implements Test {
         } catch (ClassCastException ce) {
             return false;
         }
-
-        Object ob = data.get("resultsTruncated");
-        Boolean b = (ob != null) ? ((Boolean) ob) : false;
 
         Result r = new Result(proto);
         r.setCode("response");
@@ -154,15 +149,10 @@ final public class Search implements Test {
                 r.setStatus(Status.Failure);
                 r.setInfo("did not get no results for search");
             }
-        } else if (expectedResultType == ExpectedResultType.TRUNCATED) {
-            if ((b != null) && b) {
-                r.setStatus(Status.Success);
-                r.setInfo("results have been truncated");
-            } else {
-                r.setStatus(Status.Failure);
-                r.setInfo("results have not been truncated");
-            }
         }
+        /* todo: truncated search testing should go here, based on the
+         * expected result type and the presence (or otherwise) of a
+         * 'truncated' notice. */
         context.addResult(r);
 
         return res;

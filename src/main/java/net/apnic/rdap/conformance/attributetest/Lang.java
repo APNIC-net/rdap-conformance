@@ -32,7 +32,7 @@ public final class Lang implements AttributeTest {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("lang");
-        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("5.4");
 
         String lang = Utils.getStringAttribute(context,

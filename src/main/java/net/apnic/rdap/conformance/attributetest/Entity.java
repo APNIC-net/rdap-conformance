@@ -73,7 +73,7 @@ public final class Entity implements SearchTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("6.1");
 
         String responseHandle =

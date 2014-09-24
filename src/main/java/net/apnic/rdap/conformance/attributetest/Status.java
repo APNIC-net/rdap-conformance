@@ -50,7 +50,7 @@ public final class Status implements AttributeTest {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("status");
-        nr.setDocument("draft-ietf-weirds-json-response-08");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("5.6");
 
         Result nr1 = new Result(nr);
