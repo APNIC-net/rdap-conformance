@@ -261,6 +261,9 @@ public final class Ip implements AttributeTest {
         } catch (ClassCastException cce) {
             return true;
         }
+        if (links == null) {
+            return true;
+        }
 
         Map<String, String> upLink = null;
         for (Map<String, String> link : links) {
