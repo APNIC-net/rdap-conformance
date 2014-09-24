@@ -30,6 +30,9 @@ public final class VariantRelation implements ValueTest {
     /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object data) {
+        Result r = new Result(proto);
+        r.setDocument("draft-ietf-weirds-json-response-09");
+        r.setReference("11.2.5");
         return stringSet.run(context, proto, data);
     }
 }
