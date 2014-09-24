@@ -26,6 +26,7 @@ public final class ScalarAttribute implements AttributeTest {
     private String attributeName = null;
     private ValueTest valueTest = null;
     private AttributeTest attributeTest = null;
+    private Status notFoundStatus = Status.Notification;
 
     /**
      * <p>Constructor for ScalarAttribute.</p>
@@ -60,6 +61,21 @@ public final class ScalarAttribute implements AttributeTest {
         valueTest = argValueTest;
     }
 
+    /**
+     * <p>Constructor for ScalarAttribute.</p>
+     *
+     * @param argAttributeName a {@link java.lang.String} object.
+     * @param argValueTest a {@link net.apnic.rdap.conformance.ValueTest} object.
+     * @param argNotFoundStatus a {@link net.apnic.rdap.conformance.Result.Status} object.
+     */
+    public ScalarAttribute(final String argAttributeName,
+                           final ValueTest argValueTest,
+                           final Status argNotFoundStatus) {
+        attributeName = argAttributeName;
+        valueTest = argValueTest;
+        notFoundStatus = argNotFoundStatus;
+    }
+
     /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
@@ -68,7 +84,7 @@ public final class ScalarAttribute implements AttributeTest {
         nr.setInfo("present");
 
         Object value = Utils.getAttribute(context, nr, attributeName,
-                                          Status.Notification, data);
+                                          notFoundStatus, data);
         boolean res = (value != null);
 
         Result nr2 = new Result(proto);

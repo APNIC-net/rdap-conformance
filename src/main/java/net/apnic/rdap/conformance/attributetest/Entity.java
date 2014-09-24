@@ -19,6 +19,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.valuetest.Role;
+import net.apnic.rdap.conformance.valuetest.StringTest;
 
 /**
  * <p>Entity class.</p>
@@ -179,6 +180,9 @@ public final class Entity implements SearchTest {
         boolean ret = Utils.runTestList(
             context, proto, data, knownAttributes, checkUnknown,
             Arrays.asList(
+                new ScalarAttribute("objectClassName",
+                                    new StringTest("entity"),
+                                    Result.Status.Failure),
                 new AsEventActor(),
                 new ArrayAttribute(new Ip(), "networks"),
                 new ArrayAttribute(new Autnum(), "autnums"),

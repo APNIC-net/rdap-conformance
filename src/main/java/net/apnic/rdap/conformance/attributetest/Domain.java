@@ -10,6 +10,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.valuetest.Variant;
+import net.apnic.rdap.conformance.valuetest.StringTest;
 
 /**
  * <p>Domain class.</p>
@@ -50,6 +51,9 @@ public final class Domain implements SearchTest {
         return Utils.runTestList(
             context, proto, data, knownAttributes, checkUnknown,
             Arrays.asList(
+                new ScalarAttribute("objectClassName",
+                                    new StringTest("domain"),
+                                    Result.Status.Failure),
                 new ScalarAttribute("handle"),
                 domainNames,
                 new ArrayAttribute(new Variant(), "variants"),
