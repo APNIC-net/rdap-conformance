@@ -10,6 +10,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.valuetest.StringTest;
+import net.apnic.rdap.conformance.valuetest.NoticeType;
 
 /**
  * <p>Notice class.</p>
@@ -35,6 +36,7 @@ public final class Notice implements AttributeTest {
             context, nr, data, knownAttributes, true,
             Arrays.asList(
                 new ScalarAttribute("title"),
+                new ScalarAttribute("type", new NoticeType()),
                 new ArrayAttribute(new StringTest(), "description"),
                 new Links()
             )
