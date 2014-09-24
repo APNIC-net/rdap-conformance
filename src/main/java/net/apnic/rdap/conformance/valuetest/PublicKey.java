@@ -21,6 +21,6 @@ public final class PublicKey implements ValueTest {
     /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object argData) {
-        return new HexString().run(context, proto, argData);
+        return new Base64String().run(context, proto, argData);
     }
 }
