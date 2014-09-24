@@ -415,14 +415,14 @@ public final class Ip implements AttributeTest {
         );
 
         return (Utils.runTestList(
-            context, proto, data, knownAttributes, true,
+            context, proto, data, knownAttributes, false,
             Arrays.asList(
                 new ScalarAttribute("name"),
                 new ScalarAttribute("handle"),
                 new ScalarAttribute("type"),
                 new Country(),
                 new ScalarAttribute("parentHandle"),
-                new StandardResponse()
+                new StandardObject()
             )
         ) && ret);
     }
