@@ -1,6 +1,9 @@
 package net.apnic.rdap.conformance.test.autnum;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
@@ -8,6 +11,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.attributetest.Autnum;
+import net.apnic.rdap.conformance.attributetest.StandardResponse;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
@@ -91,7 +95,13 @@ public final class Standard implements ObjectTest {
             return false;
         }
 
-        AttributeTest autnumTest = new Autnum(autnum);
-        return autnumTest.run(context, proto, data);
+        Set<String> knownAttributes = new HashSet<String>();
+        return Utils.runTestList(
+            context, proto, (Map) data, knownAttributes, true,
+            Arrays.asList(
+                new Autnum(autnum),
+                new StandardResponse()
+            )
+        );
     }
 }

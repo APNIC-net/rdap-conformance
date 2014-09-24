@@ -13,6 +13,7 @@ import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.attributetest.Nameserver;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.Notices;
+import net.apnic.rdap.conformance.attributetest.StandardResponse;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
@@ -101,8 +102,7 @@ public final class Standard implements ObjectTest {
             context, proto, (Map) data, knownAttributes, true,
             Arrays.asList(
                 new Nameserver(false),
-                new RdapConformance(),
-                new Notices()
+                new StandardResponse()
             )
         );
     }

@@ -130,7 +130,7 @@ public final class Autnum implements AttributeTest {
                 new ScalarAttribute("handle"),
                 new ScalarAttribute("type"),
                 new Country(),
-                new StandardResponse()
+                new StandardObject()
             )
         );
     }
