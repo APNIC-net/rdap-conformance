@@ -44,7 +44,7 @@ public final class Notices implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("5.3");
 
         return arrayTest.run(context, nr, data);

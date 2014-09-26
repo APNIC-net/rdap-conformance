@@ -26,7 +26,7 @@ public final class AsEventActor implements AttributeTest {
                        final Map<String, Object> argData) {
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("6.1");
 
         AttributeTest arrayTest =

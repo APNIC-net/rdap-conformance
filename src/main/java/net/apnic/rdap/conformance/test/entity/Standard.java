@@ -13,6 +13,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.attributetest.Entity;
 import net.apnic.rdap.conformance.attributetest.RdapConformance;
 import net.apnic.rdap.conformance.attributetest.Notices;
+import net.apnic.rdap.conformance.attributetest.StandardResponse;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
@@ -69,7 +70,7 @@ public final class Standard implements Test {
         Result proto = new Result(Status.Notification, path,
                                   "entity.standard",
                                   "content", "",
-                                  "draft-ietf-weirds-json-response-07",
+                                  "draft-ietf-weirds-json-response-09",
                                   "6.1");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
@@ -83,8 +84,7 @@ public final class Standard implements Test {
             context, proto, (Map) data, knownAttributes, true,
             Arrays.asList(
                 new Entity(entity, false),
-                new RdapConformance(),
-                new Notices()
+                new StandardResponse()
             )
         );
     }

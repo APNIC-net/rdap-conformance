@@ -16,6 +16,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.valuetest.StringTest;
 
 /**
  * <p>Ip class.</p>
@@ -261,6 +262,9 @@ public final class Ip implements AttributeTest {
         } catch (ClassCastException cce) {
             return true;
         }
+        if (links == null) {
+            return true;
+        }
 
         Map<String, String> upLink = null;
         for (Map<String, String> link : links) {
@@ -412,14 +416,17 @@ public final class Ip implements AttributeTest {
         );
 
         return (Utils.runTestList(
-            context, proto, data, knownAttributes, true,
+            context, proto, data, knownAttributes, false,
             Arrays.asList(
+                new ScalarAttribute("objectClassName",
+                                    new StringTest("ip network"),
+                                    Result.Status.Failure),
                 new ScalarAttribute("name"),
                 new ScalarAttribute("handle"),
                 new ScalarAttribute("type"),
                 new Country(),
                 new ScalarAttribute("parentHandle"),
-                new StandardResponse()
+                new StandardObject()
             )
         ) && ret);
     }

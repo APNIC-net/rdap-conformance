@@ -14,8 +14,8 @@ import net.apnic.rdap.conformance.Utils;
  * <p>StandardResponse class.</p>
  *
  * Tests for all the attributes that may be present in a standard
- * response. Cf. StandardObject, which covers the individual objects
- * present in the response.
+ * response, except for those that may also be present in individual
+ * objects, as per StandardObject.
  *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.3-SNAPSHOT
@@ -35,8 +35,7 @@ public final class StandardResponse implements AttributeTest {
             context, proto, data, knownAttributes, false,
             Arrays.asList(
                 new RdapConformance(),
-                new Notices(),
-                new StandardObject()
+                new Notices()
             )
         );
     }

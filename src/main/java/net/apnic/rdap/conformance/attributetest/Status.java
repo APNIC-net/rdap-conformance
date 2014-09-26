@@ -50,7 +50,7 @@ public final class Status implements AttributeTest {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("status");
-        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("5.6");
 
         Result nr1 = new Result(nr);
@@ -88,7 +88,7 @@ public final class Status implements AttributeTest {
         for (Object s : statusEntries) {
             Result r2 = new Result(nr);
             r2.addNode(Integer.toString(i++));
-            r2.setReference("11.2.1");
+            r2.setReference("11.2.2");
             if (!STATUSES.contains((String) s)) {
                 r2.setStatus(Result.Status.Failure);
                 r2.setInfo("invalid: " + ((String) s));

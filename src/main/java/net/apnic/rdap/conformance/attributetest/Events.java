@@ -28,7 +28,7 @@ public final class Events implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-06");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("5.5");
 
         return arrayTest.run(context, nr, data);

@@ -66,7 +66,7 @@ public final class ArrayAttribute implements AttributeTest {
                                    Status.Notification,
                                    data);
         if (elements == null) {
-            return false;
+            return true;
         }
 
         nr.addNode(key);

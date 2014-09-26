@@ -7,32 +7,35 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
 
 /**
- * <p>VariantRelation class.</p>
+ * <p>NoticeType class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.3-SNAPSHOT
  */
-public final class VariantRelation implements ValueTest {
+public final class NoticeType implements ValueTest {
     private static StringSet stringSet =
         new StringSet(
-            Sets.newHashSet("registered",
-                            "unregistered",
-                            "registration restricted",
-                            "open registration",
-                            "conjoined")
+            Sets.newHashSet(
+                "result set truncated due to authorization",
+                "result set truncated due to excessive load",
+                "result set truncated due to unexplainable reasons",
+                "object truncated due to authorization",
+                "object truncated due to excessive load",
+                "object truncated due to unexplainable reasons"
+            )
         );
 
     /**
-     * <p>Constructor for VariantRelation.</p>
+     * <p>Constructor for NoticeType.</p>
      */
-    public VariantRelation() { }
+    public NoticeType() { }
 
     /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object data) {
         Result r = new Result(proto);
         r.setDocument("draft-ietf-weirds-json-response-09");
-        r.setReference("11.2.5");
+        r.setReference("11.2.1");
         return stringSet.run(context, proto, data);
     }
 }

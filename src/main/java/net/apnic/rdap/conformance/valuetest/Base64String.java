@@ -1,35 +1,31 @@
 package net.apnic.rdap.conformance.valuetest;
 
-import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ValueTest;
+import net.apnic.rdap.conformance.Utils;
 
-import org.apache.http.conn.util.InetAddressUtils;
+import com.google.common.io.BaseEncoding;
 
 /**
- * <p>IPv6Address class.</p>
+ * <p>Base64String class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
  * @version 0.3-SNAPSHOT
  */
-public final class IPv6Address implements ValueTest {
+public final class Base64String implements ValueTest {
     /**
-     * <p>Constructor for IPv6Address.</p>
+     * <p>Constructor for Base64String.</p>
      */
-    public IPv6Address() { }
+    public Base64String() { }
 
     /** {@inheritDoc} */
     public boolean run(final Context context, final Result proto,
                        final Object argData) {
+        String value = Utils.castToString(argData);
+
         Result nr = new Result(proto);
-        nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-09");
-        nr.setReference("4");
-
-        String ipv6Address = Utils.castToString(argData);
-
-        boolean res = nr.setDetails((ipv6Address != null),
+        boolean res = nr.setDetails((value != null),
                                     "is string",
                                     "not string");
         context.addResult(nr);
@@ -38,9 +34,15 @@ public final class IPv6Address implements ValueTest {
         }
 
         Result nr2 = new Result(proto);
-        res = nr2.setDetails(InetAddressUtils.isIPv6Address(ipv6Address),
+        String error = null;
+        try {
+            BaseEncoding.base64().decode(value);
+        } catch (IllegalArgumentException iae) {
+            error = iae.toString();
+        }
+        res = nr2.setDetails((error == null),
                              "valid",
-                             "invalid");
+                             "invalid: " + error);
         context.addResult(nr2);
         return res;
     }

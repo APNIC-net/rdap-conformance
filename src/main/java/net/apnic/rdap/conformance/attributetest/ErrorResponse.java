@@ -40,7 +40,7 @@ public final class ErrorResponse implements AttributeTest {
                        final Map<String, Object> data) {
         Result p = new Result(proto);
         p.setCode("content");
-        p.setDocument("draft-ietf-json-response-07");
+        p.setDocument("draft-ietf-json-response-09");
         p.setReference("7");
 
         List<AttributeTest> tests = new ArrayList(Arrays.asList(

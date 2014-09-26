@@ -37,8 +37,8 @@ public final class Role implements ValueTest {
     public boolean run(final Context context, final Result proto,
                        final Object data) {
         Result r = new Result(proto);
-        r.setDocument("draft-ietf-weirds-json-response-07");
-        r.setReference("11.2.3");
+        r.setDocument("draft-ietf-weirds-json-response-09");
+        r.setReference("11.2.4");
         return stringSet.run(context, r, data);
     }
 }

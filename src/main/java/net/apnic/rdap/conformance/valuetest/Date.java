@@ -29,7 +29,7 @@ public final class Date implements ValueTest {
                        final Object argData) {
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("4");
 
         String date = Utils.castToString(argData);
@@ -42,11 +42,19 @@ public final class Date implements ValueTest {
             return false;
         }
 
-        DateTime dth = parser.parseDateTime(date);
+        DateTime dth = null;
+        String error = null;
+        try {
+            dth = parser.parseDateTime(date);
+        } catch (IllegalArgumentException iae) {
+            error = iae.toString();
+        }
         Result nr2 = new Result(nr);
         res = nr2.setDetails((dth != null),
                              "valid",
-                             "invalid");
+                             "invalid"
+                             + ((error != null) ? (": " + error)
+                                                : ""));
         context.addResult(nr2);
         return res;
     }

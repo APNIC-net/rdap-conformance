@@ -13,6 +13,7 @@ import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.AttributeTest;
+import net.apnic.rdap.conformance.valuetest.StringTest;
 
 /**
  * <p>Autnum class.</p>
@@ -122,11 +123,14 @@ public final class Autnum implements AttributeTest {
         return Utils.runTestList(
             context, proto, data, knownAttributes, true,
             Arrays.asList(
+                new ScalarAttribute("objectClassName",
+                                    new StringTest("autnum"),
+                                    Result.Status.Failure),
                 new ScalarAttribute("name"),
                 new ScalarAttribute("handle"),
                 new ScalarAttribute("type"),
                 new Country(),
-                new StandardResponse()
+                new StandardObject()
             )
         );
     }

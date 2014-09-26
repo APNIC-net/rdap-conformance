@@ -1,6 +1,9 @@
 package net.apnic.rdap.conformance.test.ip;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Utils;
@@ -8,6 +11,7 @@ import net.apnic.rdap.conformance.Context;
 import net.apnic.rdap.conformance.ObjectTest;
 import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.attributetest.Ip;
+import net.apnic.rdap.conformance.attributetest.StandardResponse;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
@@ -80,7 +84,7 @@ public final class Standard implements ObjectTest {
         Result proto = new Result(Result.Status.Notification, path,
                                   "ip.standard",
                                   "content", "",
-                                  "draft-ietf-weirds-json-response-07",
+                                  "draft-ietf-weirds-json-response-09",
                                   "6.4");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
@@ -89,7 +93,13 @@ public final class Standard implements ObjectTest {
             return false;
         }
 
-        AttributeTest ipTest = new Ip(ip);
-        return ipTest.run(context, proto, data);
+        Set<String> knownAttributes = new HashSet<String>();
+        return Utils.runTestList(
+            context, proto, data, knownAttributes, true,
+            Arrays.asList(
+                new Ip(ip),
+                new StandardResponse()
+            )
+        );
     }
 }

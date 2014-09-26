@@ -15,6 +15,7 @@ import net.apnic.rdap.conformance.AttributeTest;
 import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.valuetest.IPv4Address;
 import net.apnic.rdap.conformance.valuetest.IPv6Address;
+import net.apnic.rdap.conformance.valuetest.StringTest;
 
 /**
  * <p>Nameserver class.</p>
@@ -48,7 +49,7 @@ public final class Nameserver implements SearchTest {
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setDocument("draft-ietf-weirds-json-response-09");
         nr.setReference("6.2");
 
         SearchTest domainNames = new DomainNames();
@@ -58,6 +59,9 @@ public final class Nameserver implements SearchTest {
 
         List<AttributeTest> tests =
             new ArrayList<AttributeTest>(Arrays.asList(
+                new ScalarAttribute("objectClassName",
+                                    new StringTest("nameserver"),
+                                    Result.Status.Failure),
                 new ScalarAttribute("handle"),
                 domainNames,
                 new StandardObject()
