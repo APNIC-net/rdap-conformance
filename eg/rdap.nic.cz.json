@@ -1,0 +1,28 @@
+{ 
+    "baseUrl": "https://rdap.nic.cz",
+    "requestsPerSecond": 0.1,
+    "acceptContentType": "application/json",
+    "objectClasses": {
+        "ip": {
+            "supported": false
+        },
+        "autnum": {
+            "supported": false
+        },
+        "domain": {
+            "supported": true,
+            "exists": ["nic.cz"],
+            "notExists": ["google.com"]
+        },
+        "nameserver": {
+            "supported": true,
+            "exists": ["a.ns.nic.cz"],
+            "notExists": ["google.com"]
+        },
+        "entity": {
+            "supported": true,
+            "exists": ["REG-CZNIC"],
+            "notExists": ["@@@@@@@@"]
+        }
+    }
+}
