@@ -24,8 +24,8 @@ public final class IPv4Address implements ValueTest {
                        final Object argData) {
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-09");
-        nr.setReference("4");
+        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setReference("3");
 
         String ipv4Address = Utils.castToString(argData);
 

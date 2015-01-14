@@ -95,7 +95,7 @@ public final class Redirect implements Test {
         Result proto = new Result(Status.Notification, path,
                                   testName,
                                   "", "",
-                                  "draft-ietf-weirds-using-http-08",
+                                  "draft-ietf-weirds-using-http-15",
                                   "5.2");
         if (httpResponse == null) {
             proto.setCode("response");

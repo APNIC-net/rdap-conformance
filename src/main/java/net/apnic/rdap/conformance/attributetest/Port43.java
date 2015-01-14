@@ -39,8 +39,8 @@ public final class Port43 implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-09");
-        nr.setReference("5.7");
+        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setReference("4.7");
 
         String port43 = Utils.getStringAttribute(context, nr, "port43",
                                                  Status.Notification,

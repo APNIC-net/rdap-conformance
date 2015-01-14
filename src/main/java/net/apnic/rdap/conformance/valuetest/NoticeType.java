@@ -34,8 +34,8 @@ public final class NoticeType implements ValueTest {
     public boolean run(final Context context, final Result proto,
                        final Object data) {
         Result r = new Result(proto);
-        r.setDocument("draft-ietf-weirds-json-response-09");
-        r.setReference("11.2.1");
+        r.setDocument("draft-ietf-weirds-json-response-14");
+        r.setReference("10.2.1");
         return stringSet.run(context, proto, data);
     }
 }

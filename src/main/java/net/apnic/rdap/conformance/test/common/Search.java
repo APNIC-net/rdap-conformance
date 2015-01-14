@@ -106,8 +106,8 @@ final public class Search implements Test {
         Result proto = new Result(Status.Notification, path,
                                   testName,
                                   "", "",
-                                  "draft-ietf-weirds-json-response-09",
-                                  "9");
+                                  "draft-ietf-weirds-json-response-14",
+                                  "8");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
                                   HttpStatus.SC_OK, throwable);

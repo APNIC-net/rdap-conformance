@@ -47,7 +47,7 @@ public final class Application {
                       "entity", "domain");
 
     private static final Result EXTRA_QUERY_PARAM =
-        getDocRefProto("draft-ietf-weirds-using-http-08", "4.2",
+        getDocRefProto("draft-ietf-weirds-using-http-15", "4.3",
                        "common.extra-query-parameter");
 
     private static final TrustManager[] TRUST_MANAGER =
@@ -193,7 +193,7 @@ public final class Application {
         for (String objectType : OBJECT_TYPES) {
             Result unsupported = new Result();
             unsupported.setTestName("common.unsupported");
-            unsupported.setDocument("draft-ietf-weirds-rdap-query-15");
+            unsupported.setDocument("draft-ietf-weirds-rdap-query-18");
             unsupported.setReference("2");
             ObjectClass oc = s.getObjectClass(objectType);
             if ((oc == null)
@@ -368,7 +368,7 @@ public final class Application {
                 "/entity/1.2.3.4",
                 null,
                 true,
-                getDocRefProto("draft-ietf-weirds-rdap-query-11", "3.1.5",
+                getDocRefProto("draft-ietf-weirds-rdap-query-18", "3.1.5",
                                "entity.not-bad-request")
             )
         );
@@ -427,7 +427,7 @@ public final class Application {
                 "/domain/example.com",
                 null,
                 true,
-                getDocRefProto("draft-ietf-weirds-rdap-query-11", "3.1.3",
+                getDocRefProto("draft-ietf-weirds-rdap-query-18", "3.1.3",
                                "domain.not-bad-request")
             )
         );
@@ -438,7 +438,7 @@ public final class Application {
                 "/domain/202.in-addr.arpa",
                 null,
                 true,
-                getDocRefProto("draft-ietf-weirds-rdap-query-11", "3.1.3",
+                getDocRefProto("draft-ietf-weirds-rdap-query-18", "3.1.3",
                                "domain.not-bad-request")
             )
         );
@@ -550,7 +550,7 @@ public final class Application {
         if (s.getAcceptContentType() != null) {
             Result ctres = new Result();
             ctres.setTestName("common.rdap-specific-content-type");
-            ctres.setDocument("draft-ietf-weirds-using-http-08");
+            ctres.setDocument("draft-ietf-weirds-using-http-15");
             ctres.setReference("4.1");
             ctres.setStatus(Result.Status.Failure);
             ctres.setInfo("not supported by server in accept header");
@@ -581,8 +581,8 @@ public final class Application {
          * as the request is 'successful', it's fine. */
         Result ctres = new Result();
         ctres.setTestName("common.application-json");
-        ctres.setDocument("draft-ietf-weirds-using-http-08");
-        ctres.setReference("4.1");
+        ctres.setDocument("draft-ietf-weirds-using-http-15");
+        ctres.setReference("4.2");
         final Test test =
             new BasicRequest(
                 0,

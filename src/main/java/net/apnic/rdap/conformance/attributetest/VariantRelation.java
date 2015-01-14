@@ -31,8 +31,8 @@ public final class VariantRelation implements AttributeTest {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("status");
-        nr.setDocument("draft-ietf-weirds-json-response-09");
-        nr.setReference("6.3");
+        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setReference("5.3");
 
         return arrayAttributeTest.run(context, nr, data);
     }

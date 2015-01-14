@@ -49,8 +49,8 @@ public final class Nameserver implements SearchTest {
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-09");
-        nr.setReference("6.2");
+        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setReference("5.2");
 
         SearchTest domainNames = new DomainNames();
         if (key != null) {

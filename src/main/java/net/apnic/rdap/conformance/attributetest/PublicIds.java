@@ -29,8 +29,8 @@ public final class PublicIds implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-09");
-        nr.setReference("5.8");
+        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setReference("4.8");
 
         return arrayTest.run(context, nr, data);
     }

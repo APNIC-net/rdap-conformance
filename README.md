@@ -51,7 +51,7 @@ elements are as follows:
 
   If there is specific text concerning this test, then the final two
   fields will contain the document name (e.g.
-  'draft-ietf-weirds-using-http-08') and the paragraph reference for
+  'draft-ietf-weirds-using-http-15') and the paragraph reference for
   the text.
 
 The output format and elements are subject to change in later

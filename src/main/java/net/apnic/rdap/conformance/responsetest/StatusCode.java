@@ -52,7 +52,7 @@ public final class StatusCode implements ResponseTest {
         if (nr.getDocument().equals("")
                 && !hasMultiple
                 && expectedCodes.contains(HttpStatus.SC_BAD_REQUEST)) {
-            nr.setDocument("draft-ietf-weirds-using-http-08");
+            nr.setDocument("draft-ietf-weirds-using-http-15");
             nr.setReference("5.4");
         }
 

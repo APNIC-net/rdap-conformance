@@ -37,8 +37,8 @@ public final class Link implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-09");
-        nr.setReference("5.2");
+        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setReference("4.2");
 
         boolean success = true;
         String value = Utils.getStringAttribute(context, nr, "value",

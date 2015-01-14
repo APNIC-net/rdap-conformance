@@ -84,8 +84,8 @@ public final class Standard implements ObjectTest {
         Result proto = new Result(Result.Status.Notification, path,
                                   "ip.standard",
                                   "content", "",
-                                  "draft-ietf-weirds-json-response-09",
-                                  "6.4");
+                                  "draft-ietf-weirds-json-response-14",
+                                  "5.4");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
                                   HttpStatus.SC_OK, throwable);
