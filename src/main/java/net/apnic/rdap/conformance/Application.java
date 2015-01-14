@@ -246,10 +246,11 @@ public final class Application {
             )
         );
         /* Extra query parameter. */
+        String ip = (exists.size() > 0) ? exists.get(0) : "1.2.3.4";
         tests.add(
             new BasicRequest(
                 HttpStatus.SC_BAD_REQUEST,
-                "/ip/1.2.3.4?asdf=zxcv",
+                "/ip/" + ip + "?asdf=zxcv",
                 "ip.extra-query-parameter",
                 true,
                 EXTRA_QUERY_PARAM
@@ -282,10 +283,11 @@ public final class Application {
             tests.add(new Redirect(std, "/autnum/" + e, "autnum.redirect"));
         }
         /* Extra query parameter. */
+        String autnum = (exists.size() > 0) ? exists.get(0) : "1234";
         tests.add(
             new BasicRequest(
                 HttpStatus.SC_BAD_REQUEST,
-                "/autnum/1234?asdf=zxcv",
+                "/autnum/" + autnum + "?asdf=zxcv",
                 "autnum.extra-query-parameter",
                 true,
                 EXTRA_QUERY_PARAM
@@ -323,10 +325,12 @@ public final class Application {
             );
         }
         /* Extra query parameter. */
+        String nameserver =
+            (exists.size() > 0) ? exists.get(0) : "example.com";
         tests.add(
             new BasicRequest(
                 HttpStatus.SC_BAD_REQUEST,
-                "/nameserver/example.com?asdf=zxcv",
+                "/nameserver/" + nameserver + "?asdf=zxcv",
                 "nameserver.extra-query-parameter",
                 true,
                 EXTRA_QUERY_PARAM
@@ -373,10 +377,11 @@ public final class Application {
             )
         );
         /* Extra query parameter. */
+        String entity = (exists.size() > 0) ? exists.get(0) : "asdf";
         tests.add(
             new BasicRequest(
                 HttpStatus.SC_BAD_REQUEST,
-                "/entity/asdf?asdf=zxcv",
+                "/entity/" + entity + "?asdf=zxcv",
                 "entity.extra-query-parameter",
                 true,
                 EXTRA_QUERY_PARAM
@@ -443,10 +448,11 @@ public final class Application {
             )
         );
         /* Extra query parameter. */
+        String domain = (exists.size() > 0) ? exists.get(0) : "example.com";
         tests.add(
             new BasicRequest(
                 HttpStatus.SC_BAD_REQUEST,
-                "/domain/example.com?asdf=zxcv",
+                "/domain/" + domain + "?asdf=zxcv",
                 "domain.extra-query-parameter",
                 true,
                 EXTRA_QUERY_PARAM
