@@ -185,17 +185,22 @@ public final class Application {
 
     private static void addUnsupportedQueryTypeTests(final Specification s,
                                                      final List<Test> tests) {
+        /* Previously, this required that the server return a 400 (Bad
+         * Request) for unsupported queries, as per using-http [5.4].
+         * However, rdap-query now states that for documented query
+         * types, servers MUST return 501 if they don't
+         * support/implement them. */
         for (String objectType : OBJECT_TYPES) {
             Result unsupported = new Result();
             unsupported.setTestName("common.unsupported");
-            unsupported.setDocument("draft-ietf-weirds-using-http-08");
-            unsupported.setReference("5.4");
+            unsupported.setDocument("draft-ietf-weirds-rdap-query-15");
+            unsupported.setReference("2");
             ObjectClass oc = s.getObjectClass(objectType);
             if ((oc == null)
                     || (!s.getObjectClass(objectType).isSupported())) {
                 tests.add(
                     new BasicRequest(
-                        HttpStatus.SC_BAD_REQUEST,
+                        HttpStatus.SC_NOT_IMPLEMENTED,
                         "/" + objectType + "/1.2.3.4",
                         "common.unsupported",
                         false,
