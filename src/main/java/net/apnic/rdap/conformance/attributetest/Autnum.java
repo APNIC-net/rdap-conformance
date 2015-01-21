@@ -121,7 +121,7 @@ public final class Autnum implements AttributeTest {
                                           "endAutnum");
 
         return Utils.runTestList(
-            context, proto, data, knownAttributes, true,
+            context, proto, data, knownAttributes, false,
             Arrays.asList(
                 new ScalarAttribute("objectClassName",
                                     new StringTest("autnum"),

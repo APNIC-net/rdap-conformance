@@ -97,7 +97,7 @@ public final class Standard implements ObjectTest {
 
         Set<String> knownAttributes = new HashSet<String>();
         return Utils.runTestList(
-            context, proto, (Map) data, knownAttributes, true,
+            context, proto, data, knownAttributes, true,
             Arrays.asList(
                 new Autnum(autnum),
                 new StandardResponse()
