@@ -5,7 +5,7 @@
             "supported": true,
             "exists": ["203.119.0.0/24", "2001:dc0::/32",
                        "203.119.5.6", "2001:dc0::"],
-            "redirects": ["200.3.14.10"]
+            "redirects": ["193.0.6.139"]
         },
         "domain": {
             "supported": true,
@@ -40,7 +40,7 @@
         "autnum": {
             "supported": true,
             "exists": ["4608"],
-            "redirects": ["28001"]
+            "redirects": ["3333"]
         }
     }
 }
