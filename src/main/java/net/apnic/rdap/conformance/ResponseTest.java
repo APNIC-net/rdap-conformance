@@ -10,7 +10,7 @@ import org.apache.http.HttpResponse;
  * particular header is set properly.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public interface ResponseTest {
     /**

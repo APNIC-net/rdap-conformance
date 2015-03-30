@@ -33,7 +33,7 @@ import net.apnic.rdap.conformance.test.common.BasicRequest;
  * stdout.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Application {
     private static final int EX_USAGE = 64;

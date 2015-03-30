@@ -18,7 +18,7 @@ import net.apnic.rdap.conformance.Utils;
  * StandardResponse, which covers the top-level RDAP response.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class StandardObject implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();

@@ -17,7 +17,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * class.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Notices implements AttributeTest {
     private String key = null;

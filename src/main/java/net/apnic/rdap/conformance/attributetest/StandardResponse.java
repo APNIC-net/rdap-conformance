@@ -18,7 +18,7 @@ import net.apnic.rdap.conformance.Utils;
  * objects, as per StandardObject.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class StandardResponse implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();

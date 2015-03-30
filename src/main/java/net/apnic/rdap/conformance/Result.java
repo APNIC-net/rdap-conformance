@@ -14,7 +14,7 @@ import com.google.common.base.Joiner;
  * maps to a single line in the output of the validator.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Result {
     public enum Status { Success, Notification, Warning, Failure };

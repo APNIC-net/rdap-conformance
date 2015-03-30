@@ -12,7 +12,7 @@ import net.apnic.rdap.conformance.ValueTest;
  * See RFC 4034 [2.1.1] and [2.2].
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Flags implements ValueTest {
     private static final int NONE = 0;

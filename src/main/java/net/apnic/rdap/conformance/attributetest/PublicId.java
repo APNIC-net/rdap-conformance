@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.Utils;
  * <p>PublicId class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class PublicId implements AttributeTest {
     private Set<String> knownAttributes = new HashSet<String>();

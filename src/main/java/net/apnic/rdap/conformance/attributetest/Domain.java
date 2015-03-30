@@ -16,7 +16,7 @@ import net.apnic.rdap.conformance.valuetest.StringTest;
  * <p>Domain class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Domain implements SearchTest {
     private boolean checkUnknown = false;

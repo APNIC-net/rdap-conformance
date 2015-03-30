@@ -9,7 +9,7 @@ import net.apnic.rdap.conformance.ValueTest;
  * <p>StringTest class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class StringTest implements ValueTest {
     private String expectedValue = null;

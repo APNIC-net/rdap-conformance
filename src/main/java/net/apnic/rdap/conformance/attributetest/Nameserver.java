@@ -21,7 +21,7 @@ import net.apnic.rdap.conformance.valuetest.StringTest;
  * <p>Nameserver class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Nameserver implements SearchTest {
     private String key = null;

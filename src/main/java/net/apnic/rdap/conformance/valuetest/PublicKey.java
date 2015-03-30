@@ -10,7 +10,7 @@ import net.apnic.rdap.conformance.ValueTest;
  * See RFC 4034 [2.1.4].
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class PublicKey implements ValueTest {
     /**

@@ -11,7 +11,7 @@ import net.apnic.rdap.conformance.Utils;
  * See RFC 4034 [3.1.6].
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class KeyTag implements ValueTest {
     private static final int MAX_16BIT = 65535;

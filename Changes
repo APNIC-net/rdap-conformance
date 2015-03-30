@@ -1,5 +1,9 @@
 Revision history for rdap-conformance.
 
+v0.3    30 March 2015
+        - Use RFCs for document references, now that they have been
+          published.
+
 v0.2    12 July 2014
         - Object structure validation.
         - Basic search and redirect testing.

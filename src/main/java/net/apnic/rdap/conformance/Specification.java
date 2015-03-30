@@ -16,7 +16,7 @@ import net.apnic.rdap.conformance.specification.ObjectClass;
  * Contains the data from the validator configuration file.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Specification {
     private String baseUrl = null;

@@ -19,7 +19,7 @@ import org.apache.http.HttpRequest;
  * <p>Link class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 final public class Link implements Test {
     private String url;

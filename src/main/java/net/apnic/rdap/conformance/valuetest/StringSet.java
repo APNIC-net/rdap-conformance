@@ -11,7 +11,7 @@ import net.apnic.rdap.conformance.Utils;
  * <p>StringSet class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class StringSet implements ValueTest {
     private Set<String> members = null;

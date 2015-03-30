@@ -13,7 +13,7 @@ package net.apnic.rdap.conformance;
  * is run, then it will use that URL instead.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public interface ObjectTest extends Test {
     /**

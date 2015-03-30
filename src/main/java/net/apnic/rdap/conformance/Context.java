@@ -27,7 +27,7 @@ import com.google.common.util.concurrent.FutureCallback;
  * things.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Context {
     private static final int HTTP_PORT = 80;

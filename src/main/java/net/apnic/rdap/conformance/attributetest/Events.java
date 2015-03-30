@@ -13,7 +13,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * <p>Events class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Events implements AttributeTest {
     /**

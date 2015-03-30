@@ -11,7 +11,7 @@ import org.apache.http.conn.util.InetAddressUtils;
  * <p>IPv6Address class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class IPv6Address implements ValueTest {
     /**

@@ -16,7 +16,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * <p>Country class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3-SNAPSHOT
+ * @version 0.3
  */
 public final class Country implements AttributeTest {
     private static final Set<String> COUNTRY_CODES = new HashSet<String>();
