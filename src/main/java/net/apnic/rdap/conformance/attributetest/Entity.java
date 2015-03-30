@@ -187,7 +187,6 @@ public final class Entity implements SearchTest {
                 new ArrayAttribute(new Ip(), "networks"),
                 new ArrayAttribute(new Autnum(), "autnums"),
                 new ArrayAttribute(new Role(), "roles"),
-                new ResultsTruncated(),
                 new StandardObject()
             )
         );
