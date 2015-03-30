@@ -40,8 +40,8 @@ public final class ErrorResponse implements AttributeTest {
                        final Map<String, Object> data) {
         Result p = new Result(proto);
         p.setCode("content");
-        p.setDocument("draft-ietf-json-response-09");
-        p.setReference("7");
+        p.setDocument("rfc7483");
+        p.setReference("6");
 
         List<AttributeTest> tests = new ArrayList(Arrays.asList(
             new RdapConformance(),
