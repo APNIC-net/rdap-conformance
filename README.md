@@ -4,7 +4,7 @@ rdap-conformance
 [![Build Status](https://travis-ci.org/APNIC-net/rdap-conformance.png)](https://travis-ci.org/APNIC-net/rdap-conformance)
 
 Tests an RDAP server for conformance with the published standards.
-See [[RFC7480](http://tools.ietf.org/html/rfc7480)] and
+See [RFC7480](http://tools.ietf.org/html/rfc7480) and
 http://datatracker.ietf.org/wg/weirds.
 
 Synopsis
