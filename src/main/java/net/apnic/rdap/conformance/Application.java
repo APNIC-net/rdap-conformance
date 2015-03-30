@@ -193,8 +193,8 @@ public final class Application {
         for (String objectType : OBJECT_TYPES) {
             Result unsupported = new Result();
             unsupported.setTestName("common.unsupported");
-            unsupported.setDocument("draft-ietf-weirds-rdap-query-18");
-            unsupported.setReference("2");
+            unsupported.setDocument("rfc7482");
+            unsupported.setReference("1");
             ObjectClass oc = s.getObjectClass(objectType);
             if ((oc == null)
                     || (!s.getObjectClass(objectType).isSupported())) {
@@ -372,7 +372,7 @@ public final class Application {
                 "/entity/1.2.3.4",
                 null,
                 true,
-                getDocRefProto("draft-ietf-weirds-rdap-query-18", "3.1.5",
+                getDocRefProto("rfc7482", "3.1.5",
                                "entity.not-bad-request")
             )
         );
@@ -432,7 +432,7 @@ public final class Application {
                 "/domain/example.com",
                 null,
                 true,
-                getDocRefProto("draft-ietf-weirds-rdap-query-18", "3.1.3",
+                getDocRefProto("rfc7482", "3.1.3",
                                "domain.not-bad-request")
             )
         );
@@ -443,7 +443,7 @@ public final class Application {
                 "/domain/202.in-addr.arpa",
                 null,
                 true,
-                getDocRefProto("draft-ietf-weirds-rdap-query-18", "3.1.3",
+                getDocRefProto("rfc7482", "3.1.3",
                                "domain.not-bad-request")
             )
         );
