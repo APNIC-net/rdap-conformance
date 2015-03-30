@@ -20,7 +20,7 @@ import net.apnic.rdap.conformance.valuetest.Date;
  * <p>Event class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Event implements AttributeTest {
     private boolean allowActor = true;

@@ -13,7 +13,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * <p>Links class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Links implements AttributeTest {
     /**

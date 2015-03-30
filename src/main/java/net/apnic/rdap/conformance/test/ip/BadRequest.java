@@ -12,7 +12,7 @@ import org.apache.http.HttpRequest;
  * <p>BadRequest class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 final public class BadRequest implements Test {
     private Test cbr = null;

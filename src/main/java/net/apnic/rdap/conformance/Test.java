@@ -17,7 +17,7 @@ import org.apache.http.HttpRequest;
  * fashion.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public interface Test {
     /**

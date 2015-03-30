@@ -28,7 +28,7 @@ import net.apnic.rdap.conformance.Utils;
  * <p>BasicRequest class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class BasicRequest implements net.apnic.rdap.conformance.Test {
     private static final int HTTP_ERROR_CODE_LOWER_BOUND = 400;

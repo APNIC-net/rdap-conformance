@@ -18,7 +18,7 @@ import org.apache.http.HttpRequest;
  * <p>Head class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 final public class Head implements Test {
     private String url;

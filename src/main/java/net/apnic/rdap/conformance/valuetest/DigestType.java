@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.ValueTest;
  * http://www.iana.org/assignments/ds-rr-types/ds-rr-types.xml.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class DigestType implements ValueTest {
     private static final int SHA1        = 1;

@@ -11,7 +11,7 @@ import com.google.common.io.BaseEncoding;
  * <p>Base64String class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Base64String implements ValueTest {
     /**

@@ -22,7 +22,7 @@ import net.apnic.rdap.conformance.valuetest.StringTest;
  * <p>Ip class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Ip implements AttributeTest {
     private String ip = null;

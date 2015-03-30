@@ -31,7 +31,7 @@ import org.apache.http.client.config.RequestConfig;
  * objects.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Utils {
     private static final int TIMEOUT_MS = 60000;

@@ -20,7 +20,7 @@ import net.apnic.rdap.conformance.Utils;
  * <p>Port43 class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Port43 implements AttributeTest {
     private static Set<String> hostsChecked = new HashSet<String>();

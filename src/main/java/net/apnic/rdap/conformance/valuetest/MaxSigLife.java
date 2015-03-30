@@ -11,7 +11,7 @@ import net.apnic.rdap.conformance.Utils;
  * See RFC 5910 [3.3].
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class MaxSigLife implements ValueTest {
     /**

@@ -21,7 +21,7 @@ import net.apnic.rdap.conformance.Utils;
  * satisfies a particular ValueTest or AttributeTest.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class ArrayAttribute implements AttributeTest {
     private Set<String> knownAttributes = null;

@@ -8,7 +8,7 @@ import net.apnic.rdap.conformance.ValueTest;
  * <p>BooleanValue class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class BooleanValue implements ValueTest {
     /**

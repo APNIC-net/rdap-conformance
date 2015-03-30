@@ -14,7 +14,7 @@ import net.apnic.rdap.conformance.ValueTest;
  * http://www.iana.org/assignments/dns-sec-alg-numbers/dns-sec-alg-numbers.xml.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Algorithm implements ValueTest {
     private static final int DSA        = 3;

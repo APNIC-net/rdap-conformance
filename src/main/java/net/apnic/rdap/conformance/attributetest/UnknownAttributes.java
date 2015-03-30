@@ -22,7 +22,7 @@ import net.apnic.rdap.conformance.AttributeTest;
  * implemented.
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class UnknownAttributes implements AttributeTest {
     private Set<String> knownAttributes = null;

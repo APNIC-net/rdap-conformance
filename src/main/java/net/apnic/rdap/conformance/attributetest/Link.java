@@ -22,7 +22,7 @@ import com.google.common.collect.Sets;
  * <p>Link class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Link implements AttributeTest {
     /**

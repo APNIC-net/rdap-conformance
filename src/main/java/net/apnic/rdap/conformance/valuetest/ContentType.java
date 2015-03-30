@@ -9,7 +9,7 @@ import net.apnic.rdap.conformance.ValueTest;
  * <p>ContentType class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class ContentType implements ValueTest {
     /**

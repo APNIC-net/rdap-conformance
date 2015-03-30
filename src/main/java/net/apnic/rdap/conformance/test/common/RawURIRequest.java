@@ -23,7 +23,7 @@ import com.google.gson.Gson;
  * <p>RawURIRequest class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class RawURIRequest implements Test {
     private static final int HTTP_PORT = 80;

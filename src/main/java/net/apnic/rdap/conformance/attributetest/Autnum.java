@@ -19,7 +19,7 @@ import net.apnic.rdap.conformance.valuetest.StringTest;
  * <p>Autnum class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Autnum implements AttributeTest {
     private BigInteger autnum = null;

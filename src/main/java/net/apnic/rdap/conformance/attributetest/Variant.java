@@ -18,7 +18,7 @@ import net.apnic.rdap.conformance.attributetest.VariantName;
  * <p>Variant class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class Variant implements ValueTest {
     /**

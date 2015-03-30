@@ -9,7 +9,7 @@ import java.util.Map;
  * <p>ObjectClass class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 public final class ObjectClass {
     private boolean supported = false;

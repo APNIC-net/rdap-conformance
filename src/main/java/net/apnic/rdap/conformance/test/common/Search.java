@@ -24,7 +24,7 @@ import org.apache.http.HttpStatus;
  * <p>Search class.</p>
  *
  * @author Tom Harrison <tomh@apnic.net>
- * @version 0.3
+ * @version 0.4-SNAPSHOT
  */
 final public class Search implements Test {
     public enum ExpectedResultType { SOME, NONE, TRUNCATED };
