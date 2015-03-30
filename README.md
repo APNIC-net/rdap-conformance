@@ -3,7 +3,8 @@ rdap-conformance
 
 [![Build Status](https://travis-ci.org/APNIC-net/rdap-conformance.png)](https://travis-ci.org/APNIC-net/rdap-conformance)
 
-Tests an RDAP server for conformance with the current drafts. See
+Tests an RDAP server for conformance with the published standards.
+See [[RFC7480](http://tools.ietf.org/html/rfc7480)] and
 http://datatracker.ietf.org/wg/weirds.
 
 Synopsis
@@ -50,9 +51,8 @@ elements are as follows:
 + Reference
 
   If there is specific text concerning this test, then the final two
-  fields will contain the document name (e.g.
-  'draft-ietf-weirds-using-http-15') and the paragraph reference for
-  the text.
+  fields will contain the document name (e.g. 'rfc7480') and the
+  paragraph reference for the text.
 
 The output format and elements are subject to change in later
 releases. Result ordering is not guaranteed to be consistent.
