@@ -29,7 +29,7 @@ public final class AccessControl implements ResponseTest {
 
         Result nr = new Result(proto);
         nr.setCode("access-control-allow-origin");
-        nr.setDocument("draft-ietf-weirds-using-http-15");
+        nr.setDocument("rfc7480");
         nr.setReference("5.6");
 
         Header cth = hr.getFirstHeader("Access-Control-Allow-Origin");

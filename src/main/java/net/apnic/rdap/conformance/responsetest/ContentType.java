@@ -29,7 +29,7 @@ public final class ContentType implements ResponseTest {
 
         Result nr = new Result(proto);
         nr.setCode("content-type");
-        nr.setDocument("draft-ietf-weirds-using-http-15");
+        nr.setDocument("rfc7480");
         nr.setReference("4.2");
 
         Header cth = hr.getEntity().getContentType();

@@ -47,7 +47,7 @@ public final class Application {
                       "entity", "domain");
 
     private static final Result EXTRA_QUERY_PARAM =
-        getDocRefProto("draft-ietf-weirds-using-http-15", "4.3",
+        getDocRefProto("rfc7480", "4.3",
                        "common.extra-query-parameter");
 
     private static final TrustManager[] TRUST_MANAGER =
@@ -556,7 +556,7 @@ public final class Application {
         if (s.getAcceptContentType() != null) {
             Result ctres = new Result();
             ctres.setTestName("common.rdap-specific-content-type");
-            ctres.setDocument("draft-ietf-weirds-using-http-15");
+            ctres.setDocument("rfc7480");
             ctres.setReference("4.1");
             ctres.setStatus(Result.Status.Failure);
             ctres.setInfo("not supported by server in accept header");
@@ -587,7 +587,7 @@ public final class Application {
          * as the request is 'successful', it's fine. */
         Result ctres = new Result();
         ctres.setTestName("common.application-json");
-        ctres.setDocument("draft-ietf-weirds-using-http-15");
+        ctres.setDocument("rfc7480");
         ctres.setReference("4.2");
         final Test test =
             new BasicRequest(
