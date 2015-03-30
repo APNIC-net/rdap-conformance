@@ -37,7 +37,7 @@ public final class Link implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setDocument("rfc7483");
         nr.setReference("4.2");
 
         boolean success = true;

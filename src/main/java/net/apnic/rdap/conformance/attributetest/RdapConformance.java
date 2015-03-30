@@ -34,7 +34,7 @@ public final class RdapConformance implements AttributeTest {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("rdapConformance");
-        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setDocument("rfc7483");
         nr.setReference("4.1");
 
         Result nr1 = new Result(nr);

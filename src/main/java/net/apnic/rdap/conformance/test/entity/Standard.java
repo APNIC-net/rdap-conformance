@@ -70,7 +70,7 @@ public final class Standard implements Test {
         Result proto = new Result(Status.Notification, path,
                                   "entity.standard",
                                   "content", "",
-                                  "draft-ietf-weirds-json-response-14",
+                                  "rfc7483",
                                   "5.1");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,

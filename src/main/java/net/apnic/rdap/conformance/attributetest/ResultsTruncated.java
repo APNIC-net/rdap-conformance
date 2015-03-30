@@ -33,7 +33,7 @@ public final class ResultsTruncated implements AttributeTest {
                        final Map<String, Object> data) {
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-07");
+        nr.setDocument("rfc7483");
         nr.setReference("10");
 
         Object rt = Utils.getAttribute(context, nr,

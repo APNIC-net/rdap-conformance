@@ -59,8 +59,8 @@ public final class Standard implements Test {
         Result proto = new Result(Result.Status.Notification, path,
                                   "help",
                                   "content", "",
-                                  "draft-ietf-weirds-json-response-14",
-                                  "8");
+                                  "rfc7483",
+                                  "7");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,
                                   HttpStatus.SC_OK, throwable);

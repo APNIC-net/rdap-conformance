@@ -86,7 +86,7 @@ public final class Standard implements ObjectTest {
         Result proto = new Result(Result.Status.Notification, path,
                                   "autnum.standard",
                                   "content", "",
-                                  "draft-ietf-weirds-json-response-14",
+                                  "rfc7483",
                                   "5.5");
         Map<String, Object> data =
             Utils.processResponse(context, httpResponse, proto,

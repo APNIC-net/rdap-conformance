@@ -30,7 +30,7 @@ public final class VariantName implements AttributeTest {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("status");
-        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setDocument("rfc7483");
         nr.setReference("5.3");
 
         return Utils.runTestList(

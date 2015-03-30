@@ -38,7 +38,7 @@ public final class Country implements AttributeTest {
         Result nr = new Result(proto);
         nr.setCode("content");
         nr.addNode("country");
-        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setDocument("rfc7483");
         nr.setReference("3");
 
         String countryValue =

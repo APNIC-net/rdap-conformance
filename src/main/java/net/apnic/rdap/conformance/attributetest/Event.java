@@ -47,7 +47,7 @@ public final class Event implements AttributeTest {
 
         Result nr = new Result(proto);
         nr.setCode("content");
-        nr.setDocument("draft-ietf-weirds-json-response-14");
+        nr.setDocument("rfc7483");
         nr.setReference("4.5");
 
         boolean eacres = true;

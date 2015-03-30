@@ -32,7 +32,7 @@ public final class Entities implements AttributeTest {
         /* Only set the reference if it is not already set, since the
          * entities attribute is described separately for each object. */
         if (nr.getDocument() == null) {
-            nr.setDocument("draft-ietf-weirds-json-response-14");
+            nr.setDocument("rfc7483");
             nr.setReference("5.1");
         }
 
