@@ -131,6 +131,12 @@ final public class Search implements Test {
             return false;
         }
         if (results == null) {
+            Result r = new Result(proto);
+            r.setCode("content");
+            r.setStatus(Status.Failure);
+            r.setInfo("not present");
+            r.addNode(searchResultsKey);
+            context.addResult(r);
             return false;
         }
 
