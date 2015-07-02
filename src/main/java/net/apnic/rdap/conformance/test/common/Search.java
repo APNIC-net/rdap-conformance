@@ -130,6 +130,9 @@ final public class Search implements Test {
         } catch (ClassCastException ce) {
             return false;
         }
+        if (results == null) {
+            return false;
+        }
 
         Result r = new Result(proto);
         r.setCode("response");
