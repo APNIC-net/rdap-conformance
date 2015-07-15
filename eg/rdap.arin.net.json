@@ -1,5 +1,5 @@
 { 
-    "baseUrl": "http://rdappilot.arin.net/restfulwhois/rdap",
+    "baseUrl": "http://rdap.arin.net/registry",
     "objectClasses": {
         "ip": {
             "supported": true,
