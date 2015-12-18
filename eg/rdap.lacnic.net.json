@@ -7,7 +7,7 @@
         },
         "domain": {
             "supported": true,
-            "exists": ["66.0.200.in-addr.arpa", "0.0.8.9.d.1.4.0.8.2.ip6.arpa"],
+            "exists": ["66.0.200.in-addr.arpa", "8.9.d.1.4.0.8.2.ip6.arpa"],
             "notExists": ["google.com"]
         },
         "nameserver": {
