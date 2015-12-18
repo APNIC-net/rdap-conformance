@@ -7,11 +7,13 @@
         },
         "domain": {
             "supported": true,
-            "exists": [],
+            "exists": ["66.0.200.in-addr.arpa", "0.0.8.9.d.1.4.0.8.2.ip6.arpa"],
             "notExists": ["google.com"]
         },
         "nameserver": {
-            "supported": false
+            "supported": true,
+            "exists": ["ns.lacnic.net"],
+            "notExists": ["google.com"]
         },
         "entity": {
             "supported": true,
@@ -20,7 +22,8 @@
         },
         "autnum": {
             "supported": true,
-            "exists": ["11081"]
+            "exists": ["11081"],
+            "notExists": ["0"]
         }
     }
 }
