@@ -36,6 +36,7 @@ import net.apnic.rdap.conformance.test.common.BasicRequest;
  * @version 0.4-SNAPSHOT
  */
 public final class Application {
+    private static final int EX_FAILURE = 21;
     private static final int EX_USAGE = 64;
     private static final int EX_NOINPUT = 66;
     private static final int EX_SOFTWARE = 70;
@@ -87,7 +88,7 @@ public final class Application {
         return jarName;
     }
 
-    private static void addSearchTests(final List<Test> tests,
+    private static void addSearchTests(final TestAggregate tests,
                                        final ObjectClass oc,
                                        final SearchTest st,
                                        final String prefix,
@@ -145,7 +146,7 @@ public final class Application {
     }
 
     private static void addNonRdapTests(final Context c,
-                                        final List<Test> tests) {
+                                        final TestAggregate tests) {
         /* Relative URI in the HTTP request. */
         Result relative = new Result();
         relative.setTestName("common.bad-uri-relative");
@@ -184,7 +185,7 @@ public final class Application {
     }
 
     private static void addUnsupportedQueryTypeTests(final Specification s,
-                                                     final List<Test> tests) {
+                                                     final TestAggregate tests) {
         /* Previously, this required that the server return a 400 (Bad
          * Request) for unsupported queries, as per using-http [5.4].
          * However, rdap-query now states that for documented query
@@ -211,7 +212,7 @@ public final class Application {
     }
 
     private static void addIpTests(final Specification s,
-                                   final List<Test> tests) {
+                                   final TestAggregate tests) {
         ObjectClass ocIp = s.getObjectClass("ip");
         if ((ocIp == null) || !ocIp.isSupported()) {
             return;
@@ -259,7 +260,7 @@ public final class Application {
     }
 
     private static void addAutnumTests(final Specification s,
-                                       final List<Test> tests) {
+                                       final TestAggregate tests) {
         ObjectClass ocAn = s.getObjectClass("autnum");
         if ((ocAn == null) || !ocAn.isSupported()) {
             return;
@@ -296,7 +297,7 @@ public final class Application {
     }
 
     private static void addNameserverTests(final Specification s,
-                                           final List<Test> tests)
+                                           final TestAggregate tests)
             throws Exception {
         ObjectClass ocNs = s.getObjectClass("nameserver");
         if ((ocNs == null) || !ocNs.isSupported()) {
@@ -347,7 +348,7 @@ public final class Application {
     }
 
     private static void addEntityTests(final Specification s,
-                                       final List<Test> tests)
+                                       final TestAggregate tests)
             throws Exception {
         ObjectClass ocEn = s.getObjectClass("entity");
         if ((ocEn == null) || !ocEn.isSupported()) {
@@ -398,7 +399,7 @@ public final class Application {
     }
 
     private static void addDomainTests(final Specification s,
-                                       final List<Test> tests)
+                                       final TestAggregate tests)
             throws Exception {
         ObjectClass ocDom = s.getObjectClass("domain");
         if ((ocDom == null) || !ocDom.isSupported()) {
@@ -520,26 +521,26 @@ public final class Application {
         }
 
         String path = args[0];
-        Specification s = null;
+        Specification spec = null;
         try {
-            s = Specification.fromPath(path);
+            spec = Specification.fromPath(path);
         } catch (Exception e) {
             System.err.println("Unable to load specification "
                                + "path (" + path + "): "
                                + e.toString());
             System.exit(EX_NOINPUT);
         }
-        if (s == null) {
+        if (spec == null) {
             System.err.println("Specification (" + path + ") is empty.");
             System.exit(EX_NOINPUT);
         }
 
         RateLimiter rateLimiter =
-            (s.getRequestsPerSecond() > 0)
-                ? RateLimiter.create(s.getRequestsPerSecond())
+            (spec.getRequestsPerSecond() > 0)
+                ? RateLimiter.create(spec.getRequestsPerSecond())
                 : null;
 
-        List<Test> tests = new ArrayList();
+        TestAggregate tests = new TestAggregate();
 
         /* For now, the non-RDAP-specific tests are disabled. These
          * are fairly niche, and in many cases can't easily be fixed
@@ -553,7 +554,7 @@ public final class Application {
          * than not testing the responses at all, allow for the
          * supported content type to be set in the configuration, and
          * add a result at the beginning indicating this failure. */
-        if (s.getAcceptContentType() != null) {
+        if (spec.getAcceptContentType() != null) {
             Result ctres = new Result();
             ctres.setTestName("common.rdap-specific-content-type");
             ctres.setDocument("rfc7480");
@@ -563,12 +564,12 @@ public final class Application {
             System.out.println(ctres.toString());
         }
 
-        addUnsupportedQueryTypeTests(s, tests);
-        addIpTests(s, tests);
-        addAutnumTests(s, tests);
-        addNameserverTests(s, tests);
-        addEntityTests(s, tests);
-        addDomainTests(s, tests);
+        addUnsupportedQueryTypeTests(spec, tests);
+        addIpTests(spec, tests);
+        addAutnumTests(spec, tests);
+        addNameserverTests(spec, tests);
+        addEntityTests(spec, tests);
+        addDomainTests(spec, tests);
 
         tests.add(new net.apnic.rdap.conformance.test.help.Standard());
         AtomicInteger testsRunning = new AtomicInteger(0);
@@ -578,7 +579,7 @@ public final class Application {
                                                 .availableProcessors());
         for (final Test t : tests) {
             final Context context =
-                createContext(s, rateLimiter, executorService, testsRunning);
+                createContext(spec, rateLimiter, executorService, testsRunning);
             context.submitTest(t);
         }
 
@@ -598,7 +599,7 @@ public final class Application {
                 ctres
             );
         final Context context =
-            createContext(s, rateLimiter, executorService, testsRunning);
+            createContext(spec, rateLimiter, executorService, testsRunning);
         context.setContentType("application/json");
         context.submitTest(test);
 
@@ -614,5 +615,9 @@ public final class Application {
         }
 
         executorService.shutdown();
+
+        if(tests.hasFailure()) {
+            System.exit(EX_FAILURE);
+        }
     }
 }

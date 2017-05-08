@@ -249,6 +249,7 @@ public final class Context {
                                     testsRunning.getAndDecrement();
                                 }
                                 public void onFailure(final Throwable t) {
+                                    System.out.println("**********");
                                     test.setError(t);
                                     test.run();
                                     synchronized (System.out) {

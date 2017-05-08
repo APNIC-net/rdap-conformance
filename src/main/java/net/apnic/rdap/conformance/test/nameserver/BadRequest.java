@@ -35,6 +35,11 @@ public final class BadRequest implements Test {
     }
 
     /** {@inheritDoc} */
+    public boolean hasFailed() {
+        return cbr.hasFailed();
+    }
+
+    /** {@inheritDoc} */
     public void setContext(final Context c) {
         cbr.setContext(c);
     }

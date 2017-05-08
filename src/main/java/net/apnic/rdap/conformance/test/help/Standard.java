@@ -33,6 +33,11 @@ public final class Standard implements Test {
     public Standard() { }
 
     /** {@inheritDoc} */
+    public boolean hasFailed() {
+        return throwable != null;
+    }
+
+    /** {@inheritDoc} */
     public void setContext(final Context c) {
         context = c;
     }

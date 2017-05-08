@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 public final class RawURIRequest implements Test {
     private static final int HTTP_PORT = 80;
     private static final int BUFFER_SIZE = 4096;
+    private boolean failed = false;
     private String rawUri = null;
     private Result proto = null;
     private boolean expectedSuccess = false;
@@ -48,6 +49,10 @@ public final class RawURIRequest implements Test {
         this.expectedSuccess = expectedSuccess;
     }
 
+    public boolean hasFailed() {
+        return failed;
+    }
+
     /** {@inheritDoc} */
     public void setContext(final Context c) {
         context = c;
@@ -59,6 +64,7 @@ public final class RawURIRequest implements Test {
 
     /** {@inheritDoc} */
     public void setError(final Throwable t) {
+        failed = true;
     }
 
     /** {@inheritDoc} */
