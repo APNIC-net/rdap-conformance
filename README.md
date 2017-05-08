@@ -133,6 +133,11 @@ For example:
         } 
     }
 
+Docker
+------
+
+Docker section
+
 License
 -------
 
