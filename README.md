@@ -153,8 +153,8 @@ docker build -t apnic/rdap-conformance .
 To run the Docker container.
 
 ```
-docker run -d -v "<path_to_spec.json>:/app/rdap-spec.json" 
---name rdap-conformance apnic/rdap-conformance
+docker run -d -v "<path_to_spec.json>:/app/rdap-spec.json" \
+           --name rdap-conformance apnic/rdap-conformance
 ```
 
 <aside class="notice">
