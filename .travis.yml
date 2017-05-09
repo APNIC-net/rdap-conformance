@@ -9,5 +9,8 @@ sudo: required
 services:
     - docker
 
-after_success:
-    - docker build .
+deploy:
+    provider: script
+    script: ./scripts/docker-deploy.sh
+    on:
+        jdk: openjdk8
