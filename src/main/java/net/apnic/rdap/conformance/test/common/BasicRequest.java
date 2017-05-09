@@ -88,11 +88,6 @@ public final class BasicRequest implements net.apnic.rdap.conformance.Test {
     }
 
     /** {@inheritDoc} */
-    public boolean hasFailed() {
-        return throwable != null;
-    }
-
-    /** {@inheritDoc} */
     public void setContext(final Context c) {
         context = c;
     }

@@ -49,10 +49,6 @@ public final class RawURIRequest implements Test {
         this.expectedSuccess = expectedSuccess;
     }
 
-    public boolean hasFailed() {
-        return failed;
-    }
-
     /** {@inheritDoc} */
     public void setContext(final Context c) {
         context = c;

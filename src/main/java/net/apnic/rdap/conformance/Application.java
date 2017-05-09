@@ -88,7 +88,7 @@ public final class Application {
         return jarName;
     }
 
-    private static void addSearchTests(final TestAggregate tests,
+    private static void addSearchTests(final List<Test> tests,
                                        final ObjectClass oc,
                                        final SearchTest st,
                                        final String prefix,
@@ -146,7 +146,7 @@ public final class Application {
     }
 
     private static void addNonRdapTests(final Context c,
-                                        final TestAggregate tests) {
+                                        final List<Test> tests) {
         /* Relative URI in the HTTP request. */
         Result relative = new Result();
         relative.setTestName("common.bad-uri-relative");
@@ -185,7 +185,7 @@ public final class Application {
     }
 
     private static void addUnsupportedQueryTypeTests(final Specification s,
-                                                     final TestAggregate tests) {
+                                                     final List<Test> tests) {
         /* Previously, this required that the server return a 400 (Bad
          * Request) for unsupported queries, as per using-http [5.4].
          * However, rdap-query now states that for documented query
@@ -212,7 +212,7 @@ public final class Application {
     }
 
     private static void addIpTests(final Specification s,
-                                   final TestAggregate tests) {
+                                   final List<Test> tests) {
         ObjectClass ocIp = s.getObjectClass("ip");
         if ((ocIp == null) || !ocIp.isSupported()) {
             return;
@@ -260,7 +260,7 @@ public final class Application {
     }
 
     private static void addAutnumTests(final Specification s,
-                                       final TestAggregate tests) {
+                                       final List<Test> tests) {
         ObjectClass ocAn = s.getObjectClass("autnum");
         if ((ocAn == null) || !ocAn.isSupported()) {
             return;
@@ -297,7 +297,7 @@ public final class Application {
     }
 
     private static void addNameserverTests(final Specification s,
-                                           final TestAggregate tests)
+                                           final List<Test> tests)
             throws Exception {
         ObjectClass ocNs = s.getObjectClass("nameserver");
         if ((ocNs == null) || !ocNs.isSupported()) {
@@ -348,7 +348,7 @@ public final class Application {
     }
 
     private static void addEntityTests(final Specification s,
-                                       final TestAggregate tests)
+                                       final List<Test> tests)
             throws Exception {
         ObjectClass ocEn = s.getObjectClass("entity");
         if ((ocEn == null) || !ocEn.isSupported()) {
@@ -399,7 +399,7 @@ public final class Application {
     }
 
     private static void addDomainTests(final Specification s,
-                                       final TestAggregate tests)
+                                       final List<Test> tests)
             throws Exception {
         ObjectClass ocDom = s.getObjectClass("domain");
         if ((ocDom == null) || !ocDom.isSupported()) {
@@ -540,7 +540,7 @@ public final class Application {
                 ? RateLimiter.create(spec.getRequestsPerSecond())
                 : null;
 
-        TestAggregate tests = new TestAggregate();
+        List<Test> tests = new ArrayList<Test>();
 
         /* For now, the non-RDAP-specific tests are disabled. These
          * are fairly niche, and in many cases can't easily be fixed
@@ -577,10 +577,12 @@ public final class Application {
         final ExecutorService executorService =
             Executors.newFixedThreadPool(Runtime.getRuntime()
                                                 .availableProcessors());
+        ContextList contexts = new ContextList();
         for (final Test t : tests) {
             final Context context =
                 createContext(spec, rateLimiter, executorService, testsRunning);
             context.submitTest(t);
+            contexts.add(context);
         }
 
         /* application/json content-type. This is deliberately using
@@ -602,6 +604,7 @@ public final class Application {
             createContext(spec, rateLimiter, executorService, testsRunning);
         context.setContentType("application/json");
         context.submitTest(test);
+        contexts.add(context);
 
         while (true) {
             if (testsRunning.get() != 0) {
@@ -616,7 +619,7 @@ public final class Application {
 
         executorService.shutdown();
 
-        if(tests.hasFailure()) {
+        if(contexts.hasFailedResult()) {
             System.exit(EX_FAILURE);
         }
     }
