@@ -47,6 +47,11 @@ public final class Standard implements ObjectTest {
     }
 
     /** {@inheritDoc} */
+    public boolean hasFailed() {
+        return throwable != null;
+    }
+
+    /** {@inheritDoc} */
     public void setUrl(final String url) {
         nameserver = null;
         this.url = url;
