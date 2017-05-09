@@ -1,5 +1,13 @@
 language: java
-dist: trusty
 jdk:
     - oraclejdk8
     - openjdk8
+
+dist: trusty
+sudo: required
+
+services:
+    - docker
+
+after_success:
+    - docker build .
