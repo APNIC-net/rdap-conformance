@@ -13,4 +13,5 @@ deploy:
     provider: script
     script: ./scripts/docker-deploy.sh
     on:
+        all_branches: true
         jdk: openjdk8
