@@ -29,4 +29,4 @@ RUN useradd -MrU conformance && \
 
 EXPOSE 8080
 USER conformance
-ENTRYPOINT ["/app/entrypoint.sh", "rdap-spec.json"]
+ENTRYPOINT ["/app/entrypoint.sh", "rdap-configuration.json"]

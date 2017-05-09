@@ -136,13 +136,14 @@ For example:
 Docker
 ------
 
-RDAP conformance can be executed as a Docker container. The docker container
-works by having a spec file mounted into the containers file system. The
-return code of the container can be used to determine success or failure.
+`rdap-conformance` can be executed as a Docker container. The
+container works by having a test configuration file mounted into the
+container's file system. The return code of the container can be used
+to determine test success or failure.
 
 ### Building the image
 
-The following command can be used to build an image.
+The following command can be used to build an image:
 
 ```
 docker build -t apnic/rdap-conformance .
@@ -150,21 +151,22 @@ docker build -t apnic/rdap-conformance .
 
 ### Running the container
 
-To run the Docker container.
+To run the Docker container:
 
 ```
-docker run -d -v "<path_to_spec.json>:/app/rdap-spec.json" \
+docker run -d -v "{configuration-path}:/app/rdap-configuration.json" \
            --name rdap-conformance apnic/rdap-conformance
 ```
 
 <aside class="notice">
-Its important to note the rdap-spec file must be mounted into the container as
-a file and not a directory.
+It's important to note that the configuration file must be mounted
+into the container as a file, not a directory.
 </aside>
 
 ### Accessing the return code of the container
 
-The bellow command can be used to access the return code for the container.
+The below command can be used to access the return code for the
+container:
 
 ```
 docker wait rdap-conformance
