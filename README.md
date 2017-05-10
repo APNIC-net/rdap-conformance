@@ -154,7 +154,7 @@ docker build -t apnic/rdap-conformance .
 To run the Docker container:
 
 ```
-docker run -d -v "{configuration-path}:/app/rdap-configuration.json" \
+docker run -d -v "{configuration-path}:/rdap-config/rdap-configuration.json" \
            --name rdap-conformance apnic/rdap-conformance
 ```
 
