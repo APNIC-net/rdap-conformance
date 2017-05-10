@@ -91,7 +91,7 @@ public final class Result {
     }
 
     /**
-     * True if the supplied status is equal to the interal status of this
+     * True if the supplied status is equal to the internal status of this
      * result.
      *
      * @param checkStatus Status to check against

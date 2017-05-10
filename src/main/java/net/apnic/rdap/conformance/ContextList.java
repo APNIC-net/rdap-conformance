@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Represents a list of Context objects.
  *
  * Class is a wrapper around {@link java.util.ArrayList} that provides
- * convience functions for getting information about a list of Context objects.
+ * convenience functions for getting information about a list of Context objects.
  *
  * Note: This class does not implement any ArrayList constructors as they are
  * not needed at present.
