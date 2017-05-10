@@ -136,6 +136,22 @@ public final class Context {
     }
 
     /**
+     * <p>Indicates if a failed result is present in this context</p>
+     *
+     * @return True of false if this context has a failed result
+     */
+    public boolean hasFailedResult()
+    {
+        for(Result res: results)
+        {
+            if(res.isStatus(Result.Status.Failure)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * <p>Setter for the field <code>specification</code>.</p>
      *
      * @param s a {@link net.apnic.rdap.conformance.Specification} object.
@@ -249,7 +265,6 @@ public final class Context {
                                     testsRunning.getAndDecrement();
                                 }
                                 public void onFailure(final Throwable t) {
-                                    System.out.println("**********");
                                     test.setError(t);
                                     test.run();
                                     synchronized (System.out) {

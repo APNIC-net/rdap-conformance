@@ -80,11 +80,6 @@ final public class Search implements Test {
     }
 
     /** {@inheritDoc} */
-    public boolean hasFailed() {
-        return throwable != null;
-    }
-
-    /** {@inheritDoc} */
     public void setContext(final Context c) {
         context = c;
     }

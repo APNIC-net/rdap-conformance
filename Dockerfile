@@ -25,8 +25,10 @@ RUN cd /build && \
 
 WORKDIR /app
 RUN useradd -MrU conformance && \
-    chown -R conformance /app
+    mkdir -p /rdap-config && \
+    chown -R conformance /app && \
+    chown -R conformance /rdap-config
 
 EXPOSE 8080
 USER conformance
-ENTRYPOINT ["/app/entrypoint.sh", "rdap-configuration.json"]
+ENTRYPOINT ["/app/entrypoint.sh", "/rdap-config/rdap-configuration.json"]

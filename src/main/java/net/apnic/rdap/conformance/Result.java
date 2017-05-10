@@ -91,6 +91,18 @@ public final class Result {
     }
 
     /**
+     * True if the supplied status is equal to the internal status of this
+     * result.
+     *
+     * @param checkStatus Status to check against
+     * @return true if the provided status matches the internal status of this
+     *         result
+     */
+    public boolean isStatus(final Status checkStatus) {
+        return status == checkStatus;
+    }
+
+    /**
      * <p>Setter for the field <code>status</code>.</p>
      *
      * @param s a {@link net.apnic.rdap.conformance.Result.Status} object.

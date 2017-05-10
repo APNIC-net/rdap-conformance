@@ -35,13 +35,6 @@ public interface Test {
     HttpRequest getRequest();
 
     /**
-     * <p>isFailure.</p>
-     *
-     * @return boolean indiciator if the test succeeded or passed
-     */
-    boolean hasFailed();
-
-    /**
      * <p>setResponse.</p>
      *
      * @param httpResponse an {@link org.apache.http.HttpResponse} object.
