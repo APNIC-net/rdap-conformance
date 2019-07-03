@@ -6,7 +6,7 @@
     <groupId>net.apnic.rdap</groupId>
     <artifactId>rdap-conformance</artifactId>
     <packaging>jar</packaging>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.6</version>
     <name>rdap-conformance</name>
     <description>RDAP conformance</description>
     <inceptionYear>2014</inceptionYear>
