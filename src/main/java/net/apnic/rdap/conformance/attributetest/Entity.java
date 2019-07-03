@@ -2,6 +2,7 @@ package net.apnic.rdap.conformance.attributetest;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +13,12 @@ import ezvcard.VCard;
 import ezvcard.Ezvcard;
 import ezvcard.Ezvcard.ParserChainJsonString;
 import ezvcard.ValidationWarnings;
+import ezvcard.property.VCardProperty;
+import ezvcard.property.RawProperty;
+import ezvcard.property.Address;
+import ezvcard.property.Email;
+import ezvcard.property.Kind;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import net.apnic.rdap.conformance.Result;
 import net.apnic.rdap.conformance.Result.Status;
@@ -33,6 +40,7 @@ public final class Entity implements SearchTest {
     private String handle = null;
     private String fn = null;
     private Set<String> knownAttributes = null;
+    private Set<String> standardKinds = null;
 
     /**
      * <p>Constructor for Entity.</p>
@@ -70,6 +78,8 @@ public final class Entity implements SearchTest {
     public boolean run(final Context context, final Result proto,
                        final Map<String, Object> data) {
         knownAttributes = Sets.newHashSet("handle", "roles", "vcardArray");
+        standardKinds = Sets.newHashSet("individual", "org", "group",
+                                        "location", "application", "device");
 
         Result nr = new Result(proto);
         nr.setCode("content");
@@ -122,6 +132,7 @@ public final class Entity implements SearchTest {
             }
             Result nrv = new Result(nr);
             Result nrv2 = null;
+            List<Result> nrvAdditionals = new ArrayList<Result>();
             nrv.addNode("vcardArray");
             if (error != null) {
                 nrv.setStatus(Status.Failure);
@@ -141,20 +152,96 @@ public final class Entity implements SearchTest {
                 if (warnings.size() > 0) {
                     List<String> vcardWarnings = warnings.get(0);
                     for (String s : vcardWarnings) {
-                        System.err.println(s);
+                        Result nrvAdditional = new Result(nrv);
+                        nrvAdditional.setStatus(Status.Failure);
+                        nrvAdditional.setInfo(s);
+                        nrvAdditionals.add(nrvAdditional);
                     }
                 }
                 vcard = vcards.get(0);
                 ValidationWarnings vws =
                     vcard.validate(vcard.getVersion());
-                String validationWarnings = vws.toString();
+                String validationWarnings = vws.toString().trim();
                 nrv2 = new Result(nrv);
                 nrv2.setDetails((validationWarnings.length() == 0),
                                 "valid", "invalid: " + validationWarnings);
+
+                Collection<VCardProperty> properties =
+                    vcard.getProperties();
+                for (VCardProperty property : properties) {
+                    if (property instanceof ezvcard.property.Email) {
+                        Email emailProperty =
+                            (ezvcard.property.Email) property;
+                        String email = emailProperty.getValue();
+                        boolean valid =
+                            EmailValidator.getInstance().isValid(email);
+                        Result nrvAdditional = new Result(nrv);
+                        nrvAdditional.setDetails(
+                            valid,
+                            "email address is valid",
+                            "email address is invalid"
+                        );
+                        nrvAdditionals.add(nrvAdditional);
+                    }
+                    if (property instanceof ezvcard.property.Address) {
+                        Address addressProperty =
+                            (ezvcard.property.Address) property;
+
+                        String poBox = addressProperty.getPoBox();
+                        Result nrvAdditionalPoBox = new Result(nrv);
+                        nrvAdditionalPoBox.setDocument("rfc6350");
+                        nrvAdditionalPoBox.setReference("6.3.1");
+                        nrvAdditionalPoBox.setInfo("PO box should not be set");
+                        nrvAdditionalPoBox.setStatus(
+                            (poBox == null)
+                                ? Status.Success
+                                : Status.Warning
+                        );
+                        nrvAdditionals.add(nrvAdditionalPoBox);
+
+                        String extendedAddress =
+                            addressProperty.getExtendedAddress();
+                        Result nrvAdditionalEA = new Result(nrv);
+                        nrvAdditionalEA.setDocument("rfc6350");
+                        nrvAdditionalEA.setReference("6.3.1");
+                        nrvAdditionalEA.setInfo("extended address should not be set");
+                        nrvAdditionalEA.setStatus(
+                            (extendedAddress == null)
+                                ? Status.Success
+                                : Status.Warning
+                        );
+                        nrvAdditionals.add(nrvAdditionalEA);
+                    }
+                    if (property instanceof ezvcard.property.Kind) {
+                        Kind kindProperty =
+                            (ezvcard.property.Kind) property;
+                        String value = kindProperty.getValue();
+                        if (!standardKinds.contains(value)) {
+                            Result nrvAdditional = new Result(nrv);
+                            nrvAdditional.setStatus(Status.Warning);
+                            nrvAdditional.setInfo("found non-standard kind " +
+                                                "'" + value + "'");
+                            nrvAdditionals.add(nrvAdditional);
+                        }
+                    }
+                }
+                List<RawProperty> extendedProperties =
+                    vcard.getExtendedProperties();
+                for (RawProperty property : extendedProperties) {
+                    Result nrvAdditional = new Result(nrv);
+                    nrvAdditional.setStatus(Status.Warning);
+                    nrvAdditional.setInfo("found non-standard property " +
+                                          "'" + property.getPropertyName()
+                                          + "'");
+                    nrvAdditionals.add(nrvAdditional);
+                }
             }
             context.addResult(nrv);
             if (nrv2 != null) {
                 context.addResult(nrv2);
+            }
+            for (Result nrvAdditional : nrvAdditionals) {
+                context.addResult(nrvAdditional);
             }
         }
 
