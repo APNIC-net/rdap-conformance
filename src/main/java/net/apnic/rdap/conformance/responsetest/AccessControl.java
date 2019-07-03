@@ -45,6 +45,10 @@ public final class AccessControl implements ResponseTest {
             nr.setStatus(Status.Success);
             results.add(nr);
             return true;
+        } else if (ct.equals("http://127.0.0.1")) {
+            nr.setStatus(Status.Success);
+            results.add(nr);
+            return true;
         } else {
             nr.setStatus(Status.Failure);
             nr.setInfo("got '" + ct + "' instead of '*'");

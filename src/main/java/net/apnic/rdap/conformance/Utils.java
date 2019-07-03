@@ -48,6 +48,7 @@ public final class Utils {
                 ? new HttpGet(path)
                 : new HttpHead(path);
         request.setHeader("Accept", context.getContentType());
+        request.setHeader("Origin", "http://127.0.0.1");
         RequestConfig config =
             RequestConfig.custom()
                          .setConnectionRequestTimeout(TIMEOUT_MS)
