@@ -10,11 +10,15 @@ import java.util.concurrent.ExecutorService;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import com.google.common.util.concurrent.RateLimiter;
 import org.apache.http.HttpStatus;
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 
@@ -478,9 +482,14 @@ public final class Application {
                                          final AtomicInteger testsRunning) {
         SSLContext sslContext = null;
         try {
-            sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, TRUST_MANAGER,
-                            new java.security.SecureRandom());
+            SSLContextBuilder sslContextBuilder = new SSLContextBuilder();
+            sslContextBuilder.loadTrustMaterial(null, new TrustStrategy() {
+                @Override
+                public boolean isTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                    return true;
+                }
+            });
+            sslContext = sslContextBuilder.build();
         } catch (Exception e) {
             System.err.println(e.toString());
             System.exit(EX_SOFTWARE);
@@ -489,6 +498,7 @@ public final class Application {
         CloseableHttpAsyncClient hc =
             HttpAsyncClients.custom()
                             .setSSLContext(sslContext)
+                            .setSSLHostnameVerifier(new NoopHostnameVerifier())
                             .build();
         hc.start();
         chacs.add(hc);
@@ -578,11 +588,32 @@ public final class Application {
             Executors.newFixedThreadPool(Runtime.getRuntime()
                                                 .availableProcessors());
         ContextList contexts = new ContextList();
-        for (final Test t : tests) {
-            final Context context =
-                createContext(spec, rateLimiter, executorService, testsRunning);
-            context.submitTest(t);
-            contexts.add(context);
+
+        /* Run tests in batches. */
+        for (int i = 0; i < tests.size(); i += 10) {
+            for (int j = i; j < (i + 10); j++) {
+                if (j >= tests.size()) {
+                    break;
+                }
+                final Context context =
+                    createContext(spec,
+                                  rateLimiter,
+                                  executorService,
+                                  testsRunning);
+                context.submitTest(tests.get(j));
+                contexts.add(context);
+            }
+            while (true) {
+                if (testsRunning.get() != 0) {
+                    Thread.sleep(TESTS_RUNNING_CHECK_DELAY_MS);
+                } else {
+                    break;
+                }
+            }
+            for (CloseableHttpAsyncClient chac : chacs) {
+                chac.close();
+                // todo: remove clients after closing them.
+            }
         }
 
         /* application/json content-type. This is deliberately using
@@ -615,6 +646,7 @@ public final class Application {
         }
         for (CloseableHttpAsyncClient chac : chacs) {
             chac.close();
+            // todo: remove clients after closing them.
         }
 
         executorService.shutdown();
