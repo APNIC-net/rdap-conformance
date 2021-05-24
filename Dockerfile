@@ -18,8 +18,8 @@ RUN cd /build && \
     $M2_HOME/bin/mvn verify -DskipDocker && \
     mkdir /app && \
     cp target/*.jar /app && \
-    cp target/docker-extras/entrypoint.sh /app/ && \
-    chmod 0744 /app/entrypoint.sh && \
+    cp target/docker-extras/rdap-conformance /usr/local/bin/ && \
+    chmod 0777 /usr/local/bin/rdap-conformance && \
     cd / && \
     rm -rf /build ${M2_HOME}
 
@@ -31,4 +31,4 @@ RUN useradd -MrU conformance && \
 
 EXPOSE 8080
 USER conformance
-ENTRYPOINT ["/app/entrypoint.sh", "/rdap-config/rdap-configuration.json"]
+CMD ["rdap-conformance", "/rdap-config/rdap-configuration.json"]
