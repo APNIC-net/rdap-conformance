@@ -1,7 +1,7 @@
 rdap-conformance
 ================
 
-[![Build Status](https://github.com/APNIC-net/rdap-conformance/workflows/build/badge.svg?branch=master)](https://github.com/APNIC-net/rdap-conformance/actions)
+[![Build Status](https://github.com/APNIC-net/rdap-conformance/actions/workflows/build.yml/badge.svg)](https://github.com/APNIC-net/rdap-conformance/actions)
 
 Tests an RDAP server for conformance with the published standards.
 See [RFC7480](http://tools.ietf.org/html/rfc7480) and
