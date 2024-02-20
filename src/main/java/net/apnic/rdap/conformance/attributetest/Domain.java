@@ -11,6 +11,7 @@ import net.apnic.rdap.conformance.SearchTest;
 import net.apnic.rdap.conformance.Utils;
 import net.apnic.rdap.conformance.valuetest.Variant;
 import net.apnic.rdap.conformance.valuetest.StringTest;
+import net.apnic.rdap.conformance.valuetest.ReverseDomainMatch;
 
 /**
  * <p>Domain class.</p>
@@ -48,7 +49,7 @@ public final class Domain implements SearchTest {
             domainNames.setSearchDetails(key, pattern);
         }
 
-        return Utils.runTestList(
+        boolean res = Utils.runTestList(
             context, proto, data, knownAttributes, checkUnknown,
             Arrays.asList(
                 new ScalarAttribute("objectClassName",
@@ -63,6 +64,11 @@ public final class Domain implements SearchTest {
                 new StandardObject()
             )
         );
+
+        ReverseDomainMatch rdmTest = new ReverseDomainMatch();
+        boolean res2 = rdmTest.run(context, proto, data);
+
+        return res && res2;
     }
 
     /**

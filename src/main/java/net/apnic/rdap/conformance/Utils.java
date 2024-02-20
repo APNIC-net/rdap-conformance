@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import com.google.gson.Gson;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -527,5 +528,114 @@ public final class Utils {
                                           Pattern.CASE_INSENSITIVE
                                         | Pattern.UNICODE_CASE);
         return pattern.matcher(value).matches();
+    }
+
+    /**
+     * <p>ipv4ArpaToPrefix</p>
+     *
+     * Converts an IPv4 reverse domain name into an address prefix.
+     *
+     * @param str The reverse domain name.
+     * @return The address prefix for the domain name.
+     */
+    private static String ipv4ArpaToPrefix(final String str) {
+        Pattern pattern = Pattern.compile("([0-9\\.]+)\\.in-addr\\.arpa");
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.find()) {
+            String numbers = matcher.group(1);
+            String[] numberList = numbers.split("\\.");
+            int prefixLength = numberList.length * 8;
+            int zeroes = (32 - prefixLength) / 8;
+            if (zeroes < 0) {
+                return "";
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i = numberList.length - 1; i >= 0; i--) {
+                sb.append(numberList[i]);
+                if (!(numberList.length == 4 && i == 0)) {
+                    sb.append(".");
+                }
+            }
+            while (zeroes-- > 0) {
+                sb.append("0");
+                if (zeroes > 0) {
+                    sb.append(".");
+                }
+            }
+            sb.append("/");
+            sb.append(prefixLength);
+            return sb.toString();
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * <p>ipv6ArpaToPrefix</p>
+     *
+     * Converts an IPv6 reverse domain name into an address prefix.
+     *
+     * @param str The reverse domain name.
+     * @return The address prefix for the domain name.
+     */
+    private static String ipv6ArpaToPrefix(final String str) {
+//    my ($nums) = ($arpa =~ /^(.*)\.ip6\.arpa/i);
+//    $nums =~ s/\.//g;
+//    my $len = (length $nums);
+//    my $prefix_len = $len * 4;
+//    $nums = reverse $nums;
+//    $nums .= '0' x (4 - (($len % 4) || 4));
+//    my $addr = join ':', ($nums =~ /(.{4})/g);
+//    if ((length $addr) < 39) {
+//        $addr .= '::';
+//    }
+//    $addr .= '/'.$prefix_len;
+//    return $addr;
+
+        Pattern pattern = Pattern.compile("([0-9A-Fa-f\\.]+)\\.ip6\\.arpa");
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.find()) {
+            String numbers = matcher.group(1);
+            numbers = numbers.replaceAll("\\.", "");
+            int len = numbers.length();
+            int prefixLength = len * 4;
+            StringBuilder numberSb =
+                new StringBuilder(numbers).reverse();
+            int subtract = len % 4;
+            if (subtract == 0) {
+                subtract = 4;
+            }
+            int zeroes = 4 - subtract;
+            while (zeroes-- > 0) {
+                numberSb.append("0");
+            }
+            String[] segments =
+                numberSb.toString().split("(?<=\\G.{4})");
+            String result = String.join(":", segments);
+            if (result.length() < 39) {
+                result = result + "::";
+            }
+            result = result + "/" + prefixLength;
+            return result.toLowerCase();
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * <p>arpaToPrefix</p>
+     *
+     * Converts a reverse domain name into an address prefix.  If the
+     * domain name is invalid, this will return an empty string.
+     *
+     * @param str The reverse domain name.
+     * @return The address prefix for the domain name.
+     */
+    public static String arpaToPrefix(final String str) {
+        if (str.contains(".in-addr.arpa")) {
+            return ipv4ArpaToPrefix(str);
+        } else {
+            return ipv6ArpaToPrefix(str);
+        }
     }
 }

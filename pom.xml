@@ -207,6 +207,12 @@
             <version>4.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.ripe.ipresource</groupId>
+            <artifactId>ipresource</artifactId>
+            <version>1.46</version>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>org.testng</groupId>
