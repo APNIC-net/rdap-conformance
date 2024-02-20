@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Launching conformance test with arguments: $*"
+java -jar @project.artifactId@-@project.version@.@project.packaging@ "$\@"
