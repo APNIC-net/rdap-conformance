@@ -1,0 +1,26 @@
+{ 
+    "baseUrl": "https://rdap.registro.br",
+    "requestsPerSecond": 0.1,
+    "acceptContentType": "application/json",
+    "objectClasses": {
+        "ip": {
+            "supported": false
+        },
+        "autnum": {
+            "supported": false
+        },
+        "nameserver": {
+            "supported": false
+        },
+        "domain": {
+            "supported": true,
+            "exists": ["rdap.registro.br"],
+            "notExists": ["google.com"]
+        },
+        "entity": {
+            "supported": true,
+            "exists": ["05506560000136"],
+            "notExists": ["@@@@@@@@"]
+        }
+    }
+}
