@@ -619,7 +619,7 @@ public final class Application {
 
         executorService.shutdown();
 
-        if(contexts.hasFailedResult()) {
+        if (contexts.hasFailedResult()) {
             System.exit(EX_FAILURE);
         }
     }

@@ -20,11 +20,9 @@ public class ContextList
      *
      * @return boolean if at least one Context has a failed result.
      */
-    public boolean hasFailedResult()
-    {
-        for(Context context : this)
-        {
-            if(context.hasFailedResult()) {
+    public boolean hasFailedResult() {
+        for (Context context : this) {
+            if (context.hasFailedResult()) {
                 return true;
             }
         }

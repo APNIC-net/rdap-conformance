@@ -141,11 +141,9 @@ public final class Context {
      *
      * @return True of false if this context has a failed result
      */
-    public boolean hasFailedResult()
-    {
-        for(Result res: results)
-        {
-            if(res.isStatus(Result.Status.Failure)) {
+    public boolean hasFailedResult() {
+        for (Result res: results) {
+            if (res.isStatus(Result.Status.Failure)) {
                 return true;
             }
         }
