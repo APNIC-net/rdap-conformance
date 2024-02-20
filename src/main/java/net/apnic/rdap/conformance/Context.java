@@ -18,6 +18,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.JdkFutureAdapters;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.MoreExecutors;
 
 /**
  * <p>Context class.</p>
@@ -272,7 +273,8 @@ public final class Context {
                                     }
                                     testsRunning.getAndDecrement();
                                 }
-                            }
+                            },
+                            MoreExecutors.directExecutor()
                         );
                     } catch (Exception e) {
                         System.err.println("Error during test submission: " +

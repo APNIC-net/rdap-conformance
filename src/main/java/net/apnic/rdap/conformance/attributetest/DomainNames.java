@@ -124,7 +124,7 @@ public final class DomainNames implements SearchTest {
                                                        Status.Failure,
                                                        data);
         boolean isAscii =
-            CharMatcher.ASCII.matchesAllOf(unicodeName);
+            CharMatcher.ascii().matchesAllOf(unicodeName);
         Result hu = new Result(nr);
         hu.addNode("unicodeName");
         /* There are at least a couple of implementations that return
