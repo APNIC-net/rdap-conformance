@@ -42,10 +42,8 @@ public final class Link implements AttributeTest {
 
         boolean success = true;
         String value = Utils.getStringAttribute(context, nr, "value",
-                                                Status.Failure, data);
-        if (value == null) {
-            success = false;
-        } else {
+                                                Status.Notification, data);
+        if (value != null) {
             Result nr2 = new Result(nr);
             nr2.addNode("value");
             context.submitTest(new net.apnic.rdap.conformance.test.common.Link(
