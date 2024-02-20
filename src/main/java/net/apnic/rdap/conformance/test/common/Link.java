@@ -12,6 +12,7 @@ import net.apnic.rdap.conformance.ResponseTest;
 import net.apnic.rdap.conformance.responsetest.NotStatusCode;
 import net.apnic.rdap.conformance.Utils;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpRequest;
 
@@ -24,6 +25,7 @@ import org.apache.http.HttpRequest;
 final public class Link implements Test {
     private String url;
     private Result proto;
+    private String expectedContentType;
     private Context context = null;
     private HttpResponse httpResponse = null;
     private Throwable throwable = null;
@@ -34,11 +36,14 @@ final public class Link implements Test {
      *
      * @param argUrl a {@link java.lang.String} object.
      * @param argProto a {@link net.apnic.rdap.conformance.Result} object.
+     * @param argExpectedContentType a {@link java.lang.String} object.
      */
     public Link(final String argUrl,
-                final Result argProto) {
+                final Result argProto,
+                final String argExpectedContentType) {
         url = argUrl;
         proto = argProto;
+        expectedContentType = argExpectedContentType;
     }
 
     /** {@inheritDoc} */
@@ -81,9 +86,19 @@ final public class Link implements Test {
         context.addResult(r);
         ResponseTest sc = new NotStatusCode(0);
         boolean scres = sc.run(context, proto, httpResponse);
-        if (!scres) {
-            return false;
+
+        if (expectedContentType != null) {
+            Header contentType =
+                httpResponse.getFirstHeader("Content-Type");
+            boolean res = contentType.getValue().equals(expectedContentType);
+
+            Result r2 = new Result(proto);
+            r2.setCode("response");
+            r2.setStatus(res ? Status.Success : Status.Warning);
+            r2.setInfo("link content type matches received content type");
+            context.addResult(r2);
         }
-        return true;
+
+        return scres;
     }
 }

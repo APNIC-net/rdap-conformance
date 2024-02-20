@@ -49,10 +49,11 @@ public final class Link implements AttributeTest {
             Result nr2 = new Result(nr);
             nr2.addNode("value");
             context.submitTest(new net.apnic.rdap.conformance.test.common.Link(
-                value, nr2
+                value, nr2, null
             ));
         }
 
+        String type = Utils.castToString(data.get("type"));
         String href = Utils.getStringAttribute(context, nr, "href",
                                                Status.Failure, data);
         if (href == null) {
@@ -61,7 +62,7 @@ public final class Link implements AttributeTest {
             Result nr2 = new Result(nr);
             nr2.addNode("href");
             context.submitTest(new net.apnic.rdap.conformance.test.common.Link(
-                href, nr2
+                href, nr2, type
             ));
         }
 
