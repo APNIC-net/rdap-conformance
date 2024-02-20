@@ -4,16 +4,6 @@ on:
   schedule:
     - cron: '0 0 10 * *'
 jobs:
-  build-18-8:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v1
-      - run: sudo apt-get update && sudo apt-get install openjdk-8-jdk maven && mvn clean install --batch-mode
-  build-18-11:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v1
-      - run: sudo apt-get update && sudo apt-get install openjdk-11-jdk maven && mvn clean install --batch-mode
   build-20-8:
     runs-on: ubuntu-20.04
     steps:
@@ -29,3 +19,23 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: sudo apt-get update && sudo apt-get install openjdk-14-jdk maven && mvn clean install --batch-mode
+  build-22-8:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v1
+      - run: sudo apt-get update && sudo apt-get install openjdk-8-jdk maven && mvn clean install --batch-mode
+  build-22-11:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v1
+      - run: sudo apt-get update && sudo apt-get install openjdk-11-jdk maven && mvn clean install --batch-mode
+  build-22-14:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v1
+      - run: sudo apt-get update && sudo apt-get install openjdk-14-jdk maven && mvn clean install --batch-mode
+  build-22-17:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v1
+      - run: sudo apt-get update && sudo apt-get install openjdk-17-jdk maven && mvn clean install --batch-mode
